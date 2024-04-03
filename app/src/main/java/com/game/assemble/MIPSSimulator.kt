@@ -94,38 +94,50 @@ class MIPSSimulator(
                                 return
                             }
                         }
+
                         0x21 -> {   // addu
-                            regs[instr.rd] = (regs[instr.rs]!!.toUInt() + regs[instr.rt]!!.toUInt()).toInt()
+                            regs[instr.rd] =
+                                (regs[instr.rs]!!.toUInt() + regs[instr.rt]!!.toUInt()).toInt()
                         }
+
                         0x24 -> {   // and
                             regs[instr.rd] = regs[instr.rs]!!.and(regs[instr.rt]!!)
                         }
+
                         0x8 -> {    // jr
-                            val temp : Int? = parseCodeAddress(regs[instr.rs]!!)
+                            val temp: Int? = parseCodeAddress(regs[instr.rs]!!)
                             if (temp == null) {
                                 err = "Invalid address"
                                 return
                             }
                             line = temp
                         }
+
                         0x27 -> {   // nor
-                            regs[instr.rd] = (regs[instr.rs]!!.or(regs[instr.rt]!!)).inv()
+                            regs[instr.rd] = (regs[instr.rs]!! or regs[instr.rt]!!).inv()
                         }
+
                         0x25 -> {   // or
-                            regs[instr.rd] = regs[instr.rs]!!.or(regs[instr.rt]!!)
+                            regs[instr.rd] = regs[instr.rs]!! or regs[instr.rt]!!
                         }
+
                         0x2a -> {   // slt
                             regs[instr.rd] = if (regs[instr.rs]!! < regs[instr.rt]!!) 1 else 0
                         }
+
                         0x2b -> {   // sltu
-                            regs[instr.rd] = if (regs[instr.rs]!!.toUInt() < regs[instr.rt]!!.toUInt()) 1 else 0
+                            regs[instr.rd] =
+                                if (regs[instr.rs]!!.toUInt() < regs[instr.rt]!!.toUInt()) 1 else 0
                         }
+
                         0x0 -> {    // sll
                             regs[instr.rd] = regs[instr.rt]!! shl instr.shamt
                         }
+
                         0x2 -> {    // srl
                             regs[instr.rd] = regs[instr.rt]!! shr instr.shamt
                         }
+
                         0x22 -> {   // sub
                             val temp: Long = regs[instr.rs]!!.toLong() - regs[instr.rt]!!.toLong()
                             if (temp <= Int.MAX_VALUE && temp >= Int.MIN_VALUE) {
@@ -135,12 +147,15 @@ class MIPSSimulator(
                                 return
                             }
                         }
+
                         0x23 -> {   // subu
-                            regs[instr.rd] = (regs[instr.rs]!!.toUInt() - regs[instr.rt]!!.toUInt()).toInt()
+                            regs[instr.rd] =
+                                (regs[instr.rs]!!.toUInt() - regs[instr.rt]!!.toUInt()).toInt()
                         }
                     }
 
                 }
+
                 0x8 -> {    // addi
                     val temp: Long = regs[instr.rs]!!.toLong() + instr.immediate!!.toLong()
                     if (temp <= Int.MAX_VALUE && temp >= Int.MIN_VALUE) {
@@ -150,15 +165,19 @@ class MIPSSimulator(
                         return
                     }
                 }
+
                 0x9 -> {    // addiu
-                    regs[instr.rt] = (regs[instr.rs]!!.toUInt() + instr.immediate!!.toUInt()).toInt()
+                    regs[instr.rt] =
+                        (regs[instr.rs]!!.toUInt() + instr.immediate!!.toUInt()).toInt()
                 }
+
                 0xc -> {    // andi
                     regs[instr.rt] = regs[instr.rs]!!.and(zeroExtendImmediate(instr.immediate!!))
                 }
+
                 0x4 -> {    // beq
                     if (regs[instr.rs]!! == regs[instr.rt]!!) {
-                        val offset : Int? = parseOffset(instr.immediate)
+                        val offset: Int? = parseOffset(instr.immediate)
                         if (offset == null) {
                             err = "Invalid branch address"
                             return
@@ -166,9 +185,10 @@ class MIPSSimulator(
                         line += 1 + offset!!
                     }
                 }
+
                 0x5 -> {    // bne
                     if (regs[instr.rs]!! != regs[instr.rt]!!) {
-                        val offset : Int? = parseOffset(instr.immediate)
+                        val offset: Int? = parseOffset(instr.immediate)
                         if (offset == null) {
                             err = "Invalid branch address"
                             return
@@ -176,17 +196,20 @@ class MIPSSimulator(
                         line += 1 + offset!!
                     }
                 }
+
                 0x2 -> {    // j
-                    val temp : Int? = parseCodeAddress(instr.address)
+                    val temp: Int? = parseCodeAddress(instr.address)
                     if (temp == null) {
                         err = "Invalid jump address"
                         return
                     }
                     line = temp
                 }
+
                 0x3 -> {    // jal
                     // Not Implemented
                 }
+
                 0x24 -> {   // lbu
                     val temp = parseStackAddress(regs[instr.rs]!! + instr.immediate!!)
                     if (temp == null) {
@@ -195,20 +218,25 @@ class MIPSSimulator(
                     }
                     regs[instr.rt] = stack[temp!!].toInt() shl 24 ushr 24
                 }
+
                 0x25 -> {   // lhu
                     val temp = parseStackAddress(regs[instr.rs]!! + instr.immediate!!)
                     if (temp == null) {
                         err = "Invalid stack address"
                         return
                     }
-                    regs[instr.rt] = bigEndianConversion(stack.copyOfRange(temp, temp + 1)) shl 16 ushr 16
+                    regs[instr.rt] =
+                        bigEndianConversion(stack.copyOfRange(temp, temp + 1)) shl 16 ushr 16
                 }
+
                 0x30 -> {   // ll
                     // Not implemented
                 }
+
                 0xf -> {    // lui
                     regs[instr.rt] = instr.immediate shl 17 ushr 1
                 }
+
                 0x23 -> {   // lw
                     val temp = parseStackAddress(regs[instr.rs]!! + instr.immediate!!)
                     if (temp == null) {
@@ -217,26 +245,61 @@ class MIPSSimulator(
                     }
                     regs[instr.rt] = bigEndianConversion(stack.copyOfRange(temp, temp + 3))
                 }
+
                 0xd -> {    // ori
-
+                    regs[instr.rt] = regs[instr.rs]!! or (zeroExtendImmediate(instr.immediate))
                 }
+
                 0xa -> {    // slti
-
+                    regs[instr.rt] = if (regs[instr.rs]!! < instr.immediate) 1 else 0
                 }
+
                 0xb -> {    // sltiu
-
+                    regs[instr.rt] =
+                        if (regs[instr.rs]!!.toUInt() < instr.immediate.toUInt()) 1 else 0
                 }
+
                 0x28 -> {   // sb
-
+                    val temp = parseStackAddress(regs[instr.rs]!! + instr.immediate!!)
+                    if (temp == null) {
+                        err = "Invalid stack address"
+                        return
+                    }
+                    stack[temp!!] = (regs[instr.rt] shl 24 ushr 24).toByte()
                 }
+
                 0x38 -> {   // sc
                     // Not implemented
                 }
+
                 0x29 -> {   // sh
-
+                    val temp = parseStackAddress(regs[instr.rs]!! + instr.immediate!!)
+                    if (temp == null) {
+                        err = "Invalid stack address"
+                        return
+                    }
+                    val tempArr = byteArrayOf(
+                        (regs[instr.rt]!! shl 8 ushr 24).toByte(),
+                        (regs[instr.rt]!! ushr 24).toByte()
+                    )
+                    for (i in tempArr.indices)
+                        stack[temp!! + i] = tempArr[i]
                 }
-                0x2b -> {   // sw
 
+                0x2b -> {   // sw
+                    val temp = parseStackAddress(regs[instr.rs]!! + instr.immediate!!)
+                    if (temp == null) {
+                        err = "Invalid stack address"
+                        return
+                    }
+                    val tempArr = byteArrayOf(
+                        (regs[instr.rt]!! shl 24 ushr 24).toByte(),
+                        (regs[instr.rt]!! shl 16 ushr 24).toByte(),
+                        (regs[instr.rt]!! shl 8 ushr 24).toByte(),
+                        (regs[instr.rt]!! ushr 24).toByte()
+                    )
+                    for (i in tempArr.indices)
+                        stack[temp!! + i] = tempArr[i]
                 }
             }
         }
