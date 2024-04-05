@@ -13,6 +13,12 @@
         android:theme="@style/Theme.Assemble"
         tools:targetApi="31">
         <activity
+            android:name=".ProfilePage"
+            android:exported="true" />
+        <activity
+            android:name=".ViewImageRunHistory"
+            android:exported="true" />
+        <activity
             android:name=".Leaderboard"
             android:exported="true" />
         <activity
