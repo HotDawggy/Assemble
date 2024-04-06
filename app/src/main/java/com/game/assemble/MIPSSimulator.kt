@@ -69,7 +69,7 @@ class MIPSSimulator(
     private fun addToStack(bytes: ByteArray, index: Int, size: Int) {
         var temp = index
         Log.i("addToStack", stack.toString())
-        printStack()
+        //printStack()
         for (i in 0..< size) {
             if (temp >= stack.size) stack + byteArrayOf((bytes[i]))
             else stack[index] = bytes[i]
@@ -98,7 +98,7 @@ class MIPSSimulator(
         while (true) {
             if ((line >= code.size) || (err.isNotBlank())) return
             val instr: Instruction = code[line]!!
-            //Log.d("[*] sim.Run", "line " + line.toString())
+            //Log.d("[*] MIPSSimulator.Run", "line " + line.toString())
             if (Calendar.getInstance().time.time - startTime > 2000) {
                 err = "Timed out"
                 return
@@ -108,7 +108,7 @@ class MIPSSimulator(
                 0x0 -> {    // add, addu, and, jr, nor, or, slt, sltu, sll, srl, sub, subu
                     when (instr.funct) {
                         0x20 -> {   // add
-                            Log.d("sim.Run", "add $" + instr.rd + ", $" + instr.rs + ", $" + instr.rt)
+                            Log.d("MIPSSimulator.Run", "add $" + instr.rd + ", $" + instr.rs + ", $" + instr.rt)
                             val temp: Long = regs[instr.rs]!!.toLong() + regs[instr.rt]!!.toLong()
                             if (temp <= Int.MAX_VALUE && temp >= Int.MIN_VALUE) {
                                 regs[instr.rd] = temp.toInt()
@@ -119,18 +119,18 @@ class MIPSSimulator(
                         }
 
                         0x21 -> {   // addu
-                            Log.d("sim.Run", "addu $" + instr.rd + ", $" + instr.rs + ", $" + instr.rt)
+                            Log.d("MIPSSimulator.Run", "addu $" + instr.rd + ", $" + instr.rs + ", $" + instr.rt)
                             regs[instr.rd] =
                                 (regs[instr.rs]!!.toUInt() + regs[instr.rt]!!.toUInt()).toInt()
                         }
 
                         0x24 -> {   // and
-                            Log.d("sim.Run", "and $" + instr.rd + ", $" + instr.rs + ", $" + instr.rt)
+                            Log.d("MIPSSimulator.Run", "and $" + instr.rd + ", $" + instr.rs + ", $" + instr.rt)
                             regs[instr.rd] = regs[instr.rs]!! and (regs[instr.rt]!!)
                         }
 
                         0x8 -> {    // jr
-                            Log.d("sim.Run", "jr $" + instr.rs)
+                            Log.d("MIPSSimulator.Run", "jr $" + instr.rs)
                             val temp: Int? = parseCodeAddress(regs[instr.rs]!!)
                             if (temp == null) {
                                 err = "Invalid address"
@@ -140,38 +140,38 @@ class MIPSSimulator(
                         }
 
                         0x27 -> {   // nor
-                            Log.d("sim.Run", "nor $" + instr.rd + ", $" + instr.rs + ", $" + instr.rt)
+                            Log.d("MIPSSimulator.Run", "nor $" + instr.rd + ", $" + instr.rs + ", $" + instr.rt)
                             regs[instr.rd] = (regs[instr.rs]!! or regs[instr.rt]!!).inv()
                         }
 
                         0x25 -> {   // or
-                            Log.d("sim.Run", "or $" + instr.rd + ", $" + instr.rs + ", $" + instr.rt)
+                            Log.d("MIPSSimulator.Run", "or $" + instr.rd + ", $" + instr.rs + ", $" + instr.rt)
                             regs[instr.rd] = regs[instr.rs]!! or regs[instr.rt]!!
                         }
 
                         0x2a -> {   // slt
-                            Log.d("sim.Run", "slt $" + instr.rd + ", $" + instr.rs + ", $" + instr.rt)
+                            Log.d("MIPSSimulator.Run", "slt $" + instr.rd + ", $" + instr.rs + ", $" + instr.rt)
                             regs[instr.rd] = if (regs[instr.rs]!! < regs[instr.rt]!!) 1 else 0
                         }
 
                         0x2b -> {   // sltu
-                            Log.d("sim.Run", "sltu $" + instr.rd + ", $" + instr.rs + ", $" + instr.rt)
+                            Log.d("MIPSSimulator.Run", "sltu $" + instr.rd + ", $" + instr.rs + ", $" + instr.rt)
                             regs[instr.rd] =
                                 if (regs[instr.rs]!!.toUInt() < regs[instr.rt]!!.toUInt()) 1 else 0
                         }
 
                         0x0 -> {    // sll
-                            Log.d("sim.Run", "sll $" + instr.rd + ", $" + instr.rt + ", " + instr.shamt)
+                            Log.d("MIPSSimulator.Run", "sll $" + instr.rd + ", $" + instr.rt + ", " + instr.shamt)
                             regs[instr.rd] = regs[instr.rt]!! shl instr.shamt
                         }
 
                         0x2 -> {    // srl
-                            Log.d("sim.Run", "srl $" + instr.rd + ", $" + instr.rt + ", " + instr.shamt)
+                            Log.d("MIPSSimulator.Run", "srl $" + instr.rd + ", $" + instr.rt + ", " + instr.shamt)
                             regs[instr.rd] = regs[instr.rt]!! shr instr.shamt
                         }
 
                         0x22 -> {   // sub
-                            Log.d("sim.Run", "sub $" + instr.rd + ", $" + instr.rs + ", $" + instr.rt)
+                            Log.d("MIPSSimulator.Run", "sub $" + instr.rd + ", $" + instr.rs + ", $" + instr.rt)
                             val temp: Long = regs[instr.rs]!!.toLong() - regs[instr.rt]!!.toLong()
                             if (temp <= Int.MAX_VALUE && temp >= Int.MIN_VALUE) {
                                 regs[instr.rd] = temp.toInt()
@@ -182,7 +182,7 @@ class MIPSSimulator(
                         }
 
                         0x23 -> {   // subu
-                            Log.d("sim.Run", "subu $" + instr.rd + ", $" + instr.rs + ", $" + instr.rt)
+                            Log.d("MIPSSimulator.Run", "subu $" + instr.rd + ", $" + instr.rs + ", $" + instr.rt)
                             regs[instr.rd] =
                                 (regs[instr.rs]!!.toUInt() - regs[instr.rt]!!.toUInt()).toInt()
                         }
@@ -191,7 +191,7 @@ class MIPSSimulator(
                 }
 
                 0x8 -> {    // addi
-                    Log.d("sim.Run", "addi $" + instr.rt + ", $" + instr.rs + ", " + instr.immediate)
+                    Log.d("MIPSSimulator.Run", "addi $" + instr.rt + ", $" + instr.rs + ", " + instr.immediate)
                     val temp: Long = regs[instr.rs]!!.toLong() + instr.immediate!!.toLong()
                     if (temp <= Int.MAX_VALUE && temp >= Int.MIN_VALUE) {
                         regs[instr.rt] = temp.toInt()
@@ -202,32 +202,32 @@ class MIPSSimulator(
                 }
 
                 0x9 -> {    // addiu
-                    Log.d("sim.Run", "addiu $" + instr.rt + ", $" + instr.rs + ", " + instr.immediate)
+                    Log.d("MIPSSimulator.Run", "addiu $" + instr.rt + ", $" + instr.rs + ", " + instr.immediate)
                     regs[instr.rt] =
                         (regs[instr.rs]!!.toUInt() + instr.immediate!!.toUInt()).toInt()
                 }
 
                 0xc -> {    // andi
-                    Log.d("sim.Run", "andi $" + instr.rt + ", $" + instr.rs + ", " + instr.immediate)
+                    Log.d("MIPSSimulator.Run", "andi $" + instr.rt + ", $" + instr.rs + ", " + instr.immediate)
                     regs[instr.rt] = regs[instr.rs]!!.and(zeroExtendImmediate(instr.immediate!!))
                 }
 
                 0x4 -> {    // beq
-                    Log.d("sim.Run", "beq $" + instr.rt + ", $" + instr.rs + ", " + instr.immediate)
+                    Log.d("MIPSSimulator.Run", "beq $" + instr.rt + ", $" + instr.rs + ", " + instr.immediate)
                     if (regs[instr.rs]!! == regs[instr.rt]!!) {
                         line += instr.immediate!!
                     }
                 }
 
                 0x5 -> {    // bne
-                    Log.d("sim.Run", "bne $" + instr.rt + ", $" + instr.rs + ", " + instr.immediate)
+                    Log.d("MIPSSimulator.Run", "bne $" + instr.rt + ", $" + instr.rs + ", " + instr.immediate)
                     if (regs[instr.rs]!! != regs[instr.rt]!!) {
                         line += instr.immediate!!
                     }
                 }
 
                 0x2 -> {    // j
-                    Log.d("sim.Run", "j " + instr.address)
+                    Log.d("MIPSSimulator.Run", "j " + instr.address)
                     val temp: Int? = parseCodeAddress(instr.address)
                     if (temp == null) {
                         err = "Invalid jump address"
@@ -242,25 +242,25 @@ class MIPSSimulator(
 
                 0x24 -> {   // lbu
                     val msg = "lbu $" + instr.rt + ", " + + instr.immediate + "($" + instr.rs + ")"
-                    Log.d("sim.Run", msg)
+                    Log.d("MIPSSimulator.Run", msg)
                     val temp = parseStackAddress(regs[instr.rs]!! + instr.immediate!!)
                     if (temp == null) {
                         err = "Invalid stack address"
                         return
                     }
-                    //Log.i("sim.Run temp:", temp.toString())
+                    //Log.i("MIPSSimulator.Run temp:", temp.toString())
                     regs[instr.rt] = stack[temp!!].toInt() shl 24 ushr 24
                 }
 
                 0x25 -> {   // lhu
                     val msg = "lhu $" + instr.rt + ", " + + instr.immediate + "($" + instr.rs + ")"
-                    Log.d("sim.Run", msg)
+                    Log.d("MIPSSimulator.Run", msg)
                     val temp = parseStackAddress(regs[instr.rs]!! + instr.immediate!!)
                     if (temp == null) {
                         err = "Invalid stack address"
                         return
                     }
-                    //Log.i("sim.Run temp:", temp.toString())
+                    //Log.i("MIPSSimulator.Run temp:", temp.toString())
                     regs[instr.rt] =
                         bigEndianConversion(stack.copyOfRange(temp - 1, temp + 1)) shl 16 ushr 16
                 }
@@ -270,13 +270,13 @@ class MIPSSimulator(
                 }
 
                 0xf -> {    // lui
-                    Log.d("sim.Run", "lui $" + instr.rt + ", " + instr.immediate)
+                    Log.d("MIPSSimulator.Run", "lui $" + instr.rt + ", " + instr.immediate)
                     regs[instr.rt] = instr.immediate shl 17 ushr 1
                 }
 
                 0x23 -> {   // lw
                     val msg = "lw $" + instr.rt + ", " + + instr.immediate + "($" + instr.rs + ")"
-                    Log.d("sim.Run", msg)
+                    Log.d("MIPSSimulator.Run", msg)
                     val temp = parseStackAddress(regs[instr.rs]!! + instr.immediate!!)
                     if (temp == null) {
                         err = "Invalid stack address"
@@ -286,24 +286,24 @@ class MIPSSimulator(
                 }
 
                 0xd -> {    // ori
-                    Log.d("sim.Run", "ori $" + instr.rt + ", $" + instr.rs + ", " + instr.immediate)
+                    Log.d("MIPSSimulator.Run", "ori $" + instr.rt + ", $" + instr.rs + ", " + instr.immediate)
                     regs[instr.rt] = regs[instr.rs]!! or (zeroExtendImmediate(instr.immediate))
                 }
 
                 0xa -> {    // slti
-                    Log.d("sim.Run", "slti $" + instr.rt + ", $" + instr.rs + ", " + instr.immediate)
+                    Log.d("MIPSSimulator.Run", "slti $" + instr.rt + ", $" + instr.rs + ", " + instr.immediate)
                     regs[instr.rt] = if (regs[instr.rs]!! < instr.immediate) 1 else 0
                 }
 
                 0xb -> {    // sltiu
-                    Log.d("sim.Run", "sltiu $" + instr.rt + ", $" + instr.rs + ", " + instr.immediate)
+                    Log.d("MIPSSimulator.Run", "sltiu $" + instr.rt + ", $" + instr.rs + ", " + instr.immediate)
                     regs[instr.rt] =
                         if (regs[instr.rs]!!.toUInt() < instr.immediate.toUInt()) 1 else 0
                 }
 
                 0x28 -> {   // sb
                     val msg = "sb $" + instr.rt + ", " + + instr.immediate + "($" + instr.rs + ")"
-                    Log.d("sim.Run", msg)
+                    Log.d("MIPSSimulator.Run", msg)
                     val temp = parseStackAddress(regs[instr.rs]!! + instr.immediate!!)
                     if (temp == null) {
                         err = "Invalid stack address"
@@ -319,7 +319,7 @@ class MIPSSimulator(
 
                 0x29 -> {   // sh
                     val msg = "sh $" + instr.rt + ", " + + instr.immediate + "($" + instr.rs + ")"
-                    Log.d("sim.Run", msg)
+                    Log.d("MIPSSimulator.Run", msg)
                     val temp = parseStackAddress(regs[instr.rs]!! + instr.immediate!!)
                     if (temp == null) {
                         err = "Invalid stack address"
@@ -334,7 +334,7 @@ class MIPSSimulator(
 
                 0x2b -> {   // sw
                     val msg = "sw $" + instr.rt + ", " + + instr.immediate + "($" + instr.rs + ")"
-                    Log.d("sim.Run", msg)
+                    Log.d("MIPSSimulator.Run", msg)
                     val temp = parseStackAddress(regs[instr.rs]!! + instr.immediate!!)
                     if (temp == null) {
                         err = "Invalid stack address"

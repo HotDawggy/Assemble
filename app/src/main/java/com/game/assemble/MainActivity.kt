@@ -46,9 +46,8 @@ class MainActivity : AppCompatActivity() {
         )
 
         // Testing MIPSSimulator, remove on production
-        val temp = byteArrayOf(0x10, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x20)
-        Log.i("printStack", temp.toString())
-        sim.stack = temp
+        /*
+        sim.stack = byteArrayOf(0x10, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x20)
         sim.Run(listOf(
             Instruction(opcode = 0x28, rt = 4, rs = 29, immediate = 4)
             //Instruction(),
@@ -60,7 +59,8 @@ class MainActivity : AppCompatActivity() {
         }
         else {
             Log.i("sim.v0", sim.regs[2].toString())
-            //sim.printStack()
+            sim.printStack()
         }
+         */
     }
 }
