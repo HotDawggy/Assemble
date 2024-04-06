@@ -2,6 +2,18 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="Leaderboard">
+        <State />
+      </entry>
+      <entry key="MainActivity">
+        <State />
+      </entry>
+      <entry key="ProfilePage">
+        <State />
+      </entry>
+      <entry key="ViewImageRunHistory">
+        <State />
+      </entry>
       <entry key="app">
         <State />
       </entry>

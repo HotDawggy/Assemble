@@ -6,4 +6,68 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/homePageTitle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Home Page!"
+            android:layout_gravity="center"
+            android:gravity="center"
+            ></TextView>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/homePageTitle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/homePageLayout"
+        android:gravity="center"
+        >
+
+        <Button
+            android:id="@+id/homePageGameButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_margin="30dp"
+            android:text="New Game" />
+
+        <Button
+            android:id="@+id/homePageLeaderboardButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_margin="30dp"
+            android:text="Leaderboard" />
+
+        <Button
+            android:id="@+id/homePageProfilePageButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_margin="30dp"
+            android:text="Profile Page" />
+
+        <Button
+            android:id="@+id/homePageEncyclopediaButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_margin="30dp"
+            android:text="Encyclopedia" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
