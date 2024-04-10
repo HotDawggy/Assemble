@@ -39,6 +39,14 @@ class MainActivity : AppCompatActivity() {
             startActivity(myIntent)
         }
 
+        encyclopediaButton.setOnClickListener {
+            val myIntent = Intent(
+                this,
+                Encyclopedia::class.java
+            )
+            startActivity(myIntent)
+        }
+
 
         val sim: MIPSSimulator = MIPSSimulator(
             a0 = 0x4,
