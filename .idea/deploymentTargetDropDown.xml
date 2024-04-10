@@ -5,6 +5,9 @@
       <entry key="Encyclopedia">
         <State />
       </entry>
+      <entry key="GameActivity">
+        <State />
+      </entry>
       <entry key="MainActivity">
         <State />
       </entry>
@@ -12,9 +15,6 @@
         <State />
       </entry>
       <entry key="Task">
-        <State />
-      </entry>
-      <entry key="ViewImageRunHistory">
         <State />
       </entry>
       <entry key="app">

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:id="@+id/gameInstructionItemLayout">
+
+    <TextView
+        android:id="@+id/gameInstructionItemLineNumberTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="TextView"
+        />
+
+    <Button
+        android:id="@+id/gameInstructionOpButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="Button" />
+
+    <Button
+        android:id="@+id/gameInstructionParam1Button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="Button" />
+
+    <Button
+        android:id="@+id/gameInstructionParam2Button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="Button" />
+
+    <Button
+        android:id="@+id/gameInstructionParam3Button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="Button" />
+</LinearLayout>

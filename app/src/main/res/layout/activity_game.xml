@@ -6,4 +6,62 @@
     android:layout_height="match_parent"
     tools:context=".GameActivity">
 
+
+
+    <!-- from https://stackoverflow.com/questions/59538127/how-do-i-divide-my-screen-in-2-equal-parts-using-constraint-layout -->
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/gameGuideline"
+        app:layout_constraintGuide_percent="0.5"
+        android:orientation="horizontal"/>
+
+
+    <LinearLayout
+        android:id="@+id/gameInstructionListLayout"
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+
+        >
+
+        <ImageButton
+            android:id="@+id/gamePlayButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_media_play"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_gravity="right"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/gameInstructionRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:orientation="vertical"
+        android:id="@+id/gameInstructionKeyboardLayout"
+        app:layout_constraintTop_toBottomOf="@id/gameGuideline"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="testing"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:orientation="vertical"
+        android:id="@+id/gameInstructionRegisterLayout"
+        app:layout_constraintTop_toBottomOf="@id/gameGuideline"
+        ></LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
