@@ -39,6 +39,7 @@
             android:id="@+id/gameInstructionRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+
     </LinearLayout>
 
     <LinearLayout
@@ -60,8 +61,50 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:orientation="vertical"
-        android:id="@+id/gameInstructionRegisterLayout"
+        android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/gameGuideline"
-        ></LinearLayout>
+        >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="7"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/gameInstructionRegisterLayout">
+
+            <TextView
+                android:id="@+id/gameInstructionRegisterTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Register" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/gameInstructionRegisterRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="end"
+            >
+
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="0dp"
+                android:padding="0dp"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/backspace" />
+        </LinearLayout>
+
+
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

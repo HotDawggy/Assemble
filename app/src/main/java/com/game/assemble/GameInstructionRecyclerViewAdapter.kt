@@ -1,7 +1,6 @@
 package com.game.assemble
 
 // from https://developer.android.com/develop/ui/views/layout/recyclerview
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,6 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import getParamNumber
 
 class GameInstructionRecyclerViewAdapter(private val dataSet: Array<InstructionItem>) :
     RecyclerView.Adapter<GameInstructionRecyclerViewAdapter.ViewHolder>() {
