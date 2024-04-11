@@ -2,7 +2,6 @@ package com.game.assemble
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.GridView
@@ -45,9 +44,51 @@ class GameActivity : AppCompatActivity() {
         registerRecyclerView.adapter = registerCustomAdapter
 
 
-        val keys = listOf("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R")
-        val gridView: GridView = findViewById(R.id.keyboardGridView)
-        val gridViewAdapter = KeyboardGridViewAdapter(this, keys)
+        val keyboardTabButtons = arrayOf<Button>(
+            findViewById<Button>(R.id.buttonR),
+            findViewById<Button>(R.id.buttonJ),
+            findViewById<Button>(R.id.buttonI),
+            findViewById<Button>(R.id.buttonLabels)
+        )
+        val keyboardLayouts = arrayOf<GridView>(
+            findViewById<GridView>(R.id.keyboardRGridView),
+            findViewById<GridView>(R.id.keyboardJGridView),
+            findViewById<GridView>(R.id.keyboardIGridView),
+            findViewById<GridView>(R.id.keyboardLabelsGridView)
+        )
+
+        keyboardLayouts[1].visibility = View.GONE
+        keyboardLayouts[2].visibility = View.GONE
+        keyboardLayouts[3].visibility = View.GONE
+
+        val keysR = listOf("R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8")
+        val keysJ = listOf("J1", "J2", "J3", "J4", "J5", "J6", "J7", "J8")
+        val keysI = listOf("I1", "I2", "I3", "I4", "I5", "I6", "I7", "I8")
+        val keysLabels = listOf("Lab1", "Lab2", "Lab3", "Lab4", "Lab5", "Lab6", "Lab7", "Lab8")
+        val keys = arrayOf(keysR, keysJ, keysI, keysLabels)
+
+        for(i in 0 until 4) {
+            val gridView: GridView = keyboardLayouts[i]
+            val gridViewAdapter = KeyboardGridViewAdapter(this, keys[i])
+            gridView.adapter = gridViewAdapter
+
+            val tabButton = keyboardTabButtons[i]
+            tabButton.setOnClickListener {
+                for (j in 0 until 4) {
+                    val gridView: GridView = keyboardLayouts[j]
+                    if (i == j) {
+                        gridView.visibility = View.VISIBLE
+                    }
+                    else {
+                        gridView.visibility = View.GONE
+                    }
+                }
+            }
+        }
+
+        val gridView: GridView = findViewById(R.id.keyboardRGridView)
+        val gridViewAdapter = KeyboardGridViewAdapter(this, keysR)
         gridView.adapter = gridViewAdapter
+
     }
 }

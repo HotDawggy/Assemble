@@ -91,7 +91,34 @@
             android:horizontalSpacing="4dp"
             android:verticalSpacing="4dp"
             android:padding="8dp"
-            android:id="@+id/keyboardGridView"
+            android:id="@+id/keyboardRGridView"
+            />
+        <GridView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:numColumns="3"
+            android:horizontalSpacing="4dp"
+            android:verticalSpacing="4dp"
+            android:padding="8dp"
+            android:id="@+id/keyboardJGridView"
+            />
+        <GridView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:numColumns="3"
+            android:horizontalSpacing="4dp"
+            android:verticalSpacing="4dp"
+            android:padding="8dp"
+            android:id="@+id/keyboardIGridView"
+            />
+        <GridView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:numColumns="3"
+            android:horizontalSpacing="4dp"
+            android:verticalSpacing="4dp"
+            android:padding="8dp"
+            android:id="@+id/keyboardLabelsGridView"
             />
     </LinearLayout>
 
