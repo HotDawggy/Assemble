@@ -48,14 +48,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(myIntent)
         }
 
-        /*
+
         val sim: MIPSSimulator = MIPSSimulator(
-            context = this.applicationContext,
+            ctx = this.applicationContext,
             a0 = 0x4,
             sp = 0x7ffffff4
         )
-        */
-
         // Testing MIPSSimulator, remove on production
         /*
         sim.stack = byteArrayOf(0x10, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x20)
