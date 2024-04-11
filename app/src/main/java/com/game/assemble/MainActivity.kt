@@ -1,5 +1,6 @@
 package com.game.assemble
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -47,11 +48,13 @@ class MainActivity : AppCompatActivity() {
             startActivity(myIntent)
         }
 
-
+        /*
         val sim: MIPSSimulator = MIPSSimulator(
+            context = this.applicationContext,
             a0 = 0x4,
             sp = 0x7ffffff4
         )
+        */
 
         // Testing MIPSSimulator, remove on production
         /*

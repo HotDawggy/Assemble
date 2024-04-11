@@ -1,7 +1,11 @@
 package com.game.assemble
+import android.content.Context
+import android.content.res.Resources
 import android.util.Log
 import java.util.Calendar
 import java.util.Date
+import kotlin.math.floor
+import kotlin.math.sqrt
 
 val CODE_START = 0x00400000
 val STACK_START = 0x7ffffffc
@@ -16,6 +20,7 @@ class Instruction(
     val address: Int = 0
 ) {}
 class MIPSSimulator(
+    val context: Context,
     val v0: Int = 0,
     val a0: Int = 0,
     val a1: Int = 0,
@@ -37,7 +42,14 @@ class MIPSSimulator(
         regs[17] = s1
         regs[29] = sp
     }
-    var stack: ByteArray = byteArrayOf()
+
+    val stack: ByteArray = byteArrayOf()
+    private val taskList : Array<String> = context.resources.getStringArray(R.array.taskList)
+    private var taskNo: Int = -1
+    private var taskGoal: Int = -1
+    private var taskSize: Int = -1
+    private var taskAddr: Int = -1
+
     private fun parseCodeAddress(addr: Int) : Int? {
         val temp = addr - CODE_START
         if (temp % 4 != 0) {
@@ -75,6 +87,81 @@ class MIPSSimulator(
             else stack[index] = bytes[i]
             temp++
         }
+    }
+    private fun convertIntToByteArray(input : Int) : ByteArray {
+        var temp = input
+        var res = byteArrayOf()
+        for (i in 0..3) {
+            res = byteArrayOf((temp.toByte())) + byteArrayOf()
+            temp ushr 8
+        }
+        return res
+    }
+
+    fun generateTask() : String {
+        taskNo = taskList.indices.random()
+        when (taskNo) {
+            0 -> {  // LCM of a0, a1, return in v0
+                regs[4] = (4..999).random()
+                regs[5] = (4..999).random()
+                fun findLCM(a: Int, b: Int): Int {
+                    val larger = if (a > b) a else b
+                    val maxLcm = a * b
+                    var lcm = larger
+                    while (lcm <= maxLcm) {
+                        if (lcm % a == 0 && lcm % b == 0) {
+                            return lcm
+                        }
+                        lcm += larger
+                    }
+                    return maxLcm
+                }
+                taskGoal = findLCM(regs[4]!!, regs[5]!!)
+            }
+            1 -> {
+                regs[4] = stack.size + STACK_START
+                taskAddr = stack.size
+                taskSize = (5..20).random()
+                regs[5] = taskSize
+                for (i in (0..<taskSize)) {
+                    addToStack(convertIntToByteArray((1..999).random()), stack.size, 4)
+                }
+            }
+            2 -> {
+                regs[4] = (4..999).random()
+                regs[5] = (4..999).random()
+                fun findGCD(a: Int, b: Int): Int {
+                    var num1 = a
+                    var num2 = b
+                    while (num2 != 0) {
+                        val temp = num2
+                        num2 = num1 % num2
+                        num1 = temp
+                    }
+                    return num1
+                }
+                taskGoal = findGCD(regs[4]!!, regs[5]!!)
+            }
+        }
+        return taskList[taskNo]
+    }
+
+    fun validateTask() : Boolean {
+        when (taskNo) {
+            0 -> {  // LCM of a0, a1, return in v0
+                if (regs[2] == taskGoal) return true
+            }
+            1 -> {  // Sort array in ascending order
+                for (i in taskAddr..< taskAddr+taskSize - 1) {
+                    if (stack[i] > stack[i+1]) return false
+                }
+                return true
+            }
+            2 -> {
+                if (regs[2] == taskGoal) return true
+            }
+        }
+        return false
     }
 
     fun printStack() {
