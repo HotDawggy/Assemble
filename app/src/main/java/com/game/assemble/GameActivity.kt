@@ -20,7 +20,7 @@ class GameActivity : AppCompatActivity() {
 
         val gameInstructionItem1 = InstructionItem("ADD", "532", "782")
         val gameInstructionItem2 = InstructionItem("RAWR", "XD", "D:", "BNNUY")
-        val dataSet= arrayOf(gameInstructionItem1, gameInstructionItem2)
+        val dataSet= arrayOf(gameInstructionItem1, gameInstructionItem2, gameInstructionItem1, gameInstructionItem2, gameInstructionItem1)
 
         val recyclerView: RecyclerView = findViewById<RecyclerView>(R.id.gameInstructionRecyclerView)
         val layoutManager = LinearLayoutManager(this)

@@ -1,6 +1,7 @@
 package com.game.assemble
 
 // from https://developer.android.com/develop/ui/views/layout/recyclerview
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,7 +63,12 @@ class GameInstructionRecyclerViewAdapter(private val dataSet: Array<InstructionI
 
         for(button: Button in arrayOf(viewHolder.operator, viewHolder.reg1, viewHolder.reg2, viewHolder.reg3)) {
             button.setOnClickListener {
+                val otherButton = GameActivity.lastAccessedGameButton
+                if (otherButton != null) {
+                    otherButton.setBackgroundColor(Color.BLUE)
+                }
                 GameActivity.lastAccessedGameButton = button
+                button.setBackgroundColor(Color.GREEN)
             }
         }
     }
