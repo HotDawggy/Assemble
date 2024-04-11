@@ -59,6 +59,12 @@ class GameInstructionRecyclerViewAdapter(private val dataSet: Array<InstructionI
         viewHolder.reg1.visibility = visibilities[0]
         viewHolder.reg2.visibility = visibilities[1]
         viewHolder.reg3.visibility = visibilities[2]
+
+        for(button: Button in arrayOf(viewHolder.operator, viewHolder.reg1, viewHolder.reg2, viewHolder.reg3)) {
+            button.setOnClickListener {
+                GameActivity.lastAccessedGameButton = button
+            }
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)

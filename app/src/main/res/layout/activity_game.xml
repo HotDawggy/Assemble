@@ -23,17 +23,17 @@
 
         android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="visible"
 
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:id="@+id/gamePlayButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/ic_media_play"
+            android:layout_gravity="right"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_gravity="right"/>
+            app:srcCompat="@android:drawable/ic_media_play" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/gameInstructionRecyclerView"
@@ -50,11 +50,49 @@
         android:id="@+id/gameInstructionKeyboardLayout"
         app:layout_constraintTop_toBottomOf="@id/gameGuideline"
         >
-        <TextView
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="testing"/>
+            android:orientation="horizontal">
 
+            <Button
+                android:id="@+id/buttonR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="R" />
+
+            <Button
+                android:id="@+id/buttonJ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="I" />
+
+            <Button
+                android:id="@+id/buttonI"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="J and Digits" />
+
+            <Button
+                android:id="@+id/buttonLabels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Labels" />
+        </LinearLayout>
+        <GridView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:numColumns="3"
+            android:horizontalSpacing="4dp"
+            android:verticalSpacing="4dp"
+            android:padding="8dp"
+            android:id="@+id/keyboardGridView"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -62,15 +100,15 @@
         android:layout_height="wrap_content"
 
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/gameGuideline"
-        >
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/gameGuideline">
 
         <LinearLayout
+            android:id="@+id/gameInstructionRegisterLayout"
             android:layout_width="0dp"
-            android:layout_weight="7"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:id="@+id/gameInstructionRegisterLayout">
+            android:layout_weight="7"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/gameInstructionRegisterTitle"
@@ -88,11 +126,10 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:layout_weight="1"
             android:gravity="end"
-            >
+            android:orientation="vertical">
 
             <ImageButton
                 android:id="@+id/imageButton2"
@@ -103,7 +140,6 @@
                 android:scaleType="centerInside"
                 app:srcCompat="@drawable/backspace" />
         </LinearLayout>
-
 
 
     </LinearLayout>

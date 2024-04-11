@@ -4,11 +4,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
+import android.widget.GridView
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class GameActivity : AppCompatActivity() {
+    companion object {
+        var lastAccessedGameButton: Button? = null
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
@@ -26,7 +31,7 @@ class GameActivity : AppCompatActivity() {
         recyclerView.adapter = customAdapter
 
         val keyboardView = findViewById<LinearLayout>(R.id.gameInstructionKeyboardLayout)
-        keyboardView.visibility = View.GONE
+        //keyboardView.visibility = View.GONE
 
         val register1 = RegisterItem("a22", 6969)
         val register2 = RegisterItem("a1", 1234)
@@ -39,6 +44,10 @@ class GameActivity : AppCompatActivity() {
         val registerCustomAdapter = GameRegisterRecyclerViewAdapter(registerDataset)
         registerRecyclerView.adapter = registerCustomAdapter
 
-        Log.i("item count", GameRegisterRecyclerViewAdapter(registerDataset).getItemCount().toString())
+
+        val keys = listOf("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R")
+        val gridView: GridView = findViewById(R.id.keyboardGridView)
+        val gridViewAdapter = KeyboardGridViewAdapter(this, keys)
+        gridView.adapter = gridViewAdapter
     }
 }
