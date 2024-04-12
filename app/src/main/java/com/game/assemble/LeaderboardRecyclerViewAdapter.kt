@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class LeaderboardRecyclerViewAdapter(private val dataSet: Array<LeaderboardItem>) :
+class LeaderboardRecyclerViewAdapter(private var dataSet: Array<LeaderboardItem>) :
     RecyclerView.Adapter<LeaderboardRecyclerViewAdapter.ViewHolder>() {
 
     /**
@@ -48,4 +48,8 @@ class LeaderboardRecyclerViewAdapter(private val dataSet: Array<LeaderboardItem>
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = dataSet.size
 
+    fun updateData(newData: Array<LeaderboardItem>) {
+        this.dataSet = newData
+        notifyDataSetChanged()
+    }
 }
