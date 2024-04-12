@@ -1,16 +1,10 @@
 package com.game.assemble
 import android.content.Context
-import android.content.res.Resources
 import android.util.Log
-import androidx.resourceinspection.annotation.Attribute.IntMap
 import java.util.Calendar
-import java.util.Date
-import kotlin.math.floor
-import kotlin.math.sqrt
-import kotlin.reflect.typeOf
 
-val CODE_START = 0x00400000
-val STACK_START = 0x7ffffffc
+const val CODE_START = 0x00400000
+const val STACK_START = 0x7ffffffc
 
 class GameTask(ctx: Context) {
     val info: MutableMap<String, Any?> = mutableMapOf<String, Any?>(
@@ -55,7 +49,60 @@ class Instruction(
     val funct: Int? = null,     // 5
     val immediate: Int? = null, // 6
     val address: Int? = null,   // 7
-) {}
+    val label: String? = null   // 8
+) {
+    companion object {
+        private var registerLookup = mutableMapOf<Int, String>()
+        private var opcodeLookup = mutableMapOf<Int, String>()
+        private var functLookup  = mutableMapOf<Int, String>()
+        private var init: Boolean = false
+        fun initLookup(ctx: Context) {
+            val regsKey = ctx.resources.getIntArray(R.array.regsKey)
+            val regsString = ctx.resources.getStringArray(R.array.regsString)
+            val opcodeKey = ctx.resources.getIntArray(R.array.opcodeKey)
+            val opcodeString = ctx.resources.getStringArray(R.array.opcodeString)
+            val functKey = ctx.resources.getIntArray(R.array.functKey)
+            val functString = ctx.resources.getStringArray(R.array.functString)
+            for (i in regsKey.indices) {
+                registerLookup[regsKey[i]] = regsString[i]
+            }
+            for (i in opcodeKey.indices) {
+                opcodeLookup[opcodeKey[i]] = opcodeString[i]
+            }
+            for (i in functKey.indices) {
+                functLookup[functKey[i]] = functString[i]
+            }
+            init = true
+        }
+    }
+    fun stringify() : String {
+        if (!init) return "Resources haven't been initialized"
+        return when (opcode) {
+            null -> "_"
+            0x0 -> when (funct) {
+                null -> "_"
+                else -> functLookup[funct] + " " + when (funct) {
+                    0x08 -> registerLookup[(rs ?: -1)]
+                    0x00, 0x02 -> registerLookup[(rd ?: -1)] + ", " + registerLookup[(rs ?: -1)] + ", " + (shamt ?: "_").toString()
+                    else ->
+                        registerLookup[(rd ?: -1)] + ", " + registerLookup[(rs ?: -1)] + ", " + registerLookup[(rt ?: -1)]
+                }
+            }
+            else -> {
+                opcodeLookup[opcode] + " " + when (opcode) {
+                    0x4, 0x5 ->
+                        registerLookup[(rt ?: -1)] + ", " + registerLookup[(rs ?: -1)] + ", " + (label ?: (address ?: "_").toString())
+                    0x2 ->
+                        label ?: (address ?: "_").toString()
+                    0x24, 0x25, 0xf, 0x23, 0x28, 0x29, 0x2b ->
+                        registerLookup[(rt ?: -1)] + ", " + (immediate ?: "_").toString() + "(" + registerLookup[(rs ?: -1)] + ")"
+                    else ->
+                        registerLookup[(rt ?: -1)] + ", " + registerLookup[(rs ?: -1)] + ", " + (immediate ?: "_").toString()
+                }
+            }
+        }
+    }
+}
 class MIPSSimulator(
     val ctx: Context,
     val v0: Int = 0,
@@ -74,7 +121,7 @@ class MIPSSimulator(
     private val stack: ByteArray = byteArrayOf()
         get() = field
     init {
-
+        Instruction.initLookup(ctx)
         regs[0] = 0    // $zero
         regs[2] = v0
         regs[4] = a0
@@ -122,7 +169,7 @@ class MIPSSimulator(
             if (temp >= stack.size) stack + byteArrayOf((bytes[i]))
             else stack[index] = bytes[i]
             temp++
-            if (updateSp == true) regs[29] = regs[29]!! - 1
+            if (updateSp) regs[29] = regs[29]!! - 1
         }
     }
     private fun convertIntToByteArray(input : Int) : ByteArray {
