@@ -1,11 +1,12 @@
 package com.game.assemble
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.GridView
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -17,17 +18,18 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
-        val gameInstructionItem1 = InstructionItem("ADD", "532", "782")
-        val gameInstructionItem2 = InstructionItem("RAWR", "XD", "D:", "BNNUY")
-        val dataSet= arrayOf(gameInstructionItem1, gameInstructionItem2, gameInstructionItem1, gameInstructionItem2, gameInstructionItem1)
+        Instruction.initLookup(this.applicationContext)
+        var instrList = arrayOf<Instruction>()
+        instrList += Instruction(opcode = 0x28, rt=4, rs=2, immediate=4)
+        Log.i("PrintInstruction", instrList[0].stringify())
 
         val recyclerView: RecyclerView = findViewById<RecyclerView>(R.id.gameInstructionRecyclerView)
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
 
         // Set adapter for the RecyclerView
-        val customAdapter = GameInstructionRecyclerViewAdapter(dataSet)
-        recyclerView.adapter = customAdapter
+        //val customAdapter = GameInstructionRecyclerViewAdapter(dataSet)
+        //recyclerView.adapter = customAdapter
 
         val keyboardView = findViewById<LinearLayout>(R.id.gameInstructionKeyboardLayout)
         //keyboardView.visibility = View.GONE

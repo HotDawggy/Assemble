@@ -1,10 +1,9 @@
 package com.game.assemble
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,10 +48,10 @@ class MainActivity : AppCompatActivity() {
 
 
         val sim: MIPSSimulator = MIPSSimulator(
+            ctx = this.applicationContext,
             a0 = 0x4,
             sp = 0x7ffffff4
         )
-
         // Testing MIPSSimulator, remove on production
         /*
         sim.stack = byteArrayOf(0x10, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x20)
