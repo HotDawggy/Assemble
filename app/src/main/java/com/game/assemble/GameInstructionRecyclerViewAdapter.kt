@@ -66,19 +66,16 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
             viewHolder.txVArr[i].visibility = View.GONE
             if (!(instrStr[i - 1].contains("\t") || instrStr[i - 1].contains("(") || instrStr[i - 1].contains(")"))) {
                 viewHolder.txVArr[i].setOnClickListener {
+                    val cur = i
                     GameActivity.lastAccessedGameButton?.typeface = Typeface.DEFAULT
                     GameActivity.lastAccessedGameButton = viewHolder.txVArr[i]
                     viewHolder.txVArr[i].typeface = Typeface.DEFAULT_BOLD
                     val keyboardLayouts = GameActivity.keyboardLayouts
                     for (keyboard in keyboardLayouts) {
                         keyboard.visibility = View.GONE
+                        if (keyboard.id == Instruction.getKeyboardLayout(Instruction.getField(instr)[buttonArr.indexOf(viewHolder.txVArr[cur].id)]))
+                            keyboard.visibility = View.VISIBLE
                     }
-                    Log.i("index", buttonArr.indexOf(viewHolder.txVArr[i].id).toString())
-                    viewHolder.itemView.findViewById<LinearLayout>(
-                        Instruction.getKeyboardLayout(
-                            Instruction.getField(instr)[buttonArr.indexOf(viewHolder.txVArr[i].id)]
-                        )
-                    ).visibility = View.VISIBLE
                 }
                 buttonArr += viewHolder.txVArr[i].id
             }

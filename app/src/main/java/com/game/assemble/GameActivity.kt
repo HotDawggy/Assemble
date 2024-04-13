@@ -42,8 +42,6 @@ class GameActivity : AppCompatActivity() {
         val customAdapter = GameInstructionRecyclerViewAdapter(instrList, this)
         recyclerView.adapter = customAdapter
 
-
-
         // initialize keyboard layouts
         keyboardLayouts = arrayOf(
             findViewById(R.id.digitsKeyboardLayout),

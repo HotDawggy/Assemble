@@ -27,7 +27,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:text="add"
-        android:textSize="30dp"
+        android:textSize="28dp"
         android:visibility="gone"
         />
     <TextView
@@ -36,7 +36,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:text=" "
-        android:textSize="30dp"
+        android:textSize="28dp"
         android:visibility="gone"
         />
     <TextView
@@ -45,7 +45,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:text="$a0"
-        android:textSize="30dp"
+        android:textSize="28dp"
         android:visibility="gone"
         />
     <TextView
@@ -54,7 +54,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:text=" ,"
-        android:textSize="30dp"
+        android:textSize="28dp"
         android:visibility="gone"
         />
     <TextView
@@ -63,7 +63,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:text="$a1"
-        android:textSize="30dp"
+        android:textSize="28dp"
         android:visibility="gone"
         />
     <TextView
@@ -72,7 +72,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:text=", "
-        android:textSize="30dp"
+        android:textSize="28dp"
         android:visibility="gone"
         />
     <TextView
@@ -81,7 +81,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:text="$a1"
-        android:textSize="30dp"
+        android:textSize="28dp"
         android:visibility="gone"
         />
     <TextView
@@ -90,7 +90,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:text=""
-        android:textSize="30dp"
+        android:textSize="28dp"
         android:visibility="gone"
         />
 
