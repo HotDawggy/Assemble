@@ -59,7 +59,7 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
         val instrStr = Instruction.stringify(instr, activity)
         viewHolder.txVArr[0].text = (position + 1).toString()
         viewHolder.txVArr[0].visibility = View.VISIBLE
-        var counter = 0
+        var buttonArr = intArrayOf()
 
         for (i in 1..instrStr.size) {
             viewHolder.txVArr[i].text = instrStr[i - 1]
@@ -73,13 +73,14 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
                     for (keyboard in keyboardLayouts) {
                         keyboard.visibility = View.GONE
                     }
+                    Log.i("index", buttonArr.indexOf(viewHolder.txVArr[i].id).toString())
                     viewHolder.itemView.findViewById<LinearLayout>(
                         Instruction.getKeyboardLayout(
-                            Instruction.getField(instr)[counter]
+                            Instruction.getField(instr)[buttonArr.indexOf(viewHolder.txVArr[i].id)]
                         )
                     ).visibility = View.VISIBLE
                 }
-                counter++
+                buttonArr += viewHolder.txVArr[i].id
             }
         }
         viewHolder.txVArr[1].visibility = View.VISIBLE
