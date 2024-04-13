@@ -79,10 +79,21 @@ class GameActivity : AppCompatActivity() {
         }
         keyboardRecyclerView.adapter = GameRegisterRecyclerViewAdapter(registerArray.toTypedArray())
 
+        // setup the operator tab buttons (switch between R-type and J/I-type ops)
+        val buttonR: Button = findViewById(R.id.buttonR)
+        val buttonI: Button = findViewById(R.id.buttonI)
+
+        buttonR.setOnClickListener {
+            gridViews[0].visibility = View.VISIBLE
+            gridViews[1].visibility = View.GONE
+        }
+        buttonI.setOnClickListener {
+            gridViews[0].visibility = View.GONE
+            gridViews[1].visibility = View.VISIBLE
+        }
+
         // by default, only have the registerLayout visible
         switchKeyboardLayout(R.id.gameInstructionRegisterLayout2)
-        //switchKeyboardLayout(R.id.digitsKeyboardLayout)
-        //switchKeyboardLayout(R.id.operatorKeyboardLayout)
-        //switchKeyboardLayout(R.id.lineNumberKeyboardLayout)
+        switchKeyboardLayout(R.id.operatorKeyboardLayout)
     }
 }
