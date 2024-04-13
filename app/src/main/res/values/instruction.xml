@@ -36,6 +36,42 @@
         <item>sh</item>
         <item>sw</item>
     </string-array>
+    <string-array name="opcodeDescription">
+        <item>Adds a constant value to a register and stores the result in another register.</item>
+        <item>Similar to addi, but treats operands as unsigned integers.</item>
+        <item>Performs a bitwise AND operation between a register and a constant value, storing the result in another register.</item>
+        <item>Branches to a target address if two registers are equal.</item>
+        <item>Branches to a target address if two registers are not equal.</item>
+        <item>Unconditionally jumps to a target address.</item>
+        <item>Loads an unsigned byte from memory into a register.</item>
+        <item>Loads an unsigned halfword from memory into a register.</item>
+        <item>Loads a 16-bit immediate value into the upper 16 bits of a register.</item>
+        <item>Loads a word from memory into a register.</item>
+        <item>Performs a bitwise OR operation between a register and a constant value, storing the result in another register.</item>
+        <item>Sets a register to 1 if another register is less than a constant value; otherwise, sets it to 0.</item>
+        <item>Similar to slti, but treats operands as unsigned integers.</item>
+        <item>Stores the least significant byte of a register into memory.</item>
+        <item>Stores the least significant halfword of a register into memory.</item>
+        <item>Stores a word from a register into memory.</item>
+    </string-array>
+    <string-array name="opcodeUsage">
+        <item>addi $dest, $src, imm</item>
+        <item>addiu $dest, $src, imm</item>
+        <item>andi $dest, $src, imm</item>
+        <item>beq $src1, $src2, target</item>
+        <item>bne $src1, $src2, target</item>
+        <item>j target</item>
+        <item>lbu $dest, offset($base)</item>
+        <item>lhu $dest, offset($base)</item>
+        <item>lui $dest, imm</item>
+        <item>lw $dest, offset($base)</item>
+        <item>ori $dest, $src, imm</item>
+        <item>slti $dest, $src, imm</item>
+        <item>sltiu $dest, $src, imm</item>
+        <item>sb $src, offset($base)</item>
+        <item>sh $src, offset($base)</item>
+        <item>sw $src, offset($base)</item>
+    </string-array>
     <integer-array name="functKey">
         <item>0x20</item>
         <item>0x21</item>

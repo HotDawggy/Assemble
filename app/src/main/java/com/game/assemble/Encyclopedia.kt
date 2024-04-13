@@ -11,16 +11,26 @@ class Encyclopedia : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_encyclopedia)
 
-        val encyclopediaItem1 = EncyclopediaItem("ADD", "Adds registers and stuff D:")
-        val encyclopediaItem2 = EncyclopediaItem("XOR", "self-explanatory")
-        val dataSet = arrayOf(encyclopediaItem1, encyclopediaItem2)
+        // construct encyclopedia dataset
+        val dataSet = mutableListOf<EncyclopediaItem>()
+        val names = resources.getStringArray(R.array.opcodeString)
+        val descriptions = resources.getStringArray(R.array.opcodeDescription)
+        val usages = resources.getStringArray(R.array.opcodeUsage)
+
+        val zippedOpcodes = names.zip(descriptions).zip(usages) {
+            (a, b), c -> Triple(a, b, c)
+        }
+
+        for((name, description, usage) in zippedOpcodes) {
+            dataSet.add(EncyclopediaItem(name, description + "\n" + usage))
+        }
 
         val recyclerView: RecyclerView = findViewById<RecyclerView>(R.id.encyclopediaList)
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
 
         // Set adapter for the RecyclerView
-        val customAdapter = EncyclopediaRecyclerViewAdapter(dataSet)
+        val customAdapter = EncyclopediaRecyclerViewAdapter(dataSet.toTypedArray())
         recyclerView.adapter = customAdapter
     }
 }
