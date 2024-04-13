@@ -43,14 +43,13 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:orientation="vertical"
         android:id="@+id/operatorKeyboardLayout"
-        app:layout_constraintTop_toBottomOf="@id/gameGuideline"
-        android:visibility="gone"
-        >
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/gameGuideline">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,14 +62,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="R" />
-
-            <Button
-                android:id="@+id/buttonJ"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="I"
-                />
 
             <Button
                 android:id="@+id/buttonI"
@@ -86,98 +77,75 @@
                 android:layout_weight="1"
                 android:text="Labels" />
         </LinearLayout>
+
         <GridView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:numColumns="3"
-            android:horizontalSpacing="4dp"
-            android:verticalSpacing="4dp"
-            android:padding="8dp"
             android:id="@+id/keyboardRGridView"
-            />
-        <GridView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:numColumns="3"
             android:horizontalSpacing="4dp"
-            android:verticalSpacing="4dp"
+            android:numColumns="3"
             android:padding="8dp"
-            android:id="@+id/keyboardJGridView"
-            />
+            android:verticalSpacing="4dp" />
+
         <GridView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:numColumns="3"
-            android:horizontalSpacing="4dp"
-            android:verticalSpacing="4dp"
-            android:padding="8dp"
             android:id="@+id/keyboardIGridView"
-            />
-        <GridView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:numColumns="3"
             android:horizontalSpacing="4dp"
-            android:verticalSpacing="4dp"
+            android:numColumns="3"
             android:padding="8dp"
-            android:id="@+id/keyboardLabelsGridView"
-            />
+            android:verticalSpacing="4dp" />
+
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:orientation="vertical"
         android:id="@+id/digitsKeyboardLayout"
-        app:layout_constraintTop_toBottomOf="@id/gameGuideline"
-        android:visibility="gone"
-        >
-
-        <GridView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:numColumns="3"
-            android:horizontalSpacing="4dp"
-            android:verticalSpacing="4dp"
-            android:padding="8dp"
-            android:id="@+id/keyboardDigitsGridView"
-            />
-    </LinearLayout>
-
-
-
-
-    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
 
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id="@+id/lineNumberKeyboardLayout"
-        app:layout_constraintTop_toBottomOf="@id/gameGuideline"
-        android:visibility="gone"
-        >
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/gameGuideline">
 
         <GridView
+            android:id="@+id/keyboardDigitsGridView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:numColumns="3"
             android:horizontalSpacing="4dp"
-            android:verticalSpacing="4dp"
+            android:numColumns="3"
             android:padding="8dp"
-            android:id="@+id/lineNumberGridView"
-            />
+            android:verticalSpacing="4dp" />
     </LinearLayout>
 
 
     <LinearLayout
+        android:id="@+id/lineNumberKeyboardLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
 
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/gameGuideline">
+
+        <GridView
+            android:id="@+id/lineNumberGridView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:horizontalSpacing="4dp"
+            android:numColumns="3"
+            android:padding="8dp"
+            android:verticalSpacing="4dp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/gameInstructionRegisterLayout2"
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:visibility="invisible"
-        app:layout_constraintTop_toBottomOf="@id/gameGuideline"
-        android:id="@+id/gameInstructionRegisterLayout2">
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/gameGuideline">
 
         <LinearLayout
             android:id="@+id/gameInstructionRegisterLayout"

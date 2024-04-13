@@ -28,50 +28,6 @@ class KeyboardGridViewAdapter(val context: Context, val keys: List<String>): Bas
         val key = getItem(position)
         val button = Button(context)
         button.text = key
-        button.setOnClickListener {
-            val toFillButton: TextView? = GameActivity.lastAccessedGameButton
-            if (toFillButton != null) {
-                val parentViewGroup = toFillButton.parent as? ViewGroup
-                if (toFillButton == parentViewGroup!!.findViewById<TextView>(R.id.gameInstructionTextView1)) {
-                    // the user has just added/changed an operator
-                    // find number of buttons required for params
-                    val paramNumber = getParamNumber(toFillButton.text.toString())
-                    /*val regButtons = arrayOf<Button>(
-                        parentViewGroup!!.findViewById(R.id.gameInstructionParam1Button),
-                        parentViewGroup!!.findViewById(R.id.gameInstructionParam2Button),
-                        parentViewGroup!!.findViewById(R.id.gameInstructionParam3Button),
-                    )
-
-                    for(i in 0 until 3) {
-                        if (i < paramNumber) {
-                            val button = regButtons[i] // get the i-th button
-                            button.visibility = View.VISIBLE // un-grey out
-
-                            button.setOnClickListener {
-                                // disable all keyboards
-                                for(keyboard in GameActivity.keyboardLayouts) {
-                                    keyboard.visibility = View.GONE
-                                }
-
-                                changeLayoutVisibility(context, getKeyboardLayout(regButton.text.toString(), i + 1), View.VISIBLE)
-
-                                val otherButton = GameActivity.lastAccessedGameButton
-                                if (otherButton != null) {
-                                    otherButton.setBackgroundColor(Color.BLUE)
-                                }
-                                GameActivity.lastAccessedGameButton = button
-                                button.setBackgroundColor(Color.GREEN)
-
-                            }
-                        }
-                        else {
-                            val button = regButtons[i]
-                            button.visibility = View.INVISIBLE
-                        }
-                    }*/
-                }
-            }
-        }
         return button
     }
 }

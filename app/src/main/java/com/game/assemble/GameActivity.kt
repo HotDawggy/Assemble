@@ -16,19 +16,20 @@ class GameActivity : AppCompatActivity() {
     companion object {
         var lastAccessedGameButton: TextView? = null
         lateinit var keyboardLayouts: Array<LinearLayout>
-
+        fun switchKeyboardLayout(selectedLayoutId: Int) {
+            for (layout in keyboardLayouts) {
+                if (layout.id == selectedLayoutId) {
+                    layout.visibility = View.VISIBLE
+                } else {
+                    layout.visibility = View.GONE
+                }
+            }
+        }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
-        // initialize keyboard layouts
-        keyboardLayouts = arrayOf(
-            findViewById(R.id.digitsKeyboardLayout),
-            findViewById(R.id.operatorKeyboardLayout),
-            findViewById(R.id.lineNumberKeyboardLayout),
-            findViewById(R.id.gameInstructionRegisterLayout2)
-        )
         MIPSSimulator(this)
         var instrList = arrayOf<Instruction>()
         instrList += Instruction(opcode = 0x28, rt=4, rs=2, immediate=4)
@@ -41,86 +42,47 @@ class GameActivity : AppCompatActivity() {
         val customAdapter = GameInstructionRecyclerViewAdapter(instrList, this)
         recyclerView.adapter = customAdapter
 
-        /*
-        val keyboardView = findViewById<LinearLayout>(R.id.operatorKeyboardLayout)
-        //keyboardView.visibility = View.GONE
-
-        val register1 = RegisterItem("a22", 6969)
-        val register2 = RegisterItem("a1", 1234)
-        val registerDataset = arrayOf(register2, register1, register2, register1, register2)
-
-        val registerRecyclerView: RecyclerView = findViewById(R.id.gameInstructionRegisterRecyclerView)
-        val registerLayoutManager = LinearLayoutManager(this)
-        registerRecyclerView.layoutManager = registerLayoutManager
-
-        val registerCustomAdapter = GameRegisterRecyclerViewAdapter(registerDataset)
-        registerRecyclerView.adapter = registerCustomAdapter
 
 
-        val keyboardTabButtons = arrayOf<Button>(
-            findViewById<Button>(R.id.buttonR),
-            findViewById<Button>(R.id.buttonJ),
-            findViewById<Button>(R.id.buttonI),
-            findViewById<Button>(R.id.buttonLabels)
-        )
-        val keyboardLayouts = arrayOf<GridView>(
-            findViewById<GridView>(R.id.keyboardRGridView),
-            findViewById<GridView>(R.id.keyboardJGridView),
-            findViewById<GridView>(R.id.keyboardIGridView),
-            findViewById<GridView>(R.id.keyboardLabelsGridView)
+        // initialize keyboard layouts
+        keyboardLayouts = arrayOf(
+            findViewById(R.id.digitsKeyboardLayout),
+            findViewById(R.id.operatorKeyboardLayout),
+            findViewById(R.id.lineNumberKeyboardLayout),
+            findViewById(R.id.gameInstructionRegisterLayout2)
         )
 
-        keyboardLayouts[1].visibility = View.GONE
-        keyboardLayouts[2].visibility = View.GONE
-        keyboardLayouts[3].visibility = View.GONE
+        val keyboardData = arrayOf<Array<String>>(
+            resources.getStringArray(R.array.instr_r),
+            resources.getStringArray(R.array.instr_i) + resources.getStringArray(R.array.instr_j),
+            arrayOf<String>("0", "1", "2", "3", "4", "5", "6", "7", "8", "9"),
+            arrayOf<String>("1", "2", "3", "4", "5", "6", "7", "8", "9") // TODO: dynamically set this to the number of active instruction lines
+        )
 
-        val keysR = listOf("ADD", "R2", "R3", "R4", "R5", "R6", "R7", "R8")
-        val keysJ = listOf("J1", "J2", "J3", "J4", "J5", "J6", "J7", "J8")
-        val keysI = listOf("I1", "I2", "I3", "I4", "I5", "I6", "I7", "I8")
-        val keysLabels = listOf("Lab1", "Lab2", "Lab3", "Lab4", "Lab5", "Lab6", "Lab7", "Lab8")
-        val keys = arrayOf(keysR, keysJ, keysI, keysLabels)
+        val gridViews = arrayOf<GridView>(
+            findViewById(R.id.keyboardRGridView),
+            findViewById(R.id.keyboardIGridView),
+            findViewById(R.id.keyboardDigitsGridView),
+            findViewById(R.id.lineNumberGridView),
+        )
 
-        for(i in 0 until 4) {
-            val gridView: GridView = keyboardLayouts[i]
-            val gridViewAdapter = KeyboardGridViewAdapter(this, keys[i])
-            gridView.adapter = gridViewAdapter
-
-            val tabButton = keyboardTabButtons[i]
-            tabButton.setOnClickListener {
-                for (j in 0 until 4) {
-                    val gridView: GridView = keyboardLayouts[j]
-                    if (i == j) {
-                        gridView.visibility = View.VISIBLE
-                    }
-                    else {
-                        gridView.visibility = View.GONE
-                    }
-                }
-            }
+        for ((data, gridView) in keyboardData.zip(gridViews)) {
+            gridView.adapter = KeyboardGridViewAdapter(this, data.toList())
         }
 
-        val gridView: GridView = findViewById(R.id.keyboardRGridView)
-        val gridViewAdapter = KeyboardGridViewAdapter(this, keysR)
-        gridView.adapter = gridViewAdapter
+        // setup register view for keyboard
+        val keyboardRecyclerView: RecyclerView = findViewById(R.id.gameInstructionRegisterRecyclerView)
+        keyboardRecyclerView.layoutManager = LinearLayoutManager(this)
+        var registerArray: MutableList<RegisterItem> = mutableListOf()
+        for(name in resources.getStringArray(R.array.regsString)) {
+            registerArray.add(RegisterItem(name, 0))
+        }
+        keyboardRecyclerView.adapter = GameRegisterRecyclerViewAdapter(registerArray.toTypedArray())
 
-
-        val keyboardOps = findViewById<LinearLayout>(R.id.operatorKeyboardLayout)
-        val keyboardDigits = findViewById<LinearLayout>(R.id.digitsKeyboardLayout)
-        val keyboardLineNumbers = findViewById<LinearLayout>(R.id.lineNumberKeyboardLayout)
-
-        val digitKeyboard = findViewById<GridView>(R.id.keyboardDigitsGridView)
-        val keysDigits = listOf("0", "1", "2", "3", "4", "etc")
-        digitKeyboard.adapter = KeyboardGridViewAdapter(this, keysDigits)
-
-        val lineNumberKeyboard = findViewById<GridView>(R.id.lineNumberGridView)
-        val keysLineNumbers = listOf("Line 1", "Line 2", "etc")
-        lineNumberKeyboard.adapter = KeyboardGridViewAdapter(this, keysLineNumbers)
-
-
-        //keyboardOps.visibility = View.GONE
-        keyboardDigits.visibility = View.GONE
-        keyboardLineNumbers.visibility = View.GONE
-
-         */
+        // by default, only have the registerLayout visible
+        switchKeyboardLayout(R.id.gameInstructionRegisterLayout2)
+        //switchKeyboardLayout(R.id.digitsKeyboardLayout)
+        //switchKeyboardLayout(R.id.operatorKeyboardLayout)
+        //switchKeyboardLayout(R.id.lineNumberKeyboardLayout)
     }
 }
