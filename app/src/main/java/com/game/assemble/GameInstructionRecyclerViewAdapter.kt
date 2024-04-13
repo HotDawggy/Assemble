@@ -1,25 +1,27 @@
 package com.game.assemble
 
 // from https://developer.android.com/develop/ui/views/layout/recyclerview
-import android.content.Context
-import android.content.res.Resources
-import android.graphics.Color
-import android.graphics.Typeface
+import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+
 
 class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction>, private val activity: GameActivity) :
     RecyclerView.Adapter<GameInstructionRecyclerViewAdapter.ViewHolder>() {
-
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder)
      */
+    private var timeout: Handler = Handler(Looper.getMainLooper())
+    private var r: Runnable = Runnable{}
+    private var visible = true
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var txVArr: Array<TextView>
 
@@ -49,6 +51,7 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
     }
 
     // Replace the contents of a view (invoked by the layout manager)
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
@@ -62,19 +65,52 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
         var buttonArr = intArrayOf()
 
         for (i in 1..instrStr.size) {
+            val keyboardLayouts = GameActivity.keyboardLayouts
             viewHolder.txVArr[i].text = instrStr[i - 1]
             viewHolder.txVArr[i].visibility = View.GONE
             if (!(instrStr[i - 1].contains("\t") || instrStr[i - 1].contains("(") || instrStr[i - 1].contains(")"))) {
                 viewHolder.txVArr[i].setOnClickListener {
-                    val cur = i
-                    GameActivity.lastAccessedGameButton?.typeface = Typeface.DEFAULT
-                    GameActivity.lastAccessedGameButton = viewHolder.txVArr[i]
-                    viewHolder.txVArr[i].typeface = Typeface.DEFAULT_BOLD
-                    val keyboardLayouts = GameActivity.keyboardLayouts
-                    for (keyboard in keyboardLayouts) {
-                        keyboard.visibility = View.GONE
-                        if (keyboard.id == Instruction.getKeyboardLayout(Instruction.getField(instr)[buttonArr.indexOf(viewHolder.txVArr[cur].id)]))
-                            keyboard.visibility = View.VISIBLE
+                    if (GameActivity.lastAccessedGameButton != null) {
+                        GameActivity.lastAccessedGameButton!!.setTypeface(
+                            activity.resources.getFont(
+                                R.font.consolas
+                            )
+                        )
+                        timeout.removeCallbacks(r);
+                        visible = true
+                        GameActivity.lastAccessedGameButton?.setTextColor(GameActivity.lastAccessedGameButton!!.textColors.withAlpha(135))
+                    }
+                    if (GameActivity.lastAccessedGameButton == null || GameActivity.lastAccessedGameButton != viewHolder.txVArr[i]) {
+                        GameActivity.lastAccessedGameButton = viewHolder.txVArr[i]
+                        r = Runnable {
+                            visible = if (visible) {
+                                viewHolder.txVArr[i].setTextColor(viewHolder.txVArr[i].textColors.withAlpha(0))
+                                false
+                            } else {
+                                viewHolder.txVArr[i].setTextColor(viewHolder.txVArr[i].textColors.withAlpha(135))
+                                true
+                            }
+                            timeout.postDelayed(r, 500);
+                        }
+                        timeout.postDelayed(r, 500);
+                        viewHolder.txVArr[i].setTypeface(activity.resources.getFont(R.font.consolas_bold))
+                        for (keyboard in keyboardLayouts) {
+                            keyboard.visibility = View.GONE
+                            if (keyboard.id == Instruction.getKeyboardLayout(
+                                    Instruction.getField(instr)[buttonArr.indexOf(
+                                        viewHolder.txVArr[i].id
+                                    )]
+                                )
+                            )
+                                keyboard.visibility = View.VISIBLE
+                        }
+                    } else {
+                        GameActivity.lastAccessedGameButton = null
+                        for (keyboard in keyboardLayouts) {
+                            keyboard.visibility = View.GONE
+                            if (keyboard.id == R.id.gameInstructionRegisterLayout2)
+                                keyboard.visibility = View.VISIBLE
+                        }
                     }
                 }
                 buttonArr += viewHolder.txVArr[i].id
