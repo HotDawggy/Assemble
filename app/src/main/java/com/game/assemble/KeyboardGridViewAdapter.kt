@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.widget.doOnTextChanged
 
 class KeyboardGridViewAdapter(val context: Context, val keys: List<String>): BaseAdapter() {
@@ -28,16 +29,14 @@ class KeyboardGridViewAdapter(val context: Context, val keys: List<String>): Bas
         val button = Button(context)
         button.text = key
         button.setOnClickListener {
-            val toFillButton: Button? = GameActivity.lastAccessedGameButton
+            val toFillButton: TextView? = GameActivity.lastAccessedGameButton
             if (toFillButton != null) {
-                toFillButton.text = button.text.toString()
-
                 val parentViewGroup = toFillButton.parent as? ViewGroup
-                val regButton = parentViewGroup!!.findViewById<Button>(R.id.gameInstructionOpButton)
-                if (regButton == toFillButton) { // the user has just added/changed an operator
+                if (toFillButton == parentViewGroup!!.findViewById<TextView>(R.id.gameInstructionTextView1)) {
+                    // the user has just added/changed an operator
                     // find number of buttons required for params
                     val paramNumber = getParamNumber(toFillButton.text.toString())
-                    val regButtons = arrayOf<Button>(
+                    /*val regButtons = arrayOf<Button>(
                         parentViewGroup!!.findViewById(R.id.gameInstructionParam1Button),
                         parentViewGroup!!.findViewById(R.id.gameInstructionParam2Button),
                         parentViewGroup!!.findViewById(R.id.gameInstructionParam3Button),
@@ -69,7 +68,7 @@ class KeyboardGridViewAdapter(val context: Context, val keys: List<String>): Bas
                             val button = regButtons[i]
                             button.visibility = View.INVISIBLE
                         }
-                    }
+                    }*/
                 }
             }
         }

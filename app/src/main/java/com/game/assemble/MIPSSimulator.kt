@@ -1,12 +1,13 @@
 package com.game.assemble
 import android.content.Context
+import android.content.res.Resources
 import android.util.Log
 import java.util.Calendar
 
 const val CODE_START = 0x00400000
 const val STACK_START = 0x7ffffffc
 class MIPSSimulator(
-    private val ctx: Context,
+    private val context: Context,
     private val v0: Int = 0,
     private val a0: Int = 0,
     private val a1: Int = 0,
@@ -18,12 +19,12 @@ class MIPSSimulator(
     ) {
     private val regs: MutableMap<Int, Int> = mutableMapOf<Int, Int>()
         get() = field
-    private val gameTask: GameTask = GameTask(ctx)
+    private val gameTask: GameTask = GameTask(context)
         get() = field
     private val stack: ByteArray = byteArrayOf()
         get() = field
     init {
-        Instruction.initLookup(ctx)
+        if (!Instruction.isInit()) Instruction.initLookup(context)
         regs[0] = 0    // $zero
         regs[2] = v0
         regs[4] = a0

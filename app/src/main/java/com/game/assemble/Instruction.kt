@@ -1,7 +1,8 @@
 package com.game.assemble
 
 import android.content.Context
-import android.widget.TextView
+import android.content.res.Resources
+import android.util.Log
 
 class Instruction(
     var opcode: Int? = null,    // 0
@@ -36,15 +37,15 @@ class Instruction(
             return init
         }
 
-        fun initLookup(ctx: Context) {
-            val regsKey = ctx.resources.getIntArray(R.array.regsKey)
-            val regsString = ctx.resources.getStringArray(R.array.regsString)
-            val opcodeKey = ctx.resources.getIntArray(R.array.opcodeKey)
-            val opcodeString = ctx.resources.getStringArray(R.array.opcodeString)
-            val functKey = ctx.resources.getIntArray(R.array.functKey)
-            val functString = ctx.resources.getStringArray(R.array.functString)
-            val bitString = ctx.resources.getStringArray(R.array.instr_r) + ctx.resources.getStringArray(R.array.instr_i) + ctx.resources.getStringArray(R.array.instr_j)
-            val bitKey = ctx.resources.getIntArray(R.array.funct_r) + ctx.resources.getIntArray(R.array.opcode_i) + ctx.resources.getIntArray(R.array.opcode_j)
+        fun initLookup(context: Context) {
+            val regsKey = context.resources.getIntArray(R.array.regsKey)
+            val regsString = context.resources.getStringArray(R.array.regsString)
+            val opcodeKey = context.resources.getIntArray(R.array.opcodeKey)
+            val opcodeString = context.resources.getStringArray(R.array.opcodeString)
+            val functKey = context.resources.getIntArray(R.array.functKey)
+            val functString = context.resources.getStringArray(R.array.functString)
+            val bitString = context.resources.getStringArray(R.array.instr_r) + context.resources.getStringArray(R.array.instr_i) + context.resources.getStringArray(R.array.instr_j)
+            val bitKey = context.resources.getIntArray(R.array.funct_r) + context.resources.getIntArray(R.array.opcode_i) + context.resources.getIntArray(R.array.opcode_j)
             for (i in regsKey.indices) {
                 registerLookup[regsKey[i]] = regsString[i]
             }
@@ -83,6 +84,11 @@ class Instruction(
         }
         private fun parseField(instr: Instruction, field: Int) : String {
             return when (field) {
+                0 -> when(instr.opcode) {
+                    0x0 -> functLookup[instr.funct]!!
+                    null -> "_"
+                    else -> opcodeLookup[instr.opcode]!!
+                }
                 1 -> registerLookup[instr.rs]!!
                 2 -> registerLookup[instr.rt]!!
                 3 -> registerLookup[instr.rd]!!
@@ -92,31 +98,34 @@ class Instruction(
                 else -> throw(IllegalArgumentException("Incorrect field"))
             }
         }
-        fun stringify(instr: Instruction, ctx: Context) : Array<String> {
+        fun stringify(instr: Instruction, context: Context) : Array<String> {
             var counter = 0
             var template = arrayOf<String>()
             var res = arrayOf<String>()
             var fieldList: IntArray = getField(instr)
             when (instr.opcode) {
                 0x0 -> {
-                    res += functLookup[instr.funct].toString()
                     when (instr.funct) {
-                        0x8 -> template = ctx.resources.getStringArray(R.array.template_j_jr)
-                        else -> template = ctx.resources.getStringArray(R.array.template)
+                        0x8 -> template = context.resources.getStringArray(R.array.template_j_jr)
+                        else -> template = context.resources.getStringArray(R.array.template)
                     }
                 }
+                null -> {
+                    return arrayOf(instr.label?:"_")
+                }
                 else -> {
-                    res += functLookup[instr.opcode].toString()
                     when (instr.opcode) {
-                        0x2 -> template = ctx.resources.getStringArray(R.array.template_j_jr)
-                        0xf -> template = ctx.resources.getStringArray(R.array.template_lui)
-                        0x24, 0x25, 0x23, 0x28, 0x29, 0x2b -> template = ctx.resources.getStringArray(R.array.template_m)
+                        0x2 -> template = context.resources.getStringArray(R.array.template_j_jr)
+                        0xf -> template = context.resources.getStringArray(R.array.template_lui)
+                        0x24, 0x25, 0x23, 0x28, 0x29, 0x2b -> template = context.resources.getStringArray(R.array.template_m)
+                        0x24, 0x25, 0x23, 0x28, 0x29, 0x2b -> template = context.resources.getStringArray(R.array.template_m)
                         else -> return res
                     }
                 }
             }
             for (i in template.indices) {
                 if (template[i] == "_") {
+                    Log.i("before parseField", fieldList[counter].toString())
                     res += parseField(instr, fieldList[counter])
                     counter++
                 }

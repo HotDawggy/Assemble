@@ -2,8 +2,10 @@ package com.game.assemble
 
 // from https://developer.android.com/develop/ui/views/layout/recyclerview
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Typeface
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +13,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction>, private val ctx: Context) :
+class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction>, private val activity: GameActivity) :
     RecyclerView.Adapter<GameInstructionRecyclerViewAdapter.ViewHolder>() {
 
     /**
@@ -19,12 +21,11 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
      * (custom ViewHolder)
      */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        lateinit var layout: CodeLinearLayout
         var txVArr: Array<TextView>
 
         init {
-            layout = view.findViewById(R.id.gameInstructionItemLayout)
             txVArr = arrayOf(
+                view.findViewById(R.id.gameInstructionItemLineNumberTextView),
                 view.findViewById(R.id.gameInstructionTextView1),
                 view.findViewById(R.id.gameInstructionTextView2),
                 view.findViewById(R.id.gameInstructionTextView3),
@@ -52,20 +53,18 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         val instr = instrArr[position]
-        viewHolder.layout.instr = instr
         if (Instruction.isInit()) {
-            Instruction.initLookup(ctx)
+            Instruction.initLookup(activity)
         }
-        val instrStr = Instruction.stringify(instr, ctx)
+        val instrStr = Instruction.stringify(instr, activity)
         viewHolder.txVArr[0].text = (position + 1).toString()
+        viewHolder.txVArr[0].visibility = View.VISIBLE
         var counter = 0
+
         for (i in 1..instrStr.size) {
             viewHolder.txVArr[i].text = instrStr[i - 1]
             viewHolder.txVArr[i].visibility = View.GONE
-            if (!(instrStr[i - 1].contains(" ") || instrStr[i - 1].contains("(") || instrStr[i - 1].contains(
-                    ")"
-                ))
-            ) {
+            if (!(instrStr[i - 1].contains("\t") || instrStr[i - 1].contains("(") || instrStr[i - 1].contains(")"))) {
                 viewHolder.txVArr[i].setOnClickListener {
                     GameActivity.lastAccessedGameButton?.typeface = Typeface.DEFAULT
                     GameActivity.lastAccessedGameButton = viewHolder.txVArr[i]
@@ -81,6 +80,12 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
                     ).visibility = View.VISIBLE
                 }
                 counter++
+            }
+        }
+        viewHolder.txVArr[1].visibility = View.VISIBLE
+        if (viewHolder.txVArr[1].text != "_") {
+            for (i in 2..instrStr.size) {
+                viewHolder.txVArr[i].visibility = View.VISIBLE
             }
         }
     }

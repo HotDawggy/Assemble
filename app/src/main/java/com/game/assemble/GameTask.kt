@@ -1,13 +1,14 @@
 package com.game.assemble
 
 import android.content.Context
+import android.content.res.Resources
 
-class GameTask(ctx: Context) {
+class GameTask(context: Context) {
     val info: MutableMap<String, Any?> = mutableMapOf<String, Any?>(
         "id" to null,
         "text" to null
     )
-    private val taskList: Array<String> = ctx.resources.getStringArray(R.array.taskList)
+    private val taskList: Array<String> = context.resources.getStringArray(R.array.taskList)
     fun getRandomTask() : Int {
         val idx = taskList.indices.random()
         info["text"] = taskList[idx]

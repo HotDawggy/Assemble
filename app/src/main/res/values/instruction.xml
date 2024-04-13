@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer-array name="opcodeKey">
-        <item>0x0</item>
         <item>0x8</item>
         <item>0x9</item>
         <item>0xc</item>
@@ -91,18 +90,18 @@
     </string-array>
     <string-array name="template">
         <item>_</item>
-        <item> </item>
+        <item>\t</item>
         <item>_</item>
-        <item>, </item>
+        <item>,\t</item>
         <item>_</item>
-        <item>, </item>
+        <item>,\t</item>
         <item>_</item>
     </string-array>
     <string-array name="template_m">
         <item>_</item>
-        <item> </item>
+        <item>\t</item>
         <item>_</item>
-        <item>, </item>
+        <item>,\t</item>
         <item>_</item>
         <item>(</item>
         <item>_</item>
@@ -110,14 +109,14 @@
     </string-array>
     <string-array name="template_lui">
         <item>_</item>
-        <item> </item>
+        <item>\t</item>
         <item>_</item>
-        <item>, </item>
+        <item>,\t</item>
         <item>_</item>
     </string-array>
     <string-array name="template_j_jr">
         <item>_</item>
-        <item> </item>
+        <item>\t</item>
         <item>_</item>
     </string-array>
     <string-array name="instr_r">
@@ -141,6 +140,7 @@
         <item>0x8</item>
         <item>0x27</item>
         <item>0x25</item>
+        <item>0x2a</item>
         <item>0x2b</item>
         <item>0x00</item>
         <item>0x02</item>

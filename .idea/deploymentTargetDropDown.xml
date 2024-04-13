@@ -2,19 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="Encyclopedia">
-        <State />
-      </entry>
       <entry key="GameActivity">
-        <State />
-      </entry>
-      <entry key="Leaderboard">
-        <State />
-      </entry>
-      <entry key="MainActivity">
-        <State />
-      </entry>
-      <entry key="Task">
         <State />
       </entry>
       <entry key="app">

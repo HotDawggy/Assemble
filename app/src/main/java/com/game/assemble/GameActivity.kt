@@ -29,8 +29,7 @@ class GameActivity : AppCompatActivity() {
             findViewById(R.id.lineNumberKeyboardLayout),
             findViewById(R.id.gameInstructionRegisterLayout2)
         )
-
-        Instruction.initLookup(this.applicationContext)
+        MIPSSimulator(this)
         var instrList = arrayOf<Instruction>()
         instrList += Instruction(opcode = 0x28, rt=4, rs=2, immediate=4)
 
@@ -39,9 +38,10 @@ class GameActivity : AppCompatActivity() {
         recyclerView.layoutManager = layoutManager
 
         // Set adapter for the RecyclerView
-        val customAdapter = GameInstructionRecyclerViewAdapter(instrList, this.applicationContext)
+        val customAdapter = GameInstructionRecyclerViewAdapter(instrList, this)
         recyclerView.adapter = customAdapter
 
+        /*
         val keyboardView = findViewById<LinearLayout>(R.id.operatorKeyboardLayout)
         //keyboardView.visibility = View.GONE
 
@@ -120,5 +120,7 @@ class GameActivity : AppCompatActivity() {
         //keyboardOps.visibility = View.GONE
         keyboardDigits.visibility = View.GONE
         keyboardLineNumbers.visibility = View.GONE
+
+         */
     }
 }
