@@ -7,23 +7,23 @@
 
     <TextView
         android:id="@+id/leaderboardRowRanking"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_weight="1"
-        android:gravity="center"
+        android:gravity="left"
         android:text="TextView" />
     <TextView
         android:id="@+id/leaderboardRowUsername"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_weight="1"
+        android:layout_weight="7"
         android:gravity="center"
         android:text="TextView" />
     <TextView
         android:id="@+id/leaderboardRowScore"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_weight="1"
-        android:gravity="center"
+        android:gravity="right"
         android:text="TextView" />
 </LinearLayout>

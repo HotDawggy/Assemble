@@ -82,7 +82,7 @@ class Leaderboard : AppCompatActivity() {
     // from https://stackoverflow.com/questions/66059143/how-to-make-a-http-post-request-in-kotlin-android-to-simple-server
     fun submitScore(username: String, score: Int) {
         // TODO: Replace in Prod
-        var url = "https://11fa-219-79-67-13.ngrok-free.app/leaderboard.php"
+        var url = "https://0553-175-159-124-117.ngrok-free.app/leaderboard.php"
 
         // add parameter
         val formBody = FormBody.Builder()
@@ -109,7 +109,7 @@ class Leaderboard : AppCompatActivity() {
 
     fun requestScore(timespan: String, onResponse: (String?) -> Unit) {
         // TODO: Replace in Prod
-        var baseUrl = "https://11fa-219-79-67-13.ngrok-free.app/leaderboard.php"
+        var baseUrl = "https://0553-175-159-124-117.ngrok-free.app/leaderboard.php"
 
         // from https://stackoverflow.com/questions/65884020/http-get-request-with-parameters-in-okhttp-android-kotlin
         val url = baseUrl.toHttpUrl().newBuilder()

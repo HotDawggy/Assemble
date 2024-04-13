@@ -11,12 +11,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class GameActivity : AppCompatActivity() {
+
     companion object {
         var lastAccessedGameButton: Button? = null
+        lateinit var keyboardLayouts: Array<LinearLayout>
+
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+
+        // initialize keyboard layouts
+        keyboardLayouts = arrayOf(
+            findViewById(R.id.digitsKeyboardLayout),
+            findViewById(R.id.operatorKeyboardLayout),
+            findViewById(R.id.lineNumberKeyboardLayout),
+            findViewById(R.id.gameInstructionRegisterLayout2)
+        )
 
         Instruction.initLookup(this.applicationContext)
         var instrList = arrayOf<Instruction>()
@@ -27,11 +38,13 @@ class GameActivity : AppCompatActivity() {
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
 
-        // Set adapter for the RecyclerView
-        //val customAdapter = GameInstructionRecyclerViewAdapter(dataSet)
-        //recyclerView.adapter = customAdapter
+        val dataSet = arrayOf<InstructionItem>(InstructionItem())
 
-        val keyboardView = findViewById<LinearLayout>(R.id.gameInstructionKeyboardLayout)
+        // Set adapter for the RecyclerView
+        val customAdapter = GameInstructionRecyclerViewAdapter(dataSet)
+        recyclerView.adapter = customAdapter
+
+        val keyboardView = findViewById<LinearLayout>(R.id.operatorKeyboardLayout)
         //keyboardView.visibility = View.GONE
 
         val register1 = RegisterItem("a22", 6969)
@@ -63,7 +76,7 @@ class GameActivity : AppCompatActivity() {
         keyboardLayouts[2].visibility = View.GONE
         keyboardLayouts[3].visibility = View.GONE
 
-        val keysR = listOf("R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8")
+        val keysR = listOf("ADD", "R2", "R3", "R4", "R5", "R6", "R7", "R8")
         val keysJ = listOf("J1", "J2", "J3", "J4", "J5", "J6", "J7", "J8")
         val keysI = listOf("I1", "I2", "I3", "I4", "I5", "I6", "I7", "I8")
         val keysLabels = listOf("Lab1", "Lab2", "Lab3", "Lab4", "Lab5", "Lab6", "Lab7", "Lab8")
@@ -92,5 +105,22 @@ class GameActivity : AppCompatActivity() {
         val gridViewAdapter = KeyboardGridViewAdapter(this, keysR)
         gridView.adapter = gridViewAdapter
 
+
+        val keyboardOps = findViewById<LinearLayout>(R.id.operatorKeyboardLayout)
+        val keyboardDigits = findViewById<LinearLayout>(R.id.digitsKeyboardLayout)
+        val keyboardLineNumbers = findViewById<LinearLayout>(R.id.lineNumberKeyboardLayout)
+
+        val digitKeyboard = findViewById<GridView>(R.id.keyboardDigitsGridView)
+        val keysDigits = listOf("0", "1", "2", "3", "4", "etc")
+        digitKeyboard.adapter = KeyboardGridViewAdapter(this, keysDigits)
+
+        val lineNumberKeyboard = findViewById<GridView>(R.id.lineNumberGridView)
+        val keysLineNumbers = listOf("Line 1", "Line 2", "etc")
+        lineNumberKeyboard.adapter = KeyboardGridViewAdapter(this, keysLineNumbers)
+
+
+        //keyboardOps.visibility = View.GONE
+        keyboardDigits.visibility = View.GONE
+        keyboardLineNumbers.visibility = View.GONE
     }
 }

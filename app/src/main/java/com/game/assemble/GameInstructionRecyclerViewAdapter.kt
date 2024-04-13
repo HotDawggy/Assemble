@@ -54,21 +54,79 @@ class GameInstructionRecyclerViewAdapter(private val dataSet: Array<InstructionI
         viewHolder.reg2.text = dataSet[position].reg2
         viewHolder.reg3.text = dataSet[position].reg3
 
-        val visibleRegs = getParamNumber(dataSet[position].op)
-        val visibilities = List(visibleRegs) {View.VISIBLE} + List(3 - visibleRegs) {View.INVISIBLE}
+        val opButton = viewHolder.operator
+        val regButtons = arrayOf(
+            viewHolder.reg1,
+            viewHolder.reg2,
+            viewHolder.reg3
+        )
 
-        viewHolder.reg1.visibility = visibilities[0]
-        viewHolder.reg2.visibility = visibilities[1]
-        viewHolder.reg3.visibility = visibilities[2]
+        val keyboardLayouts = GameActivity.keyboardLayouts
 
+
+        // set lastAccessedGameButton
         for(button: Button in arrayOf(viewHolder.operator, viewHolder.reg1, viewHolder.reg2, viewHolder.reg3)) {
-            button.setOnClickListener {
-                val otherButton = GameActivity.lastAccessedGameButton
-                if (otherButton != null) {
-                    otherButton.setBackgroundColor(Color.BLUE)
+            if (button == viewHolder.operator) {
+                button.setOnClickListener {
+                    val otherButton = GameActivity.lastAccessedGameButton
+                    if (otherButton != null) {
+                        otherButton.setBackgroundColor(Color.BLUE)
+                    }
+                    GameActivity.lastAccessedGameButton = button
+                    button.setBackgroundColor(Color.GREEN)
                 }
-                GameActivity.lastAccessedGameButton = button
-                button.setBackgroundColor(Color.GREEN)
+
+            }
+            else {
+                button.setOnClickListener {
+                    val otherButton = GameActivity.lastAccessedGameButton
+                    if (otherButton != null) {
+                        otherButton.setBackgroundColor(Color.BLUE)
+                    }
+                    GameActivity.lastAccessedGameButton = button
+                    button.setBackgroundColor(Color.GREEN)
+                }
+            }
+        }
+
+
+
+        // used when loading from saved game
+        if (opButton.text == "") {// force users to input operator first
+            // grey out the remaining buttons
+            for (button in regButtons) {
+                button.visibility = View.INVISIBLE
+            }
+
+            // disable keyboard when these buttons are selected
+            for (button in regButtons) {
+                button.setOnClickListener {
+                    // disable all keyboards
+                    for (keyboard in keyboardLayouts) {
+                        keyboard.visibility = View.GONE
+                    }
+
+                    // re-enable register view
+                    keyboardLayouts[3].visibility = View.VISIBLE
+                }
+            }
+        }
+        else {
+            // find number of buttons required for params
+            val paramNumber = getParamNumber(opButton.text.toString())
+
+            for(i in 0 until paramNumber) {
+                val button = regButtons[i] // get the i-th button
+                button.visibility = View.VISIBLE // un-grey out
+
+                val keyboard: LinearLayout = viewHolder.itemView.findViewById(getKeyboardLayout(opButton.text.toString(), i + 1))
+                button.setOnClickListener {
+                    // disable all keyboards
+                    for (keyboard in keyboardLayouts) {
+                        keyboard.visibility = View.GONE
+                    }
+                    keyboard.visibility =View.VISIBLE
+                }
             }
         }
     }
