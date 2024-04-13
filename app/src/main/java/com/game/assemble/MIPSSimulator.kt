@@ -116,6 +116,9 @@ class MIPSSimulator(
                 regs[5] = (4..999).random()
                 gameTask.info["goal"] = gameTask.findGCD(regs[4]!!, regs[5]!!)
             }
+            3 -> { // Sum of all even primes
+                gameTask.info["goal"] = 2
+            }
         }
         return gameTask.info["text"] as String
     }
@@ -131,6 +134,9 @@ class MIPSSimulator(
                 return true
             }
             2 -> {  // GCD of a0, a1, return in v0
+                if (regs[2] == gameTask.info["goal"] as Int) return true
+            }
+            3 -> { // Sum of all even primes into v0
                 if (regs[2] == gameTask.info["goal"] as Int) return true
             }
         }

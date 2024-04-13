@@ -92,6 +92,5 @@ class GameActivity : AppCompatActivity() {
 
         // by default, only have the registerLayout visible
         switchKeyboardLayout(R.id.gameInstructionRegisterLayout2)
-        //switchKeyboardLayout(R.id.operatorKeyboardLayout)
     }
 }
