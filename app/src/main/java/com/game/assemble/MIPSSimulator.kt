@@ -5,114 +5,16 @@ import java.util.Calendar
 
 const val CODE_START = 0x00400000
 const val STACK_START = 0x7ffffffc
-
-class GameTask(ctx: Context) {
-    val info: MutableMap<String, Any?> = mutableMapOf<String, Any?>(
-        "id" to null,
-        "text" to null
-    )
-    private val taskList: Array<String> = ctx.resources.getStringArray(R.array.taskList)
-    fun getRandomTask() : Int {
-        val idx = taskList.indices.random()
-        info["text"] = taskList[idx]
-        return idx
-    }
-    fun findLCM(a: Int, b: Int): Int {
-        val larger = if (a > b) a else b
-        val maxLcm = a * b
-        var lcm = larger
-        while (lcm <= maxLcm) {
-            if (lcm % a == 0 && lcm % b == 0) {
-                return lcm
-            }
-            lcm += larger
-        }
-        return maxLcm
-    }
-    fun findGCD(a: Int, b: Int): Int {
-        var num1 = a
-        var num2 = b
-        while (num2 != 0) {
-            val temp = num2
-            num2 = num1 % num2
-            num1 = temp
-        }
-        return num1
-    }
-}
-class Instruction(
-    val opcode: Int? = null,    // 0
-    val rs: Int? = null,        // 1
-    val rt: Int? = null,        // 2
-    val rd: Int? = null,        // 3
-    val shamt: Int? = null,     // 4
-    val funct: Int? = null,     // 5
-    val immediate: Int? = null, // 6
-    val address: Int? = null,   // 7
-    val label: String? = null   // 8
-) {
-    companion object {
-        private var registerLookup = mutableMapOf<Int, String>()
-        private var opcodeLookup = mutableMapOf<Int, String>()
-        private var functLookup  = mutableMapOf<Int, String>()
-        private var init: Boolean = false
-        fun initLookup(ctx: Context) {
-            val regsKey = ctx.resources.getIntArray(R.array.regsKey)
-            val regsString = ctx.resources.getStringArray(R.array.regsString)
-            val opcodeKey = ctx.resources.getIntArray(R.array.opcodeKey)
-            val opcodeString = ctx.resources.getStringArray(R.array.opcodeString)
-            val functKey = ctx.resources.getIntArray(R.array.functKey)
-            val functString = ctx.resources.getStringArray(R.array.functString)
-            for (i in regsKey.indices) {
-                registerLookup[regsKey[i]] = regsString[i]
-            }
-            for (i in opcodeKey.indices) {
-                opcodeLookup[opcodeKey[i]] = opcodeString[i]
-            }
-            for (i in functKey.indices) {
-                functLookup[functKey[i]] = functString[i]
-            }
-            init = true
-        }
-    }
-    fun stringify() : String {
-        if (!init) return "Resources haven't been initialized"
-        return when (opcode) {
-            null -> "_"
-            0x0 -> when (funct) {
-                null -> "_"
-                else -> functLookup[funct] + " " + when (funct) {
-                    0x08 -> registerLookup[(rs ?: -1)]
-                    0x00, 0x02 -> registerLookup[(rd ?: -1)] + ", " + registerLookup[(rs ?: -1)] + ", " + (shamt ?: "_").toString()
-                    else ->
-                        registerLookup[(rd ?: -1)] + ", " + registerLookup[(rs ?: -1)] + ", " + registerLookup[(rt ?: -1)]
-                }
-            }
-            else -> {
-                opcodeLookup[opcode] + " " + when (opcode) {
-                    0x4, 0x5 ->
-                        registerLookup[(rt ?: -1)] + ", " + registerLookup[(rs ?: -1)] + ", " + (label ?: (address ?: "_").toString())
-                    0x2 ->
-                        label ?: (address ?: "_").toString()
-                    0x24, 0x25, 0xf, 0x23, 0x28, 0x29, 0x2b ->
-                        registerLookup[(rt ?: -1)] + ", " + (immediate ?: "_").toString() + "(" + registerLookup[(rs ?: -1)] + ")"
-                    else ->
-                        registerLookup[(rt ?: -1)] + ", " + registerLookup[(rs ?: -1)] + ", " + (immediate ?: "_").toString()
-                }
-            }
-        }
-    }
-}
 class MIPSSimulator(
-    val ctx: Context,
-    val v0: Int = 0,
-    val a0: Int = 0,
-    val a1: Int = 0,
-    val t0: Int = 0,
-    val t1: Int = 0,
-    val s0: Int = 0,
-    val s1: Int = 0,
-    val sp: Int = STACK_START
+    private val ctx: Context,
+    private val v0: Int = 0,
+    private val a0: Int = 0,
+    private val a1: Int = 0,
+    private val t0: Int = 0,
+    private val t1: Int = 0,
+    private val s0: Int = 0,
+    private val s1: Int = 0,
+    private val sp: Int = STACK_START
     ) {
     private val regs: MutableMap<Int, Int> = mutableMapOf<Int, Int>()
         get() = field
@@ -182,45 +84,6 @@ class MIPSSimulator(
         return res
     }
 
-    // Uncoment when the keyboardViews are completed
-    /*
-    fun getFieldAndKeyboard(instr : Instruction) : Array<IntArray> {
-        return when (instr.opcode) {
-            // keyboardRegisterView is the view showing all selectable registers
-            // keyboardKeypadView is the view showing a keypad (perhaps in hexidecimal?)
-            // The value right after is the max allowable size of the input, might not be needed
-            // keyboardLineView is the view to select line number for jump instruction
-            // There is actually no need for a stack keyboard view!
-
-            0x0 -> {
-                when (instr.funct) {
-                    0x20, 0x21, 0x24, 0x27, 0x25, 0x2a, 0x2b, 0x22, 0x23 -> arrayOf(
-                        intArrayOf(3, R.id.keyboardRegisterView),
-                        intArrayOf(1, R.id.keyboardRegisterView),
-                        intArrayOf(2, R.id.keyboardRegisterView))
-                    0x08 -> arrayOf(
-                        intArrayOf(1, R.id.keyboardRegisterView))
-                    0x00, 0x02 -> arrayOf(
-                        intArrayOf(3, R.id.keyboardRegisterView),
-                        intArrayOf(2, R.id.keyboardRegisterView),
-                        intArrayOf(4, R.id.keyboardKeypadView, (1 shl 4) - 1))
-                    else -> throw IllegalArgumentException("Incorrect funct!")
-                }
-            }
-            0x8, 0x9, 0xc, 0x24, 0x25, 0x30, 0x23, 0xd, 0xa, 0xb, 0x28, 0x38, 0x29, 0x2b -> arrayOf(
-                intArrayOf(2, R.id.keyboardRegisterView),
-                intArrayOf(1, R.id.keyboardRegisterView),
-                intArrayOf(6, R.id.keyboardKeypadView, (1 shl 15) - 1)
-            )
-            0x4, 0x5, 0x2, 0x3, 0xf -> arrayOf(
-                intArrayOf(1, R.id.keyboardRegisterView),
-                intArrayOf(2, R.id.keyboardRegisterView),
-                intArrayOf(7, R.id.keyboardLineView)
-            )
-            else -> throw IllegalArgumentException("Incorrect opcode!")
-        }
-    }
-     */
 
     fun printStack() {
         Log.d("printStack", "Printing Stack")

@@ -20,7 +20,6 @@
         <item>0x2b</item>
     </integer-array>>
     <string-array name="opcodeString">
-        <item></item>
         <item>addi</item>
         <item>addiu</item>
         <item>andi</item>
@@ -90,4 +89,102 @@
         <item>$s1</item>
         <item>$sp</item>
     </string-array>
+    <string-array name="template">
+        <item>_</item>
+        <item> </item>
+        <item>_</item>
+        <item>, </item>
+        <item>_</item>
+        <item>, </item>
+        <item>_</item>
+    </string-array>
+    <string-array name="template_m">
+        <item>_</item>
+        <item> </item>
+        <item>_</item>
+        <item>, </item>
+        <item>_</item>
+        <item>(</item>
+        <item>_</item>
+        <item>)</item>
+    </string-array>
+    <string-array name="template_lui">
+        <item>_</item>
+        <item> </item>
+        <item>_</item>
+        <item>, </item>
+        <item>_</item>
+    </string-array>
+    <string-array name="template_j_jr">
+        <item>_</item>
+        <item> </item>
+        <item>_</item>
+    </string-array>
+    <string-array name="instr_r">
+        <item>add</item>
+        <item>addu</item>
+        <item>and</item>
+        <item>jr</item>
+        <item>nor</item>
+        <item>or</item>
+        <item>slt</item>
+        <item>sltu</item>
+        <item>sll</item>
+        <item>srl</item>
+        <item>sub</item>
+        <item>subu</item>
+    </string-array>
+    <integer-array name="funct_r">
+        <item>0x20</item>
+        <item>0x21</item>
+        <item>0x24</item>
+        <item>0x8</item>
+        <item>0x27</item>
+        <item>0x25</item>
+        <item>0x2b</item>
+        <item>0x00</item>
+        <item>0x02</item>
+        <item>0x22</item>
+        <item>0x23</item>
+    </integer-array>
+    <string-array name="instr_i">
+        <item>addi</item>
+        <item>addiu</item>
+        <item>andi</item>
+        <item>beq</item>
+        <item>bne</item>
+        <item>lbu</item>
+        <item>lhu</item>
+        <item>lui</item>
+        <item>lw</item>
+        <item>ori</item>
+        <item>slti</item>
+        <item>sltiu</item>
+        <item>sb</item>
+        <item>sh</item>
+        <item>sw</item>
+    </string-array>
+    <integer-array name="opcode_i">
+        <item>0x8</item>
+        <item>0x9</item>
+        <item>0xc</item>
+        <item>0x4</item>
+        <item>0x5</item>
+        <item>0x24</item>
+        <item>0x25</item>
+        <item>0xf</item>
+        <item>0x23</item>
+        <item>0xd</item>
+        <item>0xa</item>
+        <item>0xb</item>
+        <item>0x28</item>
+        <item>0x29</item>
+        <item>0x2b</item>
+    </integer-array>
+    <string-array name="instr_j">
+        <item>j</item>
+    </string-array>
+    <integer-array name="opcode_j">
+        <item>0x2</item>
+    </integer-array>
 </resources>

@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.GridView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 class GameActivity : AppCompatActivity() {
 
     companion object {
-        var lastAccessedGameButton: Button? = null
+        var lastAccessedGameButton: TextView? = null
         lateinit var keyboardLayouts: Array<LinearLayout>
 
     }
@@ -32,16 +33,13 @@ class GameActivity : AppCompatActivity() {
         Instruction.initLookup(this.applicationContext)
         var instrList = arrayOf<Instruction>()
         instrList += Instruction(opcode = 0x28, rt=4, rs=2, immediate=4)
-        Log.i("PrintInstruction", instrList[0].stringify())
 
         val recyclerView: RecyclerView = findViewById<RecyclerView>(R.id.gameInstructionRecyclerView)
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
 
-        val dataSet = arrayOf<InstructionItem>(InstructionItem())
-
         // Set adapter for the RecyclerView
-        val customAdapter = GameInstructionRecyclerViewAdapter(dataSet)
+        val customAdapter = GameInstructionRecyclerViewAdapter(instrList, this.applicationContext)
         recyclerView.adapter = customAdapter
 
         val keyboardView = findViewById<LinearLayout>(R.id.operatorKeyboardLayout)

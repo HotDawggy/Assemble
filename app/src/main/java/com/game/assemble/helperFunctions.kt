@@ -14,19 +14,6 @@ fun getParamNumber(operator: String): Int {
     }
 }
 
-// TODO: IMPLEMENT THIS
-fun getKeyboardLayout(operator: String, position: Int): Int {
-    if (position == 1) {
-        return R.id.operatorKeyboardLayout
-    }
-    else if (position == 2) {
-        return R.id.digitsKeyboardLayout
-    }
-    else {
-        return R.id.lineNumberKeyboardLayout
-    }
-}
-
 // TODO:
 // In a Kotlin file
 fun changeLayoutVisibility(context: Context, layoutId: Int, visibility: Int) {

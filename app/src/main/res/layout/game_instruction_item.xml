@@ -1,46 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<com.game.assemble.CodeLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="30dp"
     android:orientation="horizontal"
-    android:id="@+id/gameInstructionItemLayout">
+    android:id="@+id/gameInstructionItemLayout"
+    >
 
     <TextView
         android:id="@+id/gameInstructionItemLineNumberTextView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="TextView"
-        android:fontFamily="sans-serif"
+        android:text="1"
+        android:textSize="30dp"
+        android:visibility="gone"
         />
 
-    <Button
-        android:id="@+id/gameInstructionOpButton"
+    <TextView
+        android:id="@+id/gameInstructionTextView1"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="Button"
-        android:fontFamily="sans-serif"
+        android:text="add"
+        android:textSize="30dp"
+        android:visibility="gone"
+        />
+    <TextView
+        android:id="@+id/gameInstructionTextView2"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text=" "
+        android:textSize="30dp"
+        android:visibility="gone"
+        />
+    <TextView
+        android:id="@+id/gameInstructionTextView3"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="$a0"
+        android:textSize="30dp"
+        android:visibility="gone"
+        />
+    <TextView
+        android:id="@+id/gameInstructionTextView4"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text=" ,"
+        android:textSize="30dp"
+        android:visibility="gone"
+        />
+    <TextView
+        android:id="@+id/gameInstructionTextView5"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="$a1"
+        android:textSize="30dp"
+        android:visibility="gone"
+        />
+    <TextView
+        android:id="@+id/gameInstructionTextView6"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text=", "
+        android:textSize="30dp"
+        android:visibility="gone"
+        />
+    <TextView
+        android:id="@+id/gameInstructionTextView7"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="$a1"
+        android:textSize="30dp"
+        android:visibility="gone"
+        />
+    <TextView
+        android:id="@+id/gameInstructionTextView8"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text=""
+        android:textSize="30dp"
+        android:visibility="gone"
         />
 
-    <Button
-        android:id="@+id/gameInstructionParam1Button"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:text="Button" />
 
-    <Button
-        android:id="@+id/gameInstructionParam2Button"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:text="Button" />
-
-    <Button
-        android:id="@+id/gameInstructionParam3Button"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:text="Button" />
-</LinearLayout>
+</com.game.assemble.CodeLinearLayout>
