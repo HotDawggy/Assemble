@@ -42,32 +42,8 @@ class KeyboardGridViewAdapter(val context: Context, val keys: List<String>): Bas
                     targetButton.text = targetButton.text.toString() + button.text.toString()
                 }
                 else if (GameActivity.getVisibleKeyboardLayout() == R.id.operatorKeyboardLayout) {
-                    val template = Instruction(arrayOf(button.text.toString())).getTemplateFromOperator()
-                    val buttonList = getSiblingButtonList(targetButton)
-                    Log.i("button list", buttonList.size.toString())
-
-                    for (i in 0 until 8) {
-                        Log.i("i is ", i.toString())
-                        val currentButton = buttonList[i]
-                        if (i >= template.size) {
-                            currentButton.visibility = View.INVISIBLE
-                            currentButton.text = "_"
-                        }
-                        else if (template[i] != "_") {
-                            currentButton.visibility = View.VISIBLE
-                            currentButton.text = template[i]
-                        }
-                        else {
-                            currentButton.visibility = View.VISIBLE
-                            currentButton.text = if (currentButton.text == "") {
-                                "_"
-                            }
-                            else {
-                                currentButton.text
-                            }
-                        }
-                    }
-                    targetButton.text = button.text
+                    targetButton.text = button.text.toString()
+                    changeInstructionOppType(targetButton, targetButton.text.toString())
                 }
                 else { // -> if target button is not "number" -> replace content
                     targetButton.text = button.text.toString()

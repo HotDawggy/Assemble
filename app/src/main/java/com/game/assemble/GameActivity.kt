@@ -145,21 +145,12 @@ class GameActivity : AppCompatActivity() {
                     // if empty, move back to prev
                     if (selectedButton!!.text == "_" || selectedButton!!.text == "") {
                         removeBlinking(selectedButton)
-                        if (getPrevButton(selectedButton!!) != selectedButton!!) {
-                            GameActivity.lastAccessedGameButton = getPrevButton(selectedButton!!)
-                            addBlinking(GameActivity.lastAccessedGameButton!!)
-                            val siblingList =
-                                getSiblingTextViewButtonList(GameActivity.lastAccessedGameButton!!)
-                            for (button in siblingList.reversed()) {
-                                if (button.visibility == View.VISIBLE) {
-                                    // switch to this button
-                                    GameActivity.switchKeyboardLayout(
-                                        getKeyboardFromOperator(
-                                            siblingList[0].text.toString()
-                                        )[siblingList.indexOf(button)]
-                                    )
-                                }
-                            }
+                        val currentButton = selectedButton!!
+                        val prevButton = getPrevButton(currentButton)
+                        if (currentButton != prevButton) {
+                            addBlinking(prevButton)
+                            prevButton.callOnClick()
+                            GameActivity.lastAccessedGameButton = prevButton
                         }
                     }
                     else if (GameActivity.getVisibleKeyboardLayout() == R.id.digitsKeyboardLayout) { // if num, delete last digit
@@ -172,6 +163,9 @@ class GameActivity : AppCompatActivity() {
                     else { // else delete thing
                         GameActivity.lastAccessedGameButton!!.text = "_"
                         // TODO: UPDATE
+                        if (GameActivity.lastAccessedGameButton!! == getSiblingButtonList(GameActivity.lastAccessedGameButton!!)[0]) {
+                            changeInstructionOppType(GameActivity.lastAccessedGameButton!!, GameActivity.lastAccessedGameButton!!.text.toString())
+                        }
                     }
                 }
             }

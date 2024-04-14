@@ -38,18 +38,15 @@ fun getPrevButton(button: TextView): TextView {
         val recyclerView = parent.parent as RecyclerView
         val position = recyclerView.getChildAdapterPosition(parent)
         if (position > 0) {
-            Log.i("up", "UP")
             val holder =
                 recyclerView.findViewHolderForAdapterPosition(position - 1) as RecyclerView.ViewHolder
             return holder.itemView.findViewById(R.id.gameInstructionTextView7)
         }
         else {
-            Log.i("down", "down")
             return button
         }
     }
     else {
-        Log.i("not here", "not ehre")
         return siblingButtons[index - 1]
     }
 }
@@ -91,4 +88,36 @@ fun removeBlinking(button: TextView) {
 
 fun addBlinking(button:TextView) {
     button.setTextColor(Color.GREEN)
+}
+
+fun changeInstructionOppType(button: TextView, opType: String) {
+    val buttons = getSiblingButtonList(button) // 1, 2, ... 8
+    val template = Instruction(arrayOf(opType)).getTemplateFromOperator()
+    val keyboards = getKeyboardFromOperator(opType)
+
+    // TODO: replace on click listeners
+    // TODO: templates
+    for(i in 0 until 8) {
+        if (i >= template.size) {
+            buttons[i].visibility = View.INVISIBLE
+            buttons[i].text = "_"
+        }
+        else if (template[i] == "_") {
+            buttons[i].setOnClickListener {
+                // TODO: bring up correct keyboard type
+                GameActivity.switchKeyboardLayout(keyboards[i / 2])
+
+                if (GameActivity.lastAccessedGameButton != null) {
+                    removeBlinking(GameActivity.lastAccessedGameButton!!)
+                }
+                GameActivity.lastAccessedGameButton = buttons[i]
+                addBlinking(buttons[i])
+            }
+            buttons[i].visibility = View.VISIBLE
+        }
+        else {
+            buttons[i].visibility = View.VISIBLE
+            buttons[i].text = template[i]
+        }
+    }
 }

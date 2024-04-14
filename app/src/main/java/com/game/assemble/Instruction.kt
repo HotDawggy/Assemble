@@ -20,14 +20,12 @@ class Instruction(
     }
     fun getKeyboardFromOperator() : IntArray {
         return when(instr[0]) {
-            // TODO: REMOVE
-            "add" -> intArrayOf(keyboards[1], keyboards[2], keyboards[3])
-            "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu" -> intArrayOf(keyboards[0], keyboards[0], keyboards[0])
-            "addi", "addiu", "andi", "ori", "slti", "sltiu", "sll", "srl" -> intArrayOf(keyboards[0], keyboards[0], keyboards[1])
-            "beq", "bne"-> intArrayOf(keyboards[0], keyboards[0], keyboards[2])
-            "lbu", "lhu", "lw", "sb", "sh", "sw" -> intArrayOf(keyboards[0], keyboards[1], keyboards[0])
+            "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu" -> intArrayOf(keyboards[3], keyboards[3], keyboards[3])
+            "addi", "addiu", "andi", "ori", "slti", "sltiu", "sll", "srl" -> intArrayOf(keyboards[3], keyboards[3], keyboards[1])
+            "beq", "bne"-> intArrayOf(keyboards[3], keyboards[3], keyboards[2])
+            "lbu", "lhu", "lw", "sb", "sh", "sw" -> intArrayOf(keyboards[3], keyboards[1], keyboards[3])
             "j" -> intArrayOf(keyboards[2])
-            "lui" -> intArrayOf(keyboards[0], keyboards[1])
+            "lui" -> intArrayOf(keyboards[3], keyboards[1])
             "_" -> intArrayOf()
 
             else -> {
@@ -43,7 +41,7 @@ class Instruction(
             "j" -> templates[2]
             "lui" -> templates[3]
             null -> arrayOf("_")
-            "_" -> arrayOf()
+            "_" -> arrayOf("_")
 
             else -> throw(IllegalArgumentException("Invalid operator detected"))
         }
