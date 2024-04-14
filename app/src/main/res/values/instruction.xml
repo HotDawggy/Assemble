@@ -159,7 +159,6 @@
         <item>add</item>
         <item>addu</item>
         <item>and</item>
-        <item>jr</item>
         <item>nor</item>
         <item>or</item>
         <item>slt</item>
@@ -173,7 +172,6 @@
         <item>0x20</item>
         <item>0x21</item>
         <item>0x24</item>
-        <item>0x8</item>
         <item>0x27</item>
         <item>0x25</item>
         <item>0x2a</item>
