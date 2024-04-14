@@ -18,6 +18,7 @@ class GameActivity : AppCompatActivity() {
         var lastAccessedGameButton: TextView? = null
         lateinit var keyboardLayouts: Array<LinearLayout>
         lateinit var instrList: MutableList<Instruction>
+        lateinit var customAdapter: GameInstructionRecyclerViewAdapter
         fun switchKeyboardLayout(selectedLayoutId: Int) {
             for (layout in keyboardLayouts) {
                 if (layout.id == selectedLayoutId) {
@@ -50,7 +51,7 @@ class GameActivity : AppCompatActivity() {
         recyclerView.layoutManager = layoutManager
 
         // Set adapter for the RecyclerView
-        val customAdapter = GameInstructionRecyclerViewAdapter(instrList.toTypedArray(), this)
+        customAdapter = GameInstructionRecyclerViewAdapter(instrList.toTypedArray(), this)
         recyclerView.adapter = customAdapter
 
         // initialize keyboard layouts
@@ -127,5 +128,6 @@ class GameActivity : AppCompatActivity() {
 
         // by default, only have the registerLayout visible
         switchKeyboardLayout(R.id.gameInstructionRegisterLayout2)
+        switchKeyboardLayout(R.id.operatorKeyboardLayout)
     }
 }
