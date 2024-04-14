@@ -32,7 +32,8 @@ class KeyboardGridViewAdapter(val context: Context, private val keys: List<Strin
             }
             else {
                 // -> if target button is "number" -> append to content
-                if (GameActivity.getVisibleKeyboardLayout() == R.id.shamtDigitKeyboardLayout) {
+                if (GameActivity.getVisibleKeyboardLayout() == R.id.shamtDigitKeyboardLayout
+                    || GameActivity.getVisibleKeyboardLayout() == R.id.immedDigitKeyboardLayout) {
                     // append digit to view
                     if (targetButton.text == "_") targetButton.text = ""
                     targetButton.text = targetButton.text.toString() + button.text.toString()

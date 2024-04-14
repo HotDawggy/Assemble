@@ -209,7 +209,8 @@ class GameActivity : AppCompatActivity() {
                             prevButton.callOnClick()
                         }
                     }
-                    else if (getVisibleKeyboardLayout() == R.id.shamtDigitKeyboardLayout) { // if num, delete last digit
+                    else if (getVisibleKeyboardLayout() == R.id.shamtDigitKeyboardLayout
+                        || getVisibleKeyboardLayout() == R.id.immedDigitKeyboardLayout) { // if num, delete last digit
                         lastAccessedGameButton!!.text = lastAccessedGameButton!!.text.toString().dropLast(1)
                         if (lastAccessedGameButton!!.text == "") {
                             lastAccessedGameButton!!.text = "_"
