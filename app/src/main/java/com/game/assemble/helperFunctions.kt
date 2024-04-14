@@ -9,10 +9,6 @@ fun setButtonOnClickKeyboard(button: TextView, keyboardLayout: Int) {
     // TODO: THIS
 }
 
-fun Update(buttons: Array<TextView>): Instruction {
-    return Instruction() // actually, just loop through all lines of code and update
-}
-
 fun getPrevButton(button: TextView): TextView {
     val parent = button.parent as ViewGroup
     val siblingButtons = getSiblingTextViewButtonList(button)

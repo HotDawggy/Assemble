@@ -127,4 +127,10 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: MutableList<Instr
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = instrArr.size
+
+    fun updateItemAtPosition(position: Int, newItem: Instruction) {
+        if (position in 0 until instrArr.size) {
+            instrArr[position] = newItem
+        }
+    }
 }

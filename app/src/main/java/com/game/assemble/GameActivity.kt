@@ -28,6 +28,7 @@ class GameActivity : AppCompatActivity() {
         lateinit var keyboardLayouts: Array<LinearLayout>
         lateinit var instrList: MutableList<Instruction>
         lateinit var customAdapter: GameInstructionRecyclerViewAdapter
+        lateinit var recyclerView: RecyclerView
         fun switchKeyboardLayout(selectedLayoutId: Int) {
             for (layout in keyboardLayouts) {
                 if (layout.id == selectedLayoutId) {
@@ -71,6 +72,26 @@ class GameActivity : AppCompatActivity() {
             }
             timeout.postDelayed(lastRunnable!!, 350)
         }
+
+        fun update() {
+            // note: we have customAdapter and recyclerView
+            for(i in 0 until recyclerView.childCount) {
+                val layout: View = recyclerView.getChildAt(i)
+                val buttons = arrayOf(
+                    layout.findViewById<TextView>(R.id.gameInstructionTextView1),
+                    layout.findViewById(R.id.gameInstructionTextView3),
+                    layout.findViewById(R.id.gameInstructionTextView5),
+                    layout.findViewById(R.id.gameInstructionTextView7)
+                )
+                customAdapter.updateItemAtPosition(i, Instruction(arrayOf(
+                    buttons[0].text.toString(),
+                    buttons[1].text.toString(),
+                    buttons[2].text.toString(),
+                    buttons[3].text.toString()
+                )))
+            }
+        }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,7 +103,7 @@ class GameActivity : AppCompatActivity() {
         instrList += Instruction(arrayOf("add"))
         instrList += Instruction(arrayOf("add"))
 
-        val recyclerView: RecyclerView = findViewById(R.id.gameInstructionRecyclerView)
+        recyclerView = findViewById(R.id.gameInstructionRecyclerView)
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
 
@@ -187,6 +208,7 @@ class GameActivity : AppCompatActivity() {
                     if (selectedButton!!.text == "_" || selectedButton.text == "") {
                         removeSelected()
                         val prevButton = getPrevButton(selectedButton)
+                        update()
                         if (
                             selectedButton == getSiblingButtonList(selectedButton)[0]     // First item of the line
                             && instrList.size > 1   // Not the last line remaining
@@ -203,7 +225,7 @@ class GameActivity : AppCompatActivity() {
 
                             val idx = (selectedButton.parent as ViewGroup).findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).text.toString().toInt() - 1
                             instrList.removeAt(idx)
-                            customAdapter.notifyItemRemoved(idx)
+                            customAdapter.notifyDataSetChanged()
                         }
                         if (selectedButton != prevButton) {
                             prevButton.callOnClick()
@@ -214,14 +236,14 @@ class GameActivity : AppCompatActivity() {
                         if (lastAccessedGameButton!!.text == "") {
                             lastAccessedGameButton!!.text = "_"
                         }
-                        // TODO: UPDATE
                     }
                     else { // else delete thing
                         lastAccessedGameButton!!.text = "_"
-                        // TODO: UPDATE
+                        // UPDATE
                         if (lastAccessedGameButton!! == getSiblingButtonList(lastAccessedGameButton!!)[0]) {
                             changeInstructionOppType(lastAccessedGameButton!!, lastAccessedGameButton!!.text.toString())
                         }
+                        update()
                     }
                 }
             }
@@ -231,5 +253,4 @@ class GameActivity : AppCompatActivity() {
         switchKeyboardLayout(R.id.registersKeyboardLayout)
         switchKeyboardLayout(R.id.operatorKeyboardLayout)
     }
-
 }
