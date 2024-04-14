@@ -7,7 +7,7 @@ import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.TextView
 
-class KeyboardGridViewAdapter(val context: Context, val keys: List<String>): BaseAdapter() {
+class KeyboardGridViewAdapter(val context: Context, private val keys: List<String>): BaseAdapter() {
     override fun getCount(): Int {
         return keys.size
     }

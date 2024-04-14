@@ -1,27 +1,20 @@
 package com.game.assemble
 
 // from https://developer.android.com/develop/ui/views/layout/recyclerview
-import android.os.Build
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 
 
-class GameInstructionRecyclerViewAdapter(private val instrArr: MutableList<Instruction>, private val activity: GameActivity) :
+class GameInstructionRecyclerViewAdapter(private val instrArr: MutableList<Instruction>) :
     RecyclerView.Adapter<GameInstructionRecyclerViewAdapter.ViewHolder>() {
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder)
      */
-    private var timeout: Handler = Handler(Looper.getMainLooper())
-    private var r: Runnable = Runnable{}
-    private var visible = true
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var txVArr: Array<TextView>
 

@@ -19,8 +19,8 @@ class EncyclopediaRecyclerViewAdapter(private val dataSet: Array<EncyclopediaIte
         val descriptionView: TextView
 
         init {
-            titleView = view.findViewById<TextView>(R.id.encyclopediaItemTextViewTitle)
-            descriptionView = view.findViewById<TextView>(R.id.encyclopediaItemTextViewDescription)
+            titleView = view.findViewById(R.id.encyclopediaItemTextViewTitle)
+            descriptionView = view.findViewById(R.id.encyclopediaItemTextViewDescription)
         }
     }
 

@@ -3,15 +3,16 @@ package com.game.assemble
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import okhttp3.*
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.FormBody
 import okhttp3.HttpUrl.Companion.toHttpUrl
-import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import okio.IOException
 import org.json.JSONArray
 import org.json.JSONObject
@@ -82,7 +83,7 @@ class Leaderboard : AppCompatActivity() {
     // from https://stackoverflow.com/questions/66059143/how-to-make-a-http-post-request-in-kotlin-android-to-simple-server
     fun submitScore(username: String, score: Int) {
         // TODO: Replace in Prod
-        var url = "https://0553-175-159-124-117.ngrok-free.app/leaderboard.php"
+        val url = "https://0553-175-159-124-117.ngrok-free.app/leaderboard.php"
 
         // add parameter
         val formBody = FormBody.Builder()
@@ -91,11 +92,11 @@ class Leaderboard : AppCompatActivity() {
             .build()
 
         // creating request
-        var request = Request.Builder().url(url)
+        val request = Request.Builder().url(url)
             .post(formBody)
             .build()
 
-        var client = OkHttpClient();
+        val client = OkHttpClient()
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 Log.i("response", response.body!!.string())
@@ -109,7 +110,7 @@ class Leaderboard : AppCompatActivity() {
 
     fun requestScore(timespan: String, onResponse: (String?) -> Unit) {
         // TODO: Replace in Prod
-        var baseUrl = "https://0553-175-159-124-117.ngrok-free.app/leaderboard.php"
+        val baseUrl = "https://0553-175-159-124-117.ngrok-free.app/leaderboard.php"
 
         // from https://stackoverflow.com/questions/65884020/http-get-request-with-parameters-in-okhttp-android-kotlin
         val url = baseUrl.toHttpUrl().newBuilder()
@@ -121,7 +122,7 @@ class Leaderboard : AppCompatActivity() {
             .header("Accept", "application/json")
             .build()
 
-        var client = OkHttpClient()
+        val client = OkHttpClient()
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body!!.string()

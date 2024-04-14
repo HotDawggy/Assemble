@@ -1,10 +1,9 @@
 package com.game.assemble
 
 import android.content.Context
-import android.content.res.Resources
 
 class GameTask(context: Context) {
-    val info: MutableMap<String, Any?> = mutableMapOf<String, Any?>(
+    val info: MutableMap<String, Any?> = mutableMapOf(
         "id" to null,
         "text" to null
     )

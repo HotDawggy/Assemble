@@ -40,9 +40,9 @@ class LeaderboardRecyclerViewAdapter(private var dataSet: Array<LeaderboardItem>
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.rankingView.text = dataSet[position].ranking;
-        viewHolder.scoreView.text = dataSet[position].score.toString();
-        viewHolder.usernameView.text = dataSet[position].username;
+        viewHolder.rankingView.text = dataSet[position].ranking
+        viewHolder.scoreView.text = dataSet[position].score.toString()
+        viewHolder.usernameView.text = dataSet[position].username
     }
 
     // Return the size of your dataset (invoked by the layout manager)

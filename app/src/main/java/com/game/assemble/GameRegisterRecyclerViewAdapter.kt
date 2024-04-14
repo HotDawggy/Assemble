@@ -1,7 +1,6 @@
 package com.game.assemble
 
 // from https://developer.android.com/develop/ui/views/layout/recyclerview
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,8 +19,8 @@ class GameRegisterRecyclerViewAdapter(private val dataSet: Array<RegisterItem>) 
         val registerValue: TextView
 
         init {
-            registerName = view.findViewById<TextView>(R.id.gameRegistersItemNameTextView)
-            registerValue = view.findViewById<TextView>(R.id.gameRegistersItemValueTextView)
+            registerName = view.findViewById(R.id.gameRegistersItemNameTextView)
+            registerValue = view.findViewById(R.id.gameRegistersItemValueTextView)
 
             registerName.setOnClickListener {
                 val targetButton: TextView? = GameActivity.lastAccessedGameButton

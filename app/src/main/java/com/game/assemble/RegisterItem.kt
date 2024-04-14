@@ -1,5 +1,3 @@
 package com.game.assemble
 
-class RegisterItem(val name: String, val value: Int) {
-
-}
+class RegisterItem(val name: String, val value: Int)

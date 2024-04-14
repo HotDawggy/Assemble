@@ -87,7 +87,7 @@ class GameActivity : AppCompatActivity() {
         recyclerView.layoutManager = layoutManager
 
         // Set adapter for the RecyclerView
-        customAdapter = GameInstructionRecyclerViewAdapter(instrList, this)
+        customAdapter = GameInstructionRecyclerViewAdapter(instrList)
         recyclerView.adapter = customAdapter
 
         // initialize keyboard layouts
@@ -190,11 +190,20 @@ class GameActivity : AppCompatActivity() {
                         if (
                             selectedButton == getSiblingButtonList(selectedButton)[0]     // First item of the line
                             && instrList.size > 1   // Not the last line remaining
-                            ) {  // First item of the line
+                            ) {
+                            // TODO: There's currently a bug
+                            // Since we never update instrList when we input/backspace
+                            // When we notfiyItemRemoved, the RecyclerView re-render all the viewHolder with the unchanged instrList data
+                            // If we have instrList = mutableListOf(Instruction(), Instruction(arrayOf("sll", "$v0"))
+                            // 1. _
+                            // 2. sll $v0, _, _
+                            // and we remove line 1:
+                            // 1. _            (vs the expected output 1. sll $v0, _, _)
+                            // since instrList[0] is unchanged!
+
                             val idx = (selectedButton.parent as ViewGroup).findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).text.toString().toInt() - 1
                             instrList.removeAt(idx)
                             customAdapter.notifyItemRemoved(idx)
-                            customAdapter.notifyItemChanged(idx)
                         }
                         if (selectedButton != prevButton) {
                             prevButton.callOnClick()

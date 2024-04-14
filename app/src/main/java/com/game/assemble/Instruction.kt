@@ -3,9 +3,9 @@ package com.game.assemble
 import android.util.Log
 
 class Instruction(
-    other : Array<String?> = arrayOf<String?>(null, null, null, null)
+    other : Array<String?> = arrayOf(null, null, null, null)
 ) {
-    private var instr: Array<String?> = arrayOf<String?>(null, null, null, null)
+    private var instr: Array<String?> = arrayOf(null, null, null, null)
     init {
         for (i in other.indices){
             if (other[i] == "_") instr[i] = null

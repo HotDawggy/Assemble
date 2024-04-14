@@ -13,7 +13,7 @@ class ProfilePage : AppCompatActivity() {
 
         // from https://stackoverflow.com/questions/44148852/how-to-add-a-button-dynamically-in-android-using-kotlin
         val runHistoryLayout = findViewById<LinearLayout>(R.id.profilePageRunHistoryLayout)
-        val btnRunHistory = Button(this);
+        val btnRunHistory = Button(this)
         btnRunHistory.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT

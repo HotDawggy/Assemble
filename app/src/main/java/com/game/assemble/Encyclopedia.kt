@@ -2,7 +2,6 @@ package com.game.assemble
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -25,7 +24,7 @@ class Encyclopedia : AppCompatActivity() {
             dataSet.add(EncyclopediaItem(name, description + "\n" + usage))
         }
 
-        val recyclerView: RecyclerView = findViewById<RecyclerView>(R.id.encyclopediaList)
+        val recyclerView: RecyclerView = findViewById(R.id.encyclopediaList)
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
 
