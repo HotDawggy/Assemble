@@ -109,6 +109,7 @@ fun changeInstructionOppType(button: TextView, opType: String) {
                 GameActivity.lastAccessedGameButton = buttons[i]
                 GameActivity.addSelected(buttons[i])
             }
+            if (i > 1) buttons[i].text = "_"    // Clears the fields
             buttons[i].visibility = View.VISIBLE
         }
         else {
