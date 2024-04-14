@@ -3,8 +3,13 @@ package com.game.assemble
 import android.util.Log
 
 class Instruction(
-    private var instr : Array<String?> = arrayOf<String?>()
+    private var instr : Array<String?> = arrayOf<String?>(null, null, null, null)
 ) {
+    init {
+        for (i in instr.indices){
+            if (instr[i] == "_") instr[i] = null
+        }
+    }
     val size = instr.size
     operator fun get(idx: Int) : String? {
         if (idx < 0 || idx > instr.size) throw(IllegalArgumentException("Index out of bound"))
@@ -18,12 +23,14 @@ class Instruction(
     }
     fun getKeyboardFromOperator() : IntArray {
         return when(instr[0]) {
-            "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu" -> intArrayOf(keyboards[3], keyboards[3], keyboards[3])
-            "addi", "addiu", "andi", "ori", "slti", "sltiu", "sll", "srl" -> intArrayOf(keyboards[3], keyboards[3], keyboards[1])
-            "beq", "bne"-> intArrayOf(keyboards[3], keyboards[3], keyboards[2])
-            "lbu", "lhu", "lw", "sb", "sh", "sw" -> intArrayOf(keyboards[3], keyboards[1], keyboards[3])
-            "j" -> intArrayOf(keyboards[2])
-            "lui" -> intArrayOf(keyboards[3], keyboards[1])
+            "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu" -> intArrayOf(keyboards[5], keyboards[6], keyboards[6])
+            "addi", "addiu", "andi", "ori", "slti", "sltiu" -> intArrayOf(keyboards[5], keyboards[6], keyboards[2])
+            "sll", "srl" -> intArrayOf(keyboards[5], keyboards[6], keyboards[1])
+            "beq", "bne"-> intArrayOf(keyboards[6], keyboards[6], keyboards[3])
+            "lbu", "lhu", "lw" -> intArrayOf(keyboards[5], keyboards[2], keyboards[6])
+            "sb", "sh", "sw" -> intArrayOf(keyboards[6], keyboards[2], keyboards[6])
+            "j" -> intArrayOf(keyboards[3])
+            "lui" -> intArrayOf(keyboards[5], keyboards[2])
             "_" -> intArrayOf()
 
             else -> {
@@ -40,8 +47,7 @@ class Instruction(
             "lui" -> templates[3]
             null -> arrayOf("_")
             "_" -> arrayOf("_")
-
-            else -> throw(IllegalArgumentException("Invalid operator detected"))
+            else -> arrayOf("_")
         }
     }
     fun hasNull() : Boolean {
@@ -52,8 +58,10 @@ class Instruction(
         private var keyboards: IntArray = intArrayOf(
             R.id.operatorKeyboardLayout,
             R.id.shamtDigitKeyboardLayout,
+            R.id.immedDigitKeyboardLayout,
             R.id.lineNumberKeyboardLayout,
-            R.id.registersKeyboardLayout
+            R.id.registersKeyboardLayout,
+            R.id.registers2KeyboardLayout
         )
         private var templates: Array<Array<String>> = arrayOf(
             arrayOf("_", "\t", "_", ",\t", "_", ",\t", "_"),
