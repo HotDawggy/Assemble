@@ -38,8 +38,6 @@ class GameRegisterRecyclerViewAdapter(private val dataSet: Array<RegisterItem>) 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        Log.i("Name", dataSet[position].name)
-        Log.i("Value", dataSet[position].value.toString())
         viewHolder.registerName.text = dataSet[position].name
         viewHolder.registerValue.text = dataSet[position].value.toString()
     }

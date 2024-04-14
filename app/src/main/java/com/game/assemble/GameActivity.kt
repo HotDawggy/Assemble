@@ -54,7 +54,9 @@ class GameActivity : AppCompatActivity() {
             resources.getStringArray(R.array.instr_r),
             resources.getStringArray(R.array.instr_i) + resources.getStringArray(R.array.instr_j),
             arrayOf<String>("0", "1", "2", "3", "4", "5", "6", "7", "8", "9"),
-            arrayOf<String>("1", "2", "3", "4", "5", "6", "7", "8", "9") // TODO: dynamically set this to the number of active instruction lines
+            arrayOf<String>("1", "2", "3", "4", "5", "6", "7", "8", "9"), // TODO: dynamically set this to the number of active instruction lines
+            arrayOf<String>("Panda", "Numpy", "Bunny", "Python"),
+            arrayOf<String>("Panda", "Numpy", "Bunny", "Python")
         )
 
         val gridViews = arrayOf<GridView>(
@@ -62,6 +64,8 @@ class GameActivity : AppCompatActivity() {
             findViewById(R.id.keyboardIGridView),
             findViewById(R.id.keyboardDigitsGridView),
             findViewById(R.id.lineNumberGridView),
+            findViewById(R.id.labelsGridView),
+            findViewById(R.id.keyboardLabelsGridView)
         )
 
         for ((data, gridView) in keyboardData.zip(gridViews)) {
@@ -80,14 +84,34 @@ class GameActivity : AppCompatActivity() {
         // setup the operator tab buttons (switch between R-type and J/I-type ops)
         val buttonR: Button = findViewById(R.id.buttonR)
         val buttonI: Button = findViewById(R.id.buttonI)
+        val buttonL: Button = findViewById(R.id.buttonL)
+
+        val buttonLineNumber: Button = findViewById(R.id.buttonLineNumber)
+        val buttonLabels: Button = findViewById(R.id.buttonLabels)
 
         buttonR.setOnClickListener {
             gridViews[0].visibility = View.VISIBLE
             gridViews[1].visibility = View.GONE
+            gridViews[5].visibility = View.GONE
         }
         buttonI.setOnClickListener {
             gridViews[0].visibility = View.GONE
             gridViews[1].visibility = View.VISIBLE
+            gridViews[5].visibility = View.GONE
+        }
+        buttonL.setOnClickListener {
+            gridViews[0].visibility = View.GONE
+            gridViews[1].visibility = View.GONE
+            gridViews[5].visibility = View.VISIBLE
+        }
+
+        buttonLineNumber.setOnClickListener {
+            gridViews[3].visibility = View.VISIBLE
+            gridViews[4].visibility = View.GONE
+        }
+        buttonLabels.setOnClickListener {
+            gridViews[3].visibility = View.GONE
+            gridViews[4].visibility = View.VISIBLE
         }
 
         // by default, only have the registerLayout visible

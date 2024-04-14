@@ -68,7 +68,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="J and Digits" />
+                android:text="J and I" />
+
+            <Button
+                android:id="@+id/buttonL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Labels" />
+
         </LinearLayout>
 
         <GridView
@@ -89,6 +97,15 @@
             android:padding="8dp"
             android:verticalSpacing="4dp" />
 
+        <GridView
+            android:id="@+id/keyboardLabelsGridView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:horizontalSpacing="4dp"
+            android:numColumns="3"
+            android:padding="8dp"
+            android:verticalSpacing="4dp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -99,6 +116,12 @@
         android:orientation="vertical"
         android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/gameGuideline">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Numpad" />
+
 
         <GridView
             android:id="@+id/keyboardDigitsGridView"
@@ -120,6 +143,25 @@
         android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/gameGuideline">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Line Numbers"
+                android:id="@+id/buttonLineNumber"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Line Numbers"
+                android:id="@+id/buttonLabels"/>
+        </LinearLayout>
+
         <GridView
             android:id="@+id/lineNumberGridView"
             android:layout_width="match_parent"
@@ -128,56 +170,60 @@
             android:numColumns="3"
             android:padding="8dp"
             android:verticalSpacing="4dp" />
+
+        <GridView
+            android:id="@+id/labelsGridView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:horizontalSpacing="4dp"
+            android:numColumns="3"
+            android:padding="8dp"
+            android:verticalSpacing="4dp"
+            android:visibility="gone"/>
+
     </LinearLayout>
 
 
     <LinearLayout
         android:id="@+id/gameInstructionRegisterLayout2"
         android:layout_width="match_parent"
-
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="visible"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/gameInstructionListLayout"
         app:layout_constraintTop_toBottomOf="@id/gameGuideline">
 
-        <LinearLayout
-            android:id="@+id/gameInstructionRegisterLayout"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="7"
-            android:orientation="vertical">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Registers" />
 
-            <TextView
-                android:id="@+id/gameInstructionRegisterTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="Register" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:visibility="visible">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/gameInstructionRegisterRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="7" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/imageButton2"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="top"
+                    android:padding="0dp"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/backspace" />
+            </LinearLayout>
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="end"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/imageButton2"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="0dp"
-                android:padding="0dp"
-                android:scaleType="centerInside"
-                app:srcCompat="@drawable/backspace" />
-        </LinearLayout>
-
-
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
