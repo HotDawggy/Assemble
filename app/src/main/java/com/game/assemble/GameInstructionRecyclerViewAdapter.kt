@@ -1,6 +1,7 @@
 package com.game.assemble
 
 // from https://developer.android.com/develop/ui/views/layout/recyclerview
+import android.graphics.Color
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -141,31 +142,11 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = instrArr.size
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun removeBlinking(button: TextView) {
-        button!!.setTypeface(
-            activity.resources.getFont(
-                R.font.consolas
-            )
-        )
-        timeout.removeCallbacks(r);
-        this.visible = false
-        button.setTextColor(button.textColors.withAlpha(135))
+        button.setTextColor(Color.BLACK)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun addBlinking(button:TextView) {
-        r = Runnable {  // Create a runnable interface that loops between setting the opacity of the text
-            visible = if (visible) {
-                button.setTextColor(button.textColors.withAlpha(0))
-                false
-            } else {
-                button.setTextColor(button.textColors.withAlpha(135))
-                true
-            }
-            timeout.postDelayed(r, 500);  // Loop the runnable interface with a 500ms delay
-        }
-        timeout.postDelayed(r, 500);    // Start the runnable interface with a 500ms delay
-        button.setTypeface(activity.resources.getFont(R.font.consolas_bold))  // Also bolds the font
+        button.setTextColor(Color.GREEN)
     }
 }

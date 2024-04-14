@@ -143,8 +143,24 @@ class GameActivity : AppCompatActivity() {
                 else {
                     val selectedButton = GameActivity.lastAccessedGameButton
                     // if empty, move back to prev
-                    if (selectedButton!!.text == "_") {
-                        GameActivity.lastAccessedGameButton = getPrevButton(selectedButton!!)
+                    if (selectedButton!!.text == "_" || selectedButton!!.text == "") {
+                        removeBlinking(selectedButton)
+                        if (getPrevButton(selectedButton!!) != selectedButton!!) {
+                            GameActivity.lastAccessedGameButton = getPrevButton(selectedButton!!)
+                            addBlinking(GameActivity.lastAccessedGameButton!!)
+                            val siblingList =
+                                getSiblingTextViewButtonList(GameActivity.lastAccessedGameButton!!)
+                            for (button in siblingList.reversed()) {
+                                if (button.visibility == View.VISIBLE) {
+                                    // switch to this button
+                                    GameActivity.switchKeyboardLayout(
+                                        getKeyboardFromOperator(
+                                            siblingList[0].text.toString()
+                                        )[siblingList.indexOf(button)]
+                                    )
+                                }
+                            }
+                        }
                     }
                     else if (GameActivity.getVisibleKeyboardLayout() == R.id.digitsKeyboardLayout) { // if num, delete last digit
                         GameActivity.lastAccessedGameButton!!.text = GameActivity.lastAccessedGameButton!!.text.toString().dropLast(1)

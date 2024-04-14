@@ -38,38 +38,36 @@ class KeyboardGridViewAdapter(val context: Context, val keys: List<String>): Bas
                 // -> if target button is "number" -> append to content
                 if (GameActivity.getVisibleKeyboardLayout() == R.id.digitsKeyboardLayout) {
                     // append digit to view
+                    if (targetButton.text == "_") targetButton.text = ""
                     targetButton.text = targetButton.text.toString() + button.text.toString()
                 }
                 else if (GameActivity.getVisibleKeyboardLayout() == R.id.operatorKeyboardLayout) {
-                    // WIPE OUT ALL BUTTON TEXTS
-                    val instructionParent = targetButton.parent as ViewGroup
-                    val instructionButtons = arrayOf<TextView>(
-                        instructionParent.findViewById(R.id.gameInstructionTextView1),
-                        instructionParent.findViewById(R.id.gameInstructionTextView3),
-                        instructionParent.findViewById(R.id.gameInstructionTextView5),
-                        instructionParent.findViewById(R.id.gameInstructionTextView7)
-                    )
-                    for(button in instructionButtons) {
-                        button.text = "_"
-                    }
+                    val template = Instruction(arrayOf(button.text.toString())).getTemplateFromOperator()
+                    val buttonList = getSiblingButtonList(targetButton)
+                    Log.i("button list", buttonList.size.toString())
 
-                    // CHANGE THE FORMAT OF BUTTONS
-                    val newFormat: Array<Int> = getFormatFromOperator(button.text.toString())
-                    for(i in 0 until newFormat.size) {
-                        val button = instructionButtons[i]
-                        val targetKeyboardLayout = newFormat[i]
-                        setButtonOnClickKeyboard(button, targetKeyboardLayout)
+                    for (i in 0 until 8) {
+                        Log.i("i is ", i.toString())
+                        val currentButton = buttonList[i]
+                        if (i >= template.size) {
+                            currentButton.visibility = View.INVISIBLE
+                            currentButton.text = "_"
+                        }
+                        else if (template[i] != "_") {
+                            currentButton.visibility = View.VISIBLE
+                            currentButton.text = template[i]
+                        }
+                        else {
+                            currentButton.visibility = View.VISIBLE
+                            currentButton.text = if (currentButton.text == "") {
+                                "_"
+                            }
+                            else {
+                                currentButton.text
+                            }
+                        }
                     }
-
-                    // Update the instrList TODO THIS
-                    // GameActivity.instrList[position] = Update(instructionButtons)
-
-                    // IF THIS IS THE LAST LINE, UPDATE THE INSTRLIST AND ADD ONE LINE
-                    if (position + 1 == GameActivity.instrList.size) {
-                        GameActivity.instrList.add(Instruction())
-                        // TODO: NOTIFY THE INSTRUTION LIST ADAPTER
-                        // this.notifyDataSetChanged()
-                    }
+                    targetButton.text = button.text
                 }
                 else { // -> if target button is not "number" -> replace content
                     targetButton.text = button.text.toString()

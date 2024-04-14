@@ -16,6 +16,8 @@ class Instruction(
     }
     fun getKeyboardFromOperator() : IntArray {
         return when(instr[0]) {
+            // TODO: REMOVE
+            "add" -> intArrayOf(keyboards[1], keyboards[2], keyboards[3])
             "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu" -> intArrayOf(keyboards[0], keyboards[0], keyboards[0])
             "addi", "addiu", "andi", "ori", "slti", "sltiu", "sll", "srl" -> intArrayOf(keyboards[0], keyboards[0], keyboards[1])
             "beq", "bne"-> intArrayOf(keyboards[0], keyboards[0], keyboards[2])
@@ -23,8 +25,12 @@ class Instruction(
             "j" -> intArrayOf(keyboards[2])
             "jr" -> intArrayOf(keyboards[1])
             "lui" -> intArrayOf(keyboards[0], keyboards[1])
+            "_" -> intArrayOf()
 
-            else -> throw(IllegalArgumentException("Invalid operator or null detected"))
+            else -> {
+                Log.i("oh no", instr[0]!!)
+                throw(IllegalArgumentException("Invalid operator or null detected"))
+            }
         }
     }
     fun getTemplateFromOperator() : Array<String> {
@@ -34,6 +40,7 @@ class Instruction(
             "j", "jr" -> templates[2]
             "lui" -> templates[3]
             null -> arrayOf("_")
+            "_" -> arrayOf()
 
             else -> throw(IllegalArgumentException("Invalid operator detected"))
         }
