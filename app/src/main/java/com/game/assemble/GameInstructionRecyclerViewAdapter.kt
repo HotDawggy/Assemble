@@ -61,12 +61,6 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
         viewHolder.txVArr[0].text = (position + 1).toString()
         viewHolder.txVArr[0].visibility = View.VISIBLE
 
-        /*
-        TODO: Set operator onClickListener to update textViews based on templates
-
-        TODO: If operator is blank, disable and grey out all other textViews
-        TODO: If operator is NOT blank, set keyboard layout and enable visibility of other textviews (simulate click is sufficient, probably)
-         */
         val opButton = viewHolder.txVArr[1]
         val paramButtons = arrayOf(
             viewHolder.txVArr[3],
@@ -91,6 +85,8 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
             if (button.text == "") {
                 button.text = "_"
             }
+
+            Log.i("text is ", button.text.toString())
 
             button.setOnClickListener {
                 if (GameActivity.lastAccessedGameButton == button) {
@@ -118,7 +114,27 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
             }
         }
         else {
-            opButton.callOnClick()
+            val template = Instruction(arrayOf(opButton.text.toString())).getTemplateFromOperator()
+            for (i in 0 until 8) {
+                val currentButton = viewHolder.txVArr[i + 1]
+                if (i >= template.size) {
+                    currentButton.visibility = View.INVISIBLE
+                    currentButton.text = "_"
+                }
+                else if (template[i] != "_") {
+                    currentButton.visibility = View.VISIBLE
+                    currentButton.text = template[i]
+                }
+                else {
+                    currentButton.visibility = View.VISIBLE
+                    currentButton.text = if (currentButton.text == "") {
+                        "_"
+                    }
+                    else {
+                        currentButton.text
+                    }
+                }
+            }
         }
     }
 

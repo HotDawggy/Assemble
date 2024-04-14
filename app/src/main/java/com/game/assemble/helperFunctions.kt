@@ -53,5 +53,5 @@ fun getPrevButton(button: TextView): TextView {
 }
 
 fun getKeyboardFromOperator(op: String): Array<Int> {
-    return Instruction(arrayOf(op)).getKeyboardFromOperator().toTypedArray()
+    return arrayOf(R.id.operatorKeyboardLayout) + Instruction(arrayOf(op)).getKeyboardFromOperator().toTypedArray()
 }
