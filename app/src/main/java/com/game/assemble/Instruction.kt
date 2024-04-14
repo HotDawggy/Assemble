@@ -40,9 +40,10 @@ class Instruction(
 
     companion object {
         private var keyboards: IntArray = intArrayOf(
-            R.id.keyboardRGridView,
-            R.id.keyboardDigitsGridView,
-            R.id.keyboardLabelsGridView
+            R.id.operatorKeyboardLayout,
+            R.id.digitsKeyboardLayout,
+            R.id.lineNumberKeyboardLayout,
+            R.id.registersKeyboardLayout
         )
         private var templates: Array<Array<String>> = arrayOf(
             arrayOf("_", "\t", "_", ",\t", "_", ",\t", "_"),
