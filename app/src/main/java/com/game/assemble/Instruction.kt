@@ -5,7 +5,7 @@ import android.content.res.Resources
 import android.util.Log
 
 class Instruction(
-    var instr : Array<String?> = arrayOf<String?>()
+    private var instr : Array<String?> = arrayOf<String?>()
 ) {
     operator fun get(idx: Int) : String? {
         if (idx < 0 || idx > instr.size) throw(IllegalArgumentException("Index out of bound"))
@@ -14,6 +14,9 @@ class Instruction(
     operator fun set(idx: Int, data: String) {
         instr[idx] = data
     }
+    fun hasLabel(label: String) : Boolean {
+        return instr[0] == label
+    }
     fun getKeyboardFromOperator() : IntArray {
         return when(instr[0]) {
             "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu" -> intArrayOf(keyboards[0], keyboards[0], keyboards[0])
@@ -21,7 +24,6 @@ class Instruction(
             "beq", "bne"-> intArrayOf(keyboards[0], keyboards[0], keyboards[2])
             "lbu", "lhu", "lw", "sb", "sh", "sw" -> intArrayOf(keyboards[0], keyboards[1], keyboards[0])
             "j" -> intArrayOf(keyboards[2])
-            "jr" -> intArrayOf(keyboards[1])
             "lui" -> intArrayOf(keyboards[0], keyboards[1])
 
             else -> throw(IllegalArgumentException("Invalid operator or null detected"))
@@ -31,7 +33,7 @@ class Instruction(
         return when (instr[0]) {
             "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu", "addi", "addiu", "andi", "ori", "slti", "sltiu", "sll", "srl", "beq", "bne" -> templates[0]
             "lbu", "lhu", "lw", "sb", "sh", "sw" -> templates[1]
-            "j", "jr" -> templates[2]
+            "j" -> templates[2]
             "lui" -> templates[3]
             null -> arrayOf("_")
 
