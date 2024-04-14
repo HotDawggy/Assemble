@@ -56,21 +56,24 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         val instr = instrArr[position]
+        // Checking if the lookup tables are initialized
         if (Instruction.isInit()) {
             Instruction.initLookup(activity)
         }
+        // Parse the saved instruction into a string array
         val instrStr = Instruction.stringify(instr, activity)
+        // Set the line number and make it visible
         viewHolder.txVArr[0].text = (position + 1).toString()
         viewHolder.txVArr[0].visibility = View.VISIBLE
-        var buttonArr = intArrayOf()
 
-        for (i in 1..instrStr.size) {
+        var buttonArr = intArrayOf()
+        for (i in 1..instrStr.size) {   // Looping all the TextViews excluding the line number TextView
             val keyboardLayouts = GameActivity.keyboardLayouts
             viewHolder.txVArr[i].text = instrStr[i - 1]
-            viewHolder.txVArr[i].visibility = View.GONE
-            if (!(instrStr[i - 1].contains("\t") || instrStr[i - 1].contains("(") || instrStr[i - 1].contains(")"))) {
+            if (!(instrStr[i - 1].contains("\t") || instrStr[i - 1].contains("(") || instrStr[i - 1].contains(")"))) {  // Is one of the input fields e.g. operator, regs, digits
                 viewHolder.txVArr[i].setOnClickListener {
                     if (GameActivity.lastAccessedGameButton != null) {
+                        // If the last accessed game button exist, unbold the text, remove the blinking animation, and reset the opacity
                         GameActivity.lastAccessedGameButton!!.setTypeface(
                             activity.resources.getFont(
                                 R.font.consolas
@@ -81,8 +84,9 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
                         GameActivity.lastAccessedGameButton?.setTextColor(GameActivity.lastAccessedGameButton!!.textColors.withAlpha(135))
                     }
                     if (GameActivity.lastAccessedGameButton == null || GameActivity.lastAccessedGameButton != viewHolder.txVArr[i]) {
+                        // If the last accessed game button doesn't exist or the player selected a different button,
                         GameActivity.lastAccessedGameButton = viewHolder.txVArr[i]
-                        r = Runnable {
+                        r = Runnable {  // Create a runnable interface that loops between setting the opacity of the text
                             visible = if (visible) {
                                 viewHolder.txVArr[i].setTextColor(viewHolder.txVArr[i].textColors.withAlpha(0))
                                 false
@@ -90,10 +94,11 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
                                 viewHolder.txVArr[i].setTextColor(viewHolder.txVArr[i].textColors.withAlpha(135))
                                 true
                             }
-                            timeout.postDelayed(r, 500);
+                            timeout.postDelayed(r, 500);  // Loop the runnable interface with a 500ms delay
                         }
-                        timeout.postDelayed(r, 500);
-                        viewHolder.txVArr[i].setTypeface(activity.resources.getFont(R.font.consolas_bold))
+                        timeout.postDelayed(r, 500);    // Start the runnable interface with a 500ms delay
+                        viewHolder.txVArr[i].setTypeface(activity.resources.getFont(R.font.consolas_bold))  // Also bolds the font
+                        // Remove the unnecessary keyboards and show the correct one
                         for (keyboard in keyboardLayouts) {
                             keyboard.visibility = View.GONE
                             if (keyboard.id == Instruction.getKeyboardLayout(
@@ -105,6 +110,7 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
                                 keyboard.visibility = View.VISIBLE
                         }
                     } else {
+                        // If the player selected the same button as the last, unselect the button, clear all keyboards, return to default view, and clear the last accessed button
                         GameActivity.lastAccessedGameButton = null
                         for (keyboard in keyboardLayouts) {
                             keyboard.visibility = View.GONE
@@ -113,11 +119,13 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
                         }
                     }
                 }
-                buttonArr += viewHolder.txVArr[i].id
+                buttonArr += viewHolder.txVArr[i].id    // stores the TextViews ids with an onClick listener
             }
         }
-        viewHolder.txVArr[1].visibility = View.VISIBLE
-        if (viewHolder.txVArr[1].text != "_") {
+
+        // Shows the instruction TextViews
+        viewHolder.txVArr[1].visibility = View.VISIBLE  // Always show the first
+        if (viewHolder.txVArr[1].text != "_") {         // If the first operand has already been input, then show the remaining fields.
             for (i in 2..instrStr.size) {
                 viewHolder.txVArr[i].visibility = View.VISIBLE
             }
