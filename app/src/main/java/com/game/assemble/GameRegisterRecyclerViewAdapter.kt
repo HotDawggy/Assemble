@@ -22,6 +22,16 @@ class GameRegisterRecyclerViewAdapter(private val dataSet: Array<RegisterItem>) 
         init {
             registerName = view.findViewById<TextView>(R.id.gameRegistersItemNameTextView)
             registerValue = view.findViewById<TextView>(R.id.gameRegistersItemValueTextView)
+
+            registerName.setOnClickListener {
+                val targetButton: TextView? = GameActivity.lastAccessedGameButton
+                if (targetButton == null) {
+                    // do nothing
+                }
+                else {
+                    targetButton.text = registerName.text.toString()
+                }
+            }
         }
     }
 

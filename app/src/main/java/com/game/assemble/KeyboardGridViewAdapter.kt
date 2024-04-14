@@ -28,6 +28,24 @@ class KeyboardGridViewAdapter(val context: Context, val keys: List<String>): Bas
         val key = getItem(position)
         val button = Button(context)
         button.text = key
+
+        button.setOnClickListener {
+            val targetButton: TextView? = GameActivity.lastAccessedGameButton
+            if (targetButton == null) {
+                // do nothing
+            }
+            else {
+                // -> if target button is "number" -> append to content
+                if (GameActivity.getVisibleKeyboardLayout() == R.id.digitsKeyboardLayout) {
+                    // append digit to view
+                    targetButton.text = targetButton.text.toString() + button.text.toString()
+                }
+                else { // -> if target button is not "number" -> replace content
+                    targetButton.text = button.text.toString()
+                }
+            }
+        }
+
         return button
     }
 }

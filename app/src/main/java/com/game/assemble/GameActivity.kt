@@ -8,6 +8,7 @@ import android.widget.GridView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -24,6 +25,15 @@ class GameActivity : AppCompatActivity() {
                     layout.visibility = View.GONE
                 }
             }
+        }
+
+        fun getVisibleKeyboardLayout(): Int {
+            for (layout in keyboardLayouts) {
+                if (layout.isVisible) {
+                    return layout.id
+                }
+            }
+            return 0 // should never reach here
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
