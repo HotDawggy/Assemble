@@ -1,18 +1,15 @@
 package com.game.assemble
 
-import android.content.Context
 import android.graphics.Color
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 
 fun getFormatFromOperator(operator: String): Array<Int> {
     if (operator == "ADD") {
         return arrayOf(R.id.operatorKeyboardLayout,
-            R.id.digitsKeyboardLayout,
+            R.id.shamtDigitKeyboardLayout,
             R.id.registersKeyboardLayout,
             R.id.lineNumberKeyboardLayout)
     }

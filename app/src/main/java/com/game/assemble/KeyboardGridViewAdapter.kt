@@ -1,15 +1,11 @@
 package com.game.assemble
 
 import android.content.Context
-import android.graphics.Color
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.widget.doOnTextChanged
 
 class KeyboardGridViewAdapter(val context: Context, val keys: List<String>): BaseAdapter() {
     override fun getCount(): Int {
@@ -36,7 +32,7 @@ class KeyboardGridViewAdapter(val context: Context, val keys: List<String>): Bas
             }
             else {
                 // -> if target button is "number" -> append to content
-                if (GameActivity.getVisibleKeyboardLayout() == R.id.digitsKeyboardLayout) {
+                if (GameActivity.getVisibleKeyboardLayout() == R.id.shamtDigitKeyboardLayout) {
                     // append digit to view
                     if (targetButton.text == "_") targetButton.text = ""
                     targetButton.text = targetButton.text.toString() + button.text.toString()

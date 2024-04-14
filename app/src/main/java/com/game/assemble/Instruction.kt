@@ -1,7 +1,5 @@
 package com.game.assemble
 
-import android.content.Context
-import android.content.res.Resources
 import android.util.Log
 
 class Instruction(
@@ -53,7 +51,7 @@ class Instruction(
     companion object {
         private var keyboards: IntArray = intArrayOf(
             R.id.operatorKeyboardLayout,
-            R.id.digitsKeyboardLayout,
+            R.id.shamtDigitKeyboardLayout,
             R.id.lineNumberKeyboardLayout,
             R.id.registersKeyboardLayout
         )

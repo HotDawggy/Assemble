@@ -57,15 +57,18 @@ class GameActivity : AppCompatActivity() {
 
         // initialize keyboard layouts
         keyboardLayouts = arrayOf(
-            findViewById(R.id.digitsKeyboardLayout),
+            findViewById(R.id.shamtDigitKeyboardLayout),
+            findViewById(R.id.immedDigitKeyboardLayout),
             findViewById(R.id.operatorKeyboardLayout),
             findViewById(R.id.lineNumberKeyboardLayout),
-            findViewById(R.id.registersKeyboardLayout)
+            findViewById(R.id.registersKeyboardLayout),
+            findViewById(R.id.registers2KeyboardLayout)
         )
 
         val keyboardData = arrayOf<Array<String>>(
             resources.getStringArray(R.array.instr_r),
             resources.getStringArray(R.array.instr_i) + resources.getStringArray(R.array.instr_j),
+            arrayOf<String>("0", "1", "2", "3", "4", "5", "6", "7", "8", "9"),
             arrayOf<String>("0", "1", "2", "3", "4", "5", "6", "7", "8", "9"),
             arrayOf<String>("1", "2", "3", "4", "5", "6", "7", "8", "9"), // TODO: dynamically set this to the number of active instruction lines
             arrayOf<String>("Panda", "Numpy", "Bunny", "Python"),
@@ -75,10 +78,11 @@ class GameActivity : AppCompatActivity() {
         val gridViews = arrayOf<GridView>(
             findViewById(R.id.keyboardRGridView),
             findViewById(R.id.keyboardIGridView),
-            findViewById(R.id.keyboardDigitsGridView),
+            findViewById(R.id.keyboardShamtDigitsGridView),
+            findViewById(R.id.keyboardImmedDigitsGridView),
             findViewById(R.id.lineNumberGridView),
             findViewById(R.id.labelsGridView),
-            findViewById(R.id.keyboardLabelsGridView)
+            findViewById(R.id.keyboardLabelsGridView),
         )
 
         for ((data, gridView) in keyboardData.zip(gridViews)) {
@@ -131,9 +135,11 @@ class GameActivity : AppCompatActivity() {
         // handle backspace
         val backspaceButtons = arrayOf(
             findViewById<ImageButton>(R.id.backspace1),
-            findViewById<ImageButton>(R.id.backspace2), // wait why is 3 missing
+            findViewById<ImageButton>(R.id.backspace2),
+            findViewById<ImageButton>(R.id.backspace3),
             findViewById<ImageButton>(R.id.backspace4),
-            findViewById<ImageButton>(R.id.backspace5)
+            findViewById<ImageButton>(R.id.backspace5),
+            findViewById<ImageButton>(R.id.backspace6)
         )
         for (backspace in backspaceButtons) {
             backspace.setOnClickListener {
@@ -153,7 +159,7 @@ class GameActivity : AppCompatActivity() {
                             GameActivity.lastAccessedGameButton = prevButton
                         }
                     }
-                    else if (GameActivity.getVisibleKeyboardLayout() == R.id.digitsKeyboardLayout) { // if num, delete last digit
+                    else if (GameActivity.getVisibleKeyboardLayout() == R.id.shamtDigitKeyboardLayout) { // if num, delete last digit
                         GameActivity.lastAccessedGameButton!!.text = GameActivity.lastAccessedGameButton!!.text.toString().dropLast(1)
                         if (GameActivity.lastAccessedGameButton!!.text == "") {
                             GameActivity.lastAccessedGameButton!!.text = "_"
