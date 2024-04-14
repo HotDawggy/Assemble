@@ -3,11 +3,13 @@ package com.game.assemble
 import android.util.Log
 
 class Instruction(
-    private var instr : Array<String?> = arrayOf<String?>(null, null, null, null)
+    other : Array<String?> = arrayOf<String?>(null, null, null, null)
 ) {
+    private var instr: Array<String?> = arrayOf<String?>(null, null, null, null)
     init {
-        for (i in instr.indices){
-            if (instr[i] == "_") instr[i] = null
+        for (i in other.indices){
+            if (other[i] == "_") instr[i] = null
+            else instr[i] = other[i]
         }
     }
     val size = instr.size
@@ -31,11 +33,11 @@ class Instruction(
             "sb", "sh", "sw" -> intArrayOf(keyboards[5], keyboards[2], keyboards[5])
             "j" -> intArrayOf(keyboards[3])
             "lui" -> intArrayOf(keyboards[4], keyboards[2])
-            "_" -> intArrayOf()
+            "_", null -> intArrayOf()
 
             else -> {
                 Log.i("oh no", instr[0]!!)
-                throw(IllegalArgumentException("Invalid operator or null detected"))
+                throw(IllegalArgumentException("Invalid operator detected"))
             }
         }
     }
