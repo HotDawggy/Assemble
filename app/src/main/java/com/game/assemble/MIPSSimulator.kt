@@ -6,7 +6,8 @@ import java.util.Calendar
 
 const val CODE_START = 0x00400000
 const val STACK_START = 0x7ffffffc
-class MIPSSimulator(
+class MIPSSimulator() {
+    /*
     private val context: Context,
     private val v0: Int = 0,
     private val a0: Int = 0,
@@ -414,4 +415,6 @@ class MIPSSimulator(
             }
         }
     }
+
+     */
 }
