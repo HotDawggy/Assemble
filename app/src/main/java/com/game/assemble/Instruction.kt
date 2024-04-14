@@ -25,14 +25,14 @@ class Instruction(
     }
     fun getKeyboardFromOperator() : IntArray {
         return when(instr[0]) {
-            "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu" -> intArrayOf(keyboards[4], keyboards[5], keyboards[5])
-            "addi", "addiu", "andi", "ori", "slti", "sltiu" -> intArrayOf(keyboards[4], keyboards[5], keyboards[2])
-            "sll", "srl" -> intArrayOf(keyboards[4], keyboards[5], keyboards[1])
-            "beq", "bne"-> intArrayOf(keyboards[5], keyboards[5], keyboards[3])
-            "lbu", "lhu", "lw" -> intArrayOf(keyboards[4], keyboards[2], keyboards[5])
-            "sb", "sh", "sw" -> intArrayOf(keyboards[5], keyboards[2], keyboards[5])
+            "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu" -> intArrayOf(keyboards[5], keyboards[4], keyboards[5])
+            "addi", "addiu", "andi", "ori", "slti", "sltiu" -> intArrayOf(keyboards[5], keyboards[4], keyboards[2])
+            "sll", "srl" -> intArrayOf(keyboards[5], keyboards[4], keyboards[1])
+            "beq", "bne"-> intArrayOf(keyboards[4], keyboards[4], keyboards[3])
+            "lbu", "lhu", "lw" -> intArrayOf(keyboards[5], keyboards[2], keyboards[4])
+            "sb", "sh", "sw" -> intArrayOf(keyboards[4], keyboards[2], keyboards[4])
             "j" -> intArrayOf(keyboards[3])
-            "lui" -> intArrayOf(keyboards[4], keyboards[2])
+            "lui" -> intArrayOf(keyboards[5], keyboards[2])
             "_", null -> intArrayOf()
 
             else -> {
