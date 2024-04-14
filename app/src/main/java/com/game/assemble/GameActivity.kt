@@ -186,7 +186,6 @@ class GameActivity : AppCompatActivity() {
                         val currentButton = selectedButton
                         val prevButton = getPrevButton(currentButton)
                         if (currentButton != prevButton) {
-                            addSelected(prevButton)
                             prevButton.callOnClick()
                         }
                     }

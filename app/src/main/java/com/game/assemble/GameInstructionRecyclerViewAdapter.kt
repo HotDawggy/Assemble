@@ -89,12 +89,11 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
             Log.i("text is ", button.text.toString())
 
             button.setOnClickListener {
+                GameActivity.removeSelected()
                 if (GameActivity.lastAccessedGameButton == button) {
-                    GameActivity.removeSelected()
                     GameActivity.switchKeyboardLayout(R.id.registersKeyboardLayout)
                 }
                 else {
-                    GameActivity.removeSelected()
                     GameActivity.addSelected(button)
                     GameActivity.switchKeyboardLayout(
                         getKeyboardFromOperator(opButton.text.toString())[i]
