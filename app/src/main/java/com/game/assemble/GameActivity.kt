@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.GridView
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -44,7 +45,8 @@ class GameActivity : AppCompatActivity() {
 
         MIPSSimulator(this)
         instrList = mutableListOf()
-        instrList += Instruction(opcode = 0x28, rt=4, rs=2, immediate=4)
+        instrList += Instruction(arrayOf("add"))
+        instrList += Instruction(arrayOf("add"))
 
         val recyclerView: RecyclerView = findViewById<RecyclerView>(R.id.gameInstructionRecyclerView)
         val layoutManager = LinearLayoutManager(this)
@@ -124,6 +126,40 @@ class GameActivity : AppCompatActivity() {
         buttonLabels.setOnClickListener {
             gridViews[3].visibility = View.GONE
             gridViews[4].visibility = View.VISIBLE
+        }
+
+
+        // handle backspace
+        val backspaceButtons = arrayOf(
+            findViewById<ImageButton>(R.id.backspace1),
+            findViewById<ImageButton>(R.id.backspace2), // wait why is 3 missing
+            findViewById<ImageButton>(R.id.backspace4),
+            findViewById<ImageButton>(R.id.backspace5)
+        )
+        for (backspace in backspaceButtons) {
+            backspace.setOnClickListener {
+                if (GameActivity.lastAccessedGameButton == null) {
+                    // do nothing
+                }
+                else {
+                    val selectedButton = GameActivity.lastAccessedGameButton
+                    // if empty, move back to prev
+                    if (selectedButton!!.text == "_") {
+                        GameActivity.lastAccessedGameButton = getPrevButton(selectedButton!!)
+                    }
+                    else if (GameActivity.getVisibleKeyboardLayout() == R.id.digitsKeyboardLayout) { // if num, delete last digit
+                        GameActivity.lastAccessedGameButton!!.text = GameActivity.lastAccessedGameButton!!.text.toString().dropLast(1)
+                        if (GameActivity.lastAccessedGameButton!!.text == "") {
+                            GameActivity.lastAccessedGameButton!!.text = "_"
+                        }
+                        // TODO: UPDATE
+                    }
+                    else { // else delete thing
+                        GameActivity.lastAccessedGameButton!!.text = "_"
+                        // TODO: UPDATE
+                    }
+                }
+            }
         }
 
         // by default, only have the registerLayout visible

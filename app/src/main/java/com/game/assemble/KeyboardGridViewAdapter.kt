@@ -67,7 +67,8 @@ class KeyboardGridViewAdapter(val context: Context, val keys: List<String>): Bas
                     // IF THIS IS THE LAST LINE, UPDATE THE INSTRLIST AND ADD ONE LINE
                     if (position + 1 == GameActivity.instrList.size) {
                         GameActivity.instrList.add(Instruction())
-                        this.notifyDataSetChanged()
+                        // TODO: NOTIFY THE INSTRUTION LIST ADAPTER
+                        // this.notifyDataSetChanged()
                     }
                 }
                 else { // -> if target button is not "number" -> replace content
