@@ -50,7 +50,7 @@ class KeyboardGridViewAdapter(val context: Context, val keys: List<String>): Bas
                         instructionParent.findViewById(R.id.gameInstructionTextView7)
                     )
                     for(button in instructionButtons) {
-                        button.text = ""
+                        button.text = "_"
                     }
 
                     // CHANGE THE FORMAT OF BUTTONS
@@ -61,8 +61,8 @@ class KeyboardGridViewAdapter(val context: Context, val keys: List<String>): Bas
                         setButtonOnClickKeyboard(button, targetKeyboardLayout)
                     }
 
-                    // Update the instrList
-                    GameActivity.instrList[position] = Update(instructionButtons)
+                    // Update the instrList TODO THIS
+                    // GameActivity.instrList[position] = Update(instructionButtons)
 
                     // IF THIS IS THE LAST LINE, UPDATE THE INSTRLIST AND ADD ONE LINE
                     if (position + 1 == GameActivity.instrList.size) {

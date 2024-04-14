@@ -7,17 +7,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 
-// TODO: IMPLEMENT THIS
-fun getParamNumber(operator: String): Int {
-    if (operator == "ADD") {
-        return 2
-    }
-    else {
-        return 3
-    }
-}
-
-// TODO: THIS
 fun getFormatFromOperator(operator: String): Array<Int> {
     if (operator == "ADD") {
         return arrayOf(R.id.operatorKeyboardLayout,
@@ -36,17 +25,9 @@ fun setButtonOnClickKeyboard(button: TextView, keyboardLayout: Int) {
 }
 
 fun Update(buttons: Array<TextView>): Instruction {
-    return Instruction()
+    return Instruction() // actually, just loop through all lines of code and update
 }
 
-// TODO:
-// In a Kotlin file
-fun changeLayoutVisibility(context: Context, layoutId: Int, visibility: Int) {
-    val layout = (context as AppCompatActivity).findViewById<View>(layoutId)
-    layout?.visibility = visibility
-}
-
-// TODO:
 fun getPrevButton(button: TextView): TextView {
     val parent = button.parent as ViewGroup
     val siblingButtons = arrayOf(
@@ -69,4 +50,8 @@ fun getPrevButton(button: TextView): TextView {
     else {
         return siblingButtons[index - 1]
     }
+}
+
+fun getKeyboardFromOperator(op: String): Array<Int> {
+    return arrayOf(R.id.operatorKeyboardLayout) + Instruction(arrayOf(op)).getKeyboardFromOperator().toTypedArray()
 }

@@ -42,7 +42,7 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
-        MIPSSimulator(this)
+        // MIPSSimulator(this)
         instrList = mutableListOf()
         instrList += Instruction(arrayOf("add"))
         instrList += Instruction(arrayOf("add"))
