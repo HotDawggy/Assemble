@@ -13,7 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 
 
-class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction>, private val activity: GameActivity) :
+class GameInstructionRecyclerViewAdapter(private val instrArr: MutableList<Instruction>, private val activity: GameActivity) :
     RecyclerView.Adapter<GameInstructionRecyclerViewAdapter.ViewHolder>() {
     /**
      * Provide a reference to the type of views that you are using
@@ -51,7 +51,6 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
     }
 
     // Replace the contents of a view (invoked by the layout manager)
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         // Get element from your dataset at this position and replace the
         // contents of the view with that element

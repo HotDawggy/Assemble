@@ -3,7 +3,9 @@ package com.game.assemble
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.GridView
 import android.widget.ImageButton
@@ -11,9 +13,12 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import okhttp3.internal.notify
+import org.w3c.dom.Text
 
 class GameActivity : AppCompatActivity() {
 
@@ -84,7 +89,7 @@ class GameActivity : AppCompatActivity() {
         recyclerView.layoutManager = layoutManager
 
         // Set adapter for the RecyclerView
-        customAdapter = GameInstructionRecyclerViewAdapter(instrList.toTypedArray(), this)
+        customAdapter = GameInstructionRecyclerViewAdapter(instrList, this)
         recyclerView.adapter = customAdapter
 
         // initialize keyboard layouts
@@ -185,6 +190,15 @@ class GameActivity : AppCompatActivity() {
                         removeSelected()
                         val currentButton = selectedButton
                         val prevButton = getPrevButton(currentButton)
+                        if (
+                            currentButton == getSiblingButtonList(currentButton)[0]     // First item of the line
+                            && instrList.size > 1   // Not the last line remaining
+                            ) {  // First item of the line
+                            val idx = (currentButton.parent as ViewGroup).findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).text.toString().toInt() - 1
+                            instrList.removeAt(idx)
+                            customAdapter.notifyItemRemoved(idx)
+                            customAdapter.notifyItemChanged(idx)
+                        }
                         if (currentButton != prevButton) {
                             prevButton.callOnClick()
                         }

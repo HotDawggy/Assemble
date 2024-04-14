@@ -11,7 +11,7 @@ class MIPSSimulator(
     private var regs: Registers = Registers()
     private val gameTask: GameTask = GameTask(context)
     private val stack: ByteArray = byteArrayOf()
-    private fun parseLabel(label: String, instrList: Array<Instruction>) : Int {
+    private fun parseLabel(label: String, instrList: MutableList<Instruction>) : Int {
         for (instr in instrList) {
             if (instr.hasLabel(label)) return instrList.indexOf(instr)
         }
@@ -123,7 +123,7 @@ class MIPSSimulator(
         }
     }
 
-    fun run(instrList: Array<Instruction>) {
+    fun run(instrList: MutableList<Instruction>) {
         val savedRegs = Registers(regs)
         var err = ""
         var line = 0
