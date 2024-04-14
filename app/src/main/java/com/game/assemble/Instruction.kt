@@ -5,13 +5,14 @@ import android.content.res.Resources
 import android.util.Log
 
 class Instruction(
-    other : Array<String> = arrayOf<String>()
+    var instr : Array<String?> = arrayOf<String?>()
 ) {
-    var instr : Array<Any?> = arrayOf<Any?>(null, null, null, null)
-    init {
-        for (i in other.indices) {
-            instr[i] = other[i]
-        }
+    operator fun get(idx: Int) : String? {
+        if (idx < 0 || idx > instr.size) throw(IllegalArgumentException("Index out of bound"))
+        else return instr[idx]
+    }
+    operator fun set(idx: Int, data: String) {
+        instr[idx] = data
     }
     fun getKeyboardFromOperator() : IntArray {
         return when(instr[0]) {
@@ -36,6 +37,9 @@ class Instruction(
 
             else -> throw(IllegalArgumentException("Invalid operator detected"))
         }
+    }
+    fun hasNull() : Boolean {
+        return instr.contains(null)
     }
 
     companion object {
