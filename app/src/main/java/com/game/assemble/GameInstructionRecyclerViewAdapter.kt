@@ -1,7 +1,6 @@
 package com.game.assemble
 
 // from https://developer.android.com/develop/ui/views/layout/recyclerview
-import android.graphics.Color
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -91,16 +90,12 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
 
             button.setOnClickListener {
                 if (GameActivity.lastAccessedGameButton == button) {
-                    removeBlinking(button)
-                    GameActivity.lastAccessedGameButton = null
+                    GameActivity.removeSelected()
                     GameActivity.switchKeyboardLayout(R.id.registersKeyboardLayout)
                 }
                 else {
-                    if (GameActivity.lastAccessedGameButton != null) {
-                        removeBlinking(GameActivity.lastAccessedGameButton!!)
-                    }
-                    GameActivity.lastAccessedGameButton = button
-                    addBlinking(button)
+                    GameActivity.removeSelected()
+                    GameActivity.addSelected(button)
                     GameActivity.switchKeyboardLayout(
                         getKeyboardFromOperator(opButton.text.toString())[i]
                     )
@@ -141,12 +136,4 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = instrArr.size
-
-    fun removeBlinking(button: TextView) {
-        button.setTextColor(Color.BLACK)
-    }
-
-    fun addBlinking(button:TextView) {
-        button.setTextColor(Color.GREEN)
-    }
 }

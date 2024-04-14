@@ -1,6 +1,5 @@
 package com.game.assemble
 
-import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -79,14 +78,6 @@ fun getKeyboardFromOperator(op: String): Array<Int> {
     return arrayOf(R.id.operatorKeyboardLayout) + Instruction(arrayOf(op)).getKeyboardFromOperator().toTypedArray()
 }
 
-fun removeBlinking(button: TextView) {
-    button.setTextColor(Color.BLACK)
-}
-
-fun addBlinking(button:TextView) {
-    button.setTextColor(Color.GREEN)
-}
-
 fun changeInstructionOppType(button: TextView, opType: String) {
     val buttons = getSiblingButtonList(button) // 1, 2, ... 8
     val template = Instruction(arrayOf(opType)).getTemplateFromOperator()
@@ -105,10 +96,10 @@ fun changeInstructionOppType(button: TextView, opType: String) {
                 GameActivity.switchKeyboardLayout(keyboards[i / 2])
 
                 if (GameActivity.lastAccessedGameButton != null) {
-                    removeBlinking(GameActivity.lastAccessedGameButton!!)
+                    GameActivity.removeSelected()
                 }
                 GameActivity.lastAccessedGameButton = buttons[i]
-                addBlinking(buttons[i])
+                GameActivity.addSelected(buttons[i])
             }
             buttons[i].visibility = View.VISIBLE
         }

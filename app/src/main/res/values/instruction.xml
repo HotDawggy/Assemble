@@ -101,7 +101,6 @@
         <item>subu</item>
     </string-array>
     <integer-array name="regsKey">
-        <item>-1</item>
         <item>0</item>
         <item>2</item>
         <item>4</item>
@@ -113,7 +112,6 @@
         <item>29</item>
     </integer-array>
     <string-array name="regsString">
-        <item>_</item>
         <item>$zero</item>
         <item>$v0</item>
         <item>$a0</item>

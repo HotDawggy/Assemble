@@ -25,7 +25,7 @@ class Instruction(
     }
     fun getKeyboardFromOperator() : IntArray {
         return when(instr[0]) {
-            "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu" -> intArrayOf(keyboards[5], keyboards[4], keyboards[5])
+            "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu" -> intArrayOf(keyboards[5], keyboards[4], keyboards[4])
             "addi", "addiu", "andi", "ori", "slti", "sltiu" -> intArrayOf(keyboards[5], keyboards[4], keyboards[2])
             "sll", "srl" -> intArrayOf(keyboards[5], keyboards[4], keyboards[1])
             "beq", "bne"-> intArrayOf(keyboards[4], keyboards[4], keyboards[3])

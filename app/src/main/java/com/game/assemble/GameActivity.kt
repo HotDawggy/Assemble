@@ -1,6 +1,8 @@
 package com.game.assemble
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.Button
 import android.widget.GridView
@@ -8,6 +10,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +19,9 @@ class GameActivity : AppCompatActivity() {
 
     companion object {
         var lastAccessedGameButton: TextView? = null
+        var lastRunnable: Runnable? = null
+        var lastAccessedGameButtonVisible : Boolean = true
+        val timeout: Handler = Handler(Looper.getMainLooper())
         lateinit var keyboardLayouts: Array<LinearLayout>
         lateinit var instrList: MutableList<Instruction>
         lateinit var customAdapter: GameInstructionRecyclerViewAdapter
@@ -37,7 +43,33 @@ class GameActivity : AppCompatActivity() {
             }
             return 0 // should never reach here
         }
+        fun removeSelected() {
+            if (lastAccessedGameButton != null) {
+                lastAccessedGameButton!!.setTextColor(lastAccessedGameButton!!.context.getColor(R.color.code_font_color)) // Reset color
+                lastAccessedGameButton!!.setTypeface(ResourcesCompat.getFont(lastAccessedGameButton!!.context, R.font.consolas)) // Unbold text
+                timeout.removeCallbacks(lastRunnable!!)
+                lastAccessedGameButtonVisible = true
+                lastAccessedGameButton = null
+            }
+        }
+
+        fun addSelected(button:TextView) {
+            lastAccessedGameButton = button
+            button.setTextColor(button.context.getColor(R.color.code_font_selected_color))
+            lastRunnable = Runnable {
+                lastAccessedGameButtonVisible = if (lastAccessedGameButtonVisible) {
+                    button.setTextColor(button.textColors.withAlpha(0))
+                    false
+                } else {
+                    button.setTextColor(button.textColors.withAlpha(255))
+                    true
+                }
+                timeout.postDelayed(lastRunnable!!, 350)
+            }
+            timeout.postDelayed(lastRunnable!!, 350)
+        }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
@@ -149,14 +181,13 @@ class GameActivity : AppCompatActivity() {
                 else {
                     val selectedButton = GameActivity.lastAccessedGameButton
                     // if empty, move back to prev
-                    if (selectedButton!!.text == "_" || selectedButton!!.text == "") {
-                        removeBlinking(selectedButton)
-                        val currentButton = selectedButton!!
+                    if (selectedButton!!.text == "_" || selectedButton.text == "") {
+                        removeSelected()
+                        val currentButton = selectedButton
                         val prevButton = getPrevButton(currentButton)
                         if (currentButton != prevButton) {
-                            addBlinking(prevButton)
+                            addSelected(prevButton)
                             prevButton.callOnClick()
-                            GameActivity.lastAccessedGameButton = prevButton
                         }
                     }
                     else if (GameActivity.getVisibleKeyboardLayout() == R.id.shamtDigitKeyboardLayout) { // if num, delete last digit
@@ -181,4 +212,5 @@ class GameActivity : AppCompatActivity() {
         switchKeyboardLayout(R.id.registersKeyboardLayout)
         switchKeyboardLayout(R.id.operatorKeyboardLayout)
     }
+
 }
