@@ -47,11 +47,8 @@ fun getPrevButton(button: TextView): TextView {
                     return button
                 }
             }
-            return button
         }
-        else {
-            return button
-        }
+        return button
     }
     else {
         return siblingButtons[index - 1]
