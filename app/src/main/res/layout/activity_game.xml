@@ -79,32 +79,62 @@
 
         </LinearLayout>
 
-        <GridView
-            android:id="@+id/keyboardRGridView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:horizontalSpacing="4dp"
-            android:numColumns="3"
-            android:padding="8dp"
-            android:verticalSpacing="4dp" />
+            android:orientation="horizontal"
+            >
+            <GridView
+                android:id="@+id/keyboardRGridView"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:layout_height="wrap_content"
+                android:horizontalSpacing="4dp"
+                android:numColumns="3"
+                android:padding="8dp"
+                android:verticalSpacing="4dp" />
 
-        <GridView
-            android:id="@+id/keyboardIGridView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:horizontalSpacing="4dp"
-            android:numColumns="3"
-            android:padding="8dp"
-            android:verticalSpacing="4dp" />
+            <GridView
+                android:id="@+id/keyboardIGridView"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:layout_height="wrap_content"
+                android:horizontalSpacing="4dp"
+                android:numColumns="3"
+                android:padding="8dp"
+                android:verticalSpacing="4dp"
+                android:visibility="gone"
+                />
 
-        <GridView
-            android:id="@+id/keyboardLabelsGridView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:horizontalSpacing="4dp"
-            android:numColumns="3"
-            android:padding="8dp"
-            android:verticalSpacing="4dp" />
+            <GridView
+                android:id="@+id/keyboardLabelsGridView"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:layout_height="wrap_content"
+                android:horizontalSpacing="4dp"
+                android:numColumns="3"
+                android:padding="8dp"
+                android:verticalSpacing="4dp"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/backspace5"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="top"
+                    android:padding="0dp"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/backspace" />
+            </LinearLayout>
+        </LinearLayout>
+
+
 
     </LinearLayout>
 
@@ -123,14 +153,36 @@
             android:text="Numpad" />
 
 
-        <GridView
-            android:id="@+id/keyboardDigitsGridView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:horizontalSpacing="4dp"
-            android:numColumns="3"
-            android:padding="8dp"
-            android:verticalSpacing="4dp" />
+            android:orientation="horizontal"
+            >
+            <GridView
+                android:id="@+id/keyboardDigitsGridView"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:layout_height="wrap_content"
+                android:horizontalSpacing="4dp"
+                android:numColumns="3"
+                android:padding="8dp"
+                android:verticalSpacing="4dp" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/backspace4"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="top"
+                    android:padding="0dp"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/backspace" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
 
@@ -162,25 +214,48 @@
                 android:id="@+id/buttonLabels"/>
         </LinearLayout>
 
-        <GridView
-            android:id="@+id/lineNumberGridView"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:horizontalSpacing="4dp"
-            android:numColumns="3"
-            android:padding="8dp"
-            android:verticalSpacing="4dp" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        <GridView
-            android:id="@+id/labelsGridView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:horizontalSpacing="4dp"
-            android:numColumns="3"
-            android:padding="8dp"
-            android:verticalSpacing="4dp"
-            android:visibility="gone"/>
+            <GridView
+                android:id="@+id/lineNumberGridView"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:layout_height="wrap_content"
+                android:horizontalSpacing="4dp"
+                android:numColumns="3"
+                android:padding="8dp"
+                android:verticalSpacing="4dp" />
 
+            <GridView
+                android:id="@+id/labelsGridView"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:layout_height="wrap_content"
+                android:horizontalSpacing="4dp"
+                android:numColumns="3"
+                android:padding="8dp"
+                android:verticalSpacing="4dp"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/backspace1"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="top"
+                    android:padding="0dp"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/backspace" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
 
@@ -216,7 +291,7 @@
                 android:orientation="vertical">
 
                 <ImageButton
-                    android:id="@+id/imageButton2"
+                    android:id="@+id/backspace2"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_gravity="top"
