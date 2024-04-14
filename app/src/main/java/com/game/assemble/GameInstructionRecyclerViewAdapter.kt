@@ -75,9 +75,9 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: Array<Instruction
                 paramButtons[i - 1]
             }
 
-            button.text = if (i < instr.instr.size) {
+            button.text = if (i < instr.size) {
                 button.visibility = View.VISIBLE
-                instr.instr[i]
+                instr[i]
             } else {
                 button.visibility = View.INVISIBLE
                 "_"

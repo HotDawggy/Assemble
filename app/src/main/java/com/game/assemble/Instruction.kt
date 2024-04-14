@@ -7,6 +7,7 @@ import android.util.Log
 class Instruction(
     private var instr : Array<String?> = arrayOf<String?>()
 ) {
+    val size = instr.size
     operator fun get(idx: Int) : String? {
         if (idx < 0 || idx > instr.size) throw(IllegalArgumentException("Index out of bound"))
         else return instr[idx]
