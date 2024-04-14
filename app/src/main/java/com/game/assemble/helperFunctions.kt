@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Recycler
 
 // TODO: IMPLEMENT THIS
 fun getParamNumber(operator: String): Int {
@@ -23,12 +22,12 @@ fun getFormatFromOperator(operator: String): Array<Int> {
     if (operator == "ADD") {
         return arrayOf(R.id.operatorKeyboardLayout,
             R.id.digitsKeyboardLayout,
-            R.id.gameInstructionRegisterLayout2,
+            R.id.registersKeyboardLayout,
             R.id.lineNumberKeyboardLayout)
     }
     else {
         return arrayOf(R.id.operatorKeyboardLayout,
-            R.id.gameInstructionRegisterLayout2)
+            R.id.registersKeyboardLayout)
     }
 }
 

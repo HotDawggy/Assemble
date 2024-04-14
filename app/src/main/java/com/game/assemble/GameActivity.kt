@@ -1,7 +1,6 @@
 package com.game.assemble
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.GridView
@@ -61,7 +60,7 @@ class GameActivity : AppCompatActivity() {
             findViewById(R.id.digitsKeyboardLayout),
             findViewById(R.id.operatorKeyboardLayout),
             findViewById(R.id.lineNumberKeyboardLayout),
-            findViewById(R.id.gameInstructionRegisterLayout2)
+            findViewById(R.id.registersKeyboardLayout)
         )
 
         val keyboardData = arrayOf<Array<String>>(
@@ -163,7 +162,7 @@ class GameActivity : AppCompatActivity() {
         }
 
         // by default, only have the registerLayout visible
-        switchKeyboardLayout(R.id.gameInstructionRegisterLayout2)
+        switchKeyboardLayout(R.id.registersKeyboardLayout)
         switchKeyboardLayout(R.id.operatorKeyboardLayout)
     }
 }

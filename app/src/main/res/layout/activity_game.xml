@@ -260,7 +260,7 @@
 
 
     <LinearLayout
-        android:id="@+id/gameInstructionRegisterLayout2"
+        android:id="@+id/registersKeyboardLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
