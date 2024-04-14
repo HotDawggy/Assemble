@@ -40,6 +40,36 @@ class KeyboardGridViewAdapter(val context: Context, val keys: List<String>): Bas
                     // append digit to view
                     targetButton.text = targetButton.text.toString() + button.text.toString()
                 }
+                else if (GameActivity.getVisibleKeyboardLayout() == R.id.operatorKeyboardLayout) {
+                    // WIPE OUT ALL BUTTON TEXTS
+                    val instructionParent = targetButton.parent as ViewGroup
+                    val instructionButtons = arrayOf<TextView>(
+                        instructionParent.findViewById(R.id.gameInstructionTextView1),
+                        instructionParent.findViewById(R.id.gameInstructionTextView3),
+                        instructionParent.findViewById(R.id.gameInstructionTextView5),
+                        instructionParent.findViewById(R.id.gameInstructionTextView7)
+                    )
+                    for(button in instructionButtons) {
+                        button.text = ""
+                    }
+
+                    // CHANGE THE FORMAT OF BUTTONS
+                    val newFormat: Array<Int> = getFormatFromOperator(button.text.toString())
+                    for(i in 0 until newFormat.size) {
+                        val button = instructionButtons[i]
+                        val targetKeyboardLayout = newFormat[i]
+                        setButtonOnClickKeyboard(button, targetKeyboardLayout)
+                    }
+
+                    // Update the instrList
+                    GameActivity.instrList[position] = Update(instructionButtons)
+
+                    // IF THIS IS THE LAST LINE, UPDATE THE INSTRLIST AND ADD ONE LINE
+                    if (position + 1 == GameActivity.instrList.size) {
+                        GameActivity.instrList.add(Instruction())
+                        this.notifyDataSetChanged()
+                    }
+                }
                 else { // -> if target button is not "number" -> replace content
                     targetButton.text = button.text.toString()
                 }

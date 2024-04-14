@@ -17,6 +17,7 @@ class GameActivity : AppCompatActivity() {
     companion object {
         var lastAccessedGameButton: TextView? = null
         lateinit var keyboardLayouts: Array<LinearLayout>
+        lateinit var instrList: MutableList<Instruction>
         fun switchKeyboardLayout(selectedLayoutId: Int) {
             for (layout in keyboardLayouts) {
                 if (layout.id == selectedLayoutId) {
@@ -41,7 +42,7 @@ class GameActivity : AppCompatActivity() {
         setContentView(R.layout.activity_game)
 
         MIPSSimulator(this)
-        var instrList = arrayOf<Instruction>()
+        instrList = mutableListOf()
         instrList += Instruction(opcode = 0x28, rt=4, rs=2, immediate=4)
 
         val recyclerView: RecyclerView = findViewById<RecyclerView>(R.id.gameInstructionRecyclerView)
@@ -49,7 +50,7 @@ class GameActivity : AppCompatActivity() {
         recyclerView.layoutManager = layoutManager
 
         // Set adapter for the RecyclerView
-        val customAdapter = GameInstructionRecyclerViewAdapter(instrList, this)
+        val customAdapter = GameInstructionRecyclerViewAdapter(instrList.toTypedArray(), this)
         recyclerView.adapter = customAdapter
 
         // initialize keyboard layouts
