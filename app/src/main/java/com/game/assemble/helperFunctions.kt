@@ -36,7 +36,18 @@ fun getPrevButton(button: TextView): TextView {
         if (position > 0) {
             val holder =
                 recyclerView.findViewHolderForAdapterPosition(position - 1) as RecyclerView.ViewHolder
-            return holder.itemView.findViewById(R.id.gameInstructionTextView7)
+            val ids = arrayOf(
+                holder.itemView.findViewById<TextView>(R.id.gameInstructionTextView7),
+                holder.itemView.findViewById(R.id.gameInstructionTextView5),
+                holder.itemView.findViewById(R.id.gameInstructionTextView3),
+                holder.itemView.findViewById(R.id.gameInstructionTextView1)
+            )
+            for (button in ids) {
+                if (button.visibility == View.VISIBLE) {
+                    return button
+                }
+            }
+            return button
         }
         else {
             return button
