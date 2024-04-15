@@ -102,13 +102,18 @@ class GameActivity : AppCompatActivity() {
 
         val sim = MIPSSimulator(this)
         // TODO: Deal with load game case
-        Log.i("GameActivity", "Calling generateTask()")
+        //Log.i("GameActivity", "Calling generateTask()")
         currentTask = sim.generateTask()
-        Log.i("GameActivity", "Returned from generateTask()")
-        Log.i("GameActivity", currentTask)
+        //Log.i("GameActivity", "Returned from generateTask()")
+        //Log.i("GameActivity", currentTask)
         instrList = mutableListOf(Instruction((arrayOf("main:"))))
         instrList += Instruction(arrayOf("add", "_", "_", "_"))
-        instrList += Instruction(arrayOf("add", "_", "_", "_"))
+        instrList += Instruction(arrayOf("and", "\$v0", "\$v0", "\$zero"))
+        instrList += Instruction(arrayOf("multiply:"))
+        instrList += Instruction(arrayOf("add", "\$v0", "\$v0", "\$a0"))
+        instrList += Instruction(arrayOf("addi", "\$a1", "\$a1", "-1"))
+        instrList += Instruction(arrayOf("bne", "\$a1", "\$zero", "multiply"))
+        instrList += Instruction(arrayOf("j", "exit"))
 
         recyclerView = findViewById(R.id.gameInstructionRecyclerView)
         val layoutManager = LinearLayoutManager(this)

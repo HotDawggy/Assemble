@@ -1,116 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer-array name="opcodeKey">
-        <item>0x8</item>
-        <item>0x9</item>
-        <item>0xc</item>
-        <item>0x4</item>
-        <item>0x5</item>
-        <item>0x2</item>
-        <item>0x24</item>
-        <item>0x25</item>
-        <item>0xf</item>
-        <item>0x23</item>
-        <item>0xd</item>
-        <item>0xa</item>
-        <item>0xb</item>
-        <item>0x28</item>
-        <item>0x29</item>
-        <item>0x2b</item>
-    </integer-array>>
-    <string-array name="opcodeString">
+    <string-array name="instrString">
+        <item>add</item>
         <item>addi</item>
         <item>addiu</item>
+        <item>addu</item>
+        <item>and</item>
         <item>andi</item>
         <item>beq</item>
         <item>bne</item>
         <item>j</item>
+        <item>jal</item>
+        <item>jr</item>
         <item>lbu</item>
         <item>lhu</item>
         <item>lui</item>
         <item>lw</item>
+        <item>nor</item>
+        <item>or</item>
         <item>ori</item>
+        <item>slt</item>
         <item>slti</item>
         <item>sltiu</item>
+        <item>sltu</item>
+        <item>sll</item>
+        <item>srl</item>
         <item>sb</item>
         <item>sh</item>
         <item>sw</item>
+        <item>sub</item>
+        <item>subu</item>
     </string-array>
-    <string-array name="opcodeDescription">
-        <item>Adds a constant value to a register and stores the result in another register.</item>
-        <item>Similar to addi, but treats operands as unsigned integers.</item>
+    <string-array name="instrDescription">
+        <item>Adds the values of two registers and stores the result in another. May cause overflow exception</item>
+        <item>Adds a constant value to a register and stores the result in another register. May cause overflow exception</item>
+        <item>Adds a constant value to a register and stores the result in another register. But operands are treated as unsigned i.e. no overflow exception</item>
+        <item>Adds the values of two registers and stores the result in another. But operands are treated as unsigned i.e. no overflow exception</item>
+        <item>Performs a bitwise AND operation between two registers, storing the result in another register.</item>
         <item>Performs a bitwise AND operation between a register and a constant value, storing the result in another register.</item>
-        <item>Branches to a target address if two registers are equal.</item>
-        <item>Branches to a target address if two registers are not equal.</item>
-        <item>Unconditionally jumps to a target address.</item>
+        <item>Branches to a target label if two registers are equal.</item>
+        <item>Branches to a target label if two registers are not equal.</item>
+        <item>Unconditionally jumps to a target label.</item>
+        <item>Unconditionally jumps and links to a target label. Will update $ra to $pc + 8</item>
+        <item>Unconditionally jumps to the address specified by the register. Can be used in conjunction with $ra</item>
         <item>Loads an unsigned byte from memory into a register.</item>
         <item>Loads an unsigned halfword from memory into a register.</item>
         <item>Loads a 16-bit immediate value into the upper 16 bits of a register.</item>
         <item>Loads a word from memory into a register.</item>
+        <item>Performs a bitwise NOR operation between two registers, storing the result in another register.</item>
+        <item>Performs a bitwise OR operation between two registers, storing the result in another register.</item>
         <item>Performs a bitwise OR operation between a register and a constant value, storing the result in another register.</item>
+        <item>Sets a register to 1 if another register is less than the other register; otherwise, sets it to 0.</item>
         <item>Sets a register to 1 if another register is less than a constant value; otherwise, sets it to 0.</item>
-        <item>Similar to slti, but treats operands as unsigned integers.</item>
+        <item>Sets a register to 1 if another register is less than a constant value; otherwise, sets it to 0. But operands are treated as unsigned.</item>
+        <item>Sets a register to 1 if another register is less than the other register; otherwise, sets it to 0. But operands are treated as unsigned.</item>
+        <item>Performs a bitwise left shift of the value of a register a constant amount of time and stores it in another register. Equivalent to multiplying by 2 a constant amount of time.</item>
+        <item>Performs a bitwise right shift of the value of a register a constant amount of time and stores it in another register. Zero-extended. </item>
         <item>Stores the least significant byte of a register into memory.</item>
         <item>Stores the least significant halfword of a register into memory.</item>
         <item>Stores a word from a register into memory.</item>
+        <item>Subtracts the values of two registers and stores the result in another. May cause overflow exception</item>
+        <item>Subtracts the values of two registers and stores the result in another. But operands are treated as unsigned i.e. no overflow exception</item>
     </string-array>
-    <string-array name="opcodeUsage">
-        <item>addi $dest, $src, imm</item>
-        <item>addiu $dest, $src, imm</item>
-        <item>andi $dest, $src, imm</item>
+    <string-array name="instrUsage">
+        <item>add $dest, $src1, $src2 \t // $dest = $src1 + $src2</item>
+        <item>addi $dest, $src, imm \t // $dest = $src + imm</item>
+        <item>addiu $dest, $src, imm \t // $dest = $src + imm</item>
+        <item>addu $dest, $src1, $src2 \t // $dest = $src1 + $src2</item>
+        <item>and $dest, $src1, $src2 \t // $dest = $src1 and $src2</item>
+        <item>andi $dest, $src, imm \t // $dest = $src and imm</item>
         <item>beq $src1, $src2, target</item>
         <item>bne $src1, $src2, target</item>
         <item>j target</item>
-        <item>lbu $dest, offset($base)</item>
-        <item>lhu $dest, offset($base)</item>
-        <item>lui $dest, imm</item>
-        <item>lw $dest, offset($base)</item>
-        <item>ori $dest, $src, imm</item>
-        <item>slti $dest, $src, imm</item>
-        <item>sltiu $dest, $src, imm</item>
+        <item>jal target</item>
+        <item>jr $dest</item>
+        <item>lbu $dest, offset($base) \t // $dest = ($base + offset)</item>
+        <item>lhu $dest, offset($base) \t // $dest = ($base + offset)</item>
+        <item>lui $dest, imm \t // $dest = imm sll 16 </item>
+        <item>lw $dest, offset($base) \t // $dest = ($base + offset)</item>
+        <item>nor $dest, $src1, $src2 \t // $dest = $src1 nor $src2</item>
+        <item>or $dest, $src1, $src2 \t // $dest = $src1 or $src2</item>
+        <item>ori $dest, $src, imm \t // $dest = $src or imm</item>
+        <item>slt $dest, $src1, $src2 \t // $dest = ($src1 > $src2)? 1: 0</item>
+        <item>slti $dest, $src, imm \t // $dest = ($src1 > imm)? 1: 0</item>
+        <item>sltiu $dest, $src, imm \t // $dest = ($src1 > imm)? 1: 0</item>
+        <item>sltu $dest, $src1, $src2 \t // $dest = ($src1 > $src2)? 1: 0</item>
+        <item>sll $dest, $src, shamt \t // $dest = $src sll shamt</item>
+        <item>srl $dest, $src, shamt \t // $dest = $src srl shamt</item>
         <item>sb $src, offset($base)</item>
         <item>sh $src, offset($base)</item>
         <item>sw $src, offset($base)</item>
+        <item>sub $dest, $src1, $src2 \t // $dest = $src1 - $src2</item>
+        <item>subu $dest, $src1, $src2 \t // $dest = $src1 - $src2</item>
     </string-array>
-    <integer-array name="functKey">
-        <item>0x20</item>
-        <item>0x21</item>
-        <item>0x24</item>
-        <item>0x8</item>
-        <item>0x27</item>
-        <item>0x25</item>
-        <item>0x2a</item>
-        <item>0x2b</item>
-        <item>0x00</item>
-        <item>0x02</item>
-        <item>0x22</item>
-        <item>0x23</item>
-    </integer-array>
-    <string-array name="functString">
-        <item>add</item>
-        <item>addu</item>
-        <item>and</item>
-        <item>jr</item>
-        <item>nor</item>
-        <item>or</item>
-        <item>slt</item>
-        <item>sltu</item>
-        <item>sll</item>
-        <item>srl</item>
-        <item>sub</item>
-        <item>subu</item>
-    </string-array>
-    <integer-array name="regsKey">
-        <item>0</item>
-        <item>2</item>
-        <item>4</item>
-        <item>5</item>
-        <item>8</item>
-        <item>9</item>
-        <item>16</item>
-        <item>17</item>
-        <item>29</item>
-    </integer-array>
     <string-array name="regsString">
         <item>$zero</item>
         <item>$v0</item>
@@ -118,6 +100,8 @@
         <item>$a1</item>
         <item>$t0</item>
         <item>$t1</item>
+        <item>$t2</item>
+        <item>$t3</item>
         <item>$s0</item>
         <item>$s1</item>
         <item>$sp</item>
@@ -157,6 +141,7 @@
         <item>add</item>
         <item>addu</item>
         <item>and</item>
+        <item>jr</item>
         <item>nor</item>
         <item>or</item>
         <item>slt</item>
@@ -170,6 +155,7 @@
         <item>0x20</item>
         <item>0x21</item>
         <item>0x24</item>
+        <item>0x8</item>
         <item>0x27</item>
         <item>0x25</item>
         <item>0x2a</item>
@@ -215,8 +201,10 @@
     </integer-array>
     <string-array name="instr_j">
         <item>j</item>
+        <item>jal</item>
     </string-array>
     <integer-array name="opcode_j">
         <item>0x2</item>
+        <item>0x3</item>
     </integer-array>
 </resources>

@@ -81,9 +81,9 @@ class MIPSSimulator(
     }
 
     fun generateTask(id: Int? = null) : String {
-        Log.i("generateTask()", "Generating task...")
+        //Log.i("generateTask()", "Generating task...")
         gameTask.info["id"] = id?:gameTask.getRandomTask()
-        Log.i("generateTask()", "Obtained task ID " + gameTask.info["id"].toString() + "...")
+        //Log.i("generateTask()", "Obtained task ID " + gameTask.info["id"].toString() + "...")
         when (gameTask.info["id"]) {
             0 -> {  // LCM of a0, a1, return in v0
                 regs["\$a0"] = (4..999).random()
@@ -106,23 +106,30 @@ class MIPSSimulator(
                 gameTask["goal"] = gameTask.findGCD(regs["\$a0"], regs["\$a1"])
             }
             3 -> { // Sum of all even primes
-                Log.i("generateTask()", "Setting goal...")
+                //Log.i("generateTask()", "Setting goal...")
                 gameTask["goal"] = 2
             }
+            4 -> {
+                regs["\$a0"] = (4..999).random()
+                regs["\$a1"] = (4..999).random()
+                gameTask["goal"] = regs["\$a0"] * regs["\$a1"]
+            }
         }
-        Log.i("generateTask()", "Returning...")
+        //Log.i("generateTask()", "Returning...")
         return gameTask["text"].toString()
     }
     fun validateTask(instrList: MutableList<Instruction>) : Boolean {
         val initState = Registers(regs)
         for (i in 0 until 10) {
-            Log.i("validateTask()", "Running test case $0")
-            regs = Registers(initState)
+            Log.i("validateTask()", "Running test case $i")
+            Log.i("validateTask()", "Expected output: " + regs["\$a0"] + " * " + regs["\$a1"] + " = " + ((gameTask["goal"]?: -999999) as Int).toString())
+            //printState()
             val err = run(instrList)
             if (err.isNotBlank()) {
                 Log.i("validateTask()", err)
                 return false
             }
+            Log.i("validateTask()", "Obtained output: " + regs["\$v0"].toString())
             when (gameTask.info["id"] as Int) {
                 0 -> {  // LCM of a0, a1, return in v0
                     if (regs["\$v0"] != gameTask["goal"] as Int) return false
@@ -141,17 +148,26 @@ class MIPSSimulator(
                 3 -> { // Sum of all even primes into v0
                     if (regs["\$v0"] != gameTask.info["goal"] as Int) return false
                 }
+
+                4 -> {  // Multiply a0 and a1 and return in v0
+                    if (regs["\$v0"] != gameTask.info["goal"] as Int) return false
+                }
             }
             Log.i("validateTask", "Test case $i completed")
+            regs = Registers(initState)
             GameActivity.currentTask = generateTask(gameTask.info["id"] as Int?)
         }
         return true
     }
 
-    fun printState() {
+    fun printState(idx: String? = null) {
         Log.d("printState", "Printing State")
-        for (reg in regs) {
-            Log.d("PrintState", reg.toString())
+        if (idx == null) {
+            for (reg in regs) {
+                Log.d("PrintState", reg.toString())
+            }
+        } else {
+            Log.d("PrintSate", regs[idx].toString())
         }
     }
 
@@ -160,6 +176,7 @@ class MIPSSimulator(
         val startTime = Calendar.getInstance().time.time
         var line = 0
         while (true) {
+            // printState("\$v0")
             if (line >= instrList.size) return "The program never jumped to exit!"
             val instr: Instruction = instrList[line]
             //Log.d("[*] MIPSSimulator.Run", "line " + line.toString())

@@ -34,21 +34,17 @@ class Instruction(
             "beq", "bne"-> intArrayOf(keyboards[4], keyboards[4], keyboards[3])
             "lbu", "lhu", "lw" -> intArrayOf(keyboards[5], keyboards[2], keyboards[4])
             "sb", "sh", "sw" -> intArrayOf(keyboards[4], keyboards[2], keyboards[4])
-            "j" -> intArrayOf(keyboards[3])
+            "jr" -> intArrayOf(keyboards[5])
+            "j", "jal" -> intArrayOf(keyboards[3])
             "lui" -> intArrayOf(keyboards[5], keyboards[2])
-            "_", null -> intArrayOf()
-
-            else -> {
-                Log.i("oh no", instr[0]!!)
-                throw(IllegalArgumentException("Invalid operator detected"))
-            }
+            else -> intArrayOf()
         }
     }
     fun getTemplateFromOperator() : Array<String> {
         return when (instr[0]?.removePrefix("\t")) {
             "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu", "addi", "addiu", "andi", "ori", "slti", "sltiu", "sll", "srl", "beq", "bne" -> templates[0]
             "lbu", "lhu", "lw", "sb", "sh", "sw" -> templates[1]
-            "j" -> templates[2]
+            "j", "jr", "jal" -> templates[2]
             "lui" -> templates[3]
             null -> arrayOf("_")
             "_" -> arrayOf("_")
@@ -56,7 +52,13 @@ class Instruction(
         }
     }
     fun hasNull() : Boolean {
-        return instr.contains(null)
+        if (instr[0] == null) return true
+        else {
+            for (i in getKeyboardFromOperator().indices) {
+                if (instr[i + 1] == null) return true
+            }
+        }
+        return false
     }
 
     companion object {

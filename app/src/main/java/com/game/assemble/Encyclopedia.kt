@@ -12,9 +12,9 @@ class Encyclopedia : AppCompatActivity() {
 
         // construct encyclopedia dataset
         val dataSet = mutableListOf<EncyclopediaItem>()
-        val names = resources.getStringArray(R.array.opcodeString)
-        val descriptions = resources.getStringArray(R.array.opcodeDescription)
-        val usages = resources.getStringArray(R.array.opcodeUsage)
+        val names = resources.getStringArray(R.array.instrString)
+        val descriptions = resources.getStringArray(R.array.instrDescription)
+        val usages = resources.getStringArray(R.array.instrUsage)
 
         val zippedOpcodes = names.zip(descriptions).zip(usages) {
             (a, b), c -> Triple(a, b, c)

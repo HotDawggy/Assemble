@@ -5,5 +5,6 @@
         <item>Sort the INTEGER array in the stack in ascending order. The address of the first element is stored in $a0, and the size of the array is stored in $a1. Note each integer element occupies 4 bytes!</item>
         <item>Calculate the greatest common divisor of the values stored in $a0, $a1, and return it to $v0</item>
         <item>Find the sum of all even primes, and return it to $v0</item>
+        <item>Multiply the values stored in $a0, $a1, and return it to $v0</item>
     </string-array>
 </resources>
