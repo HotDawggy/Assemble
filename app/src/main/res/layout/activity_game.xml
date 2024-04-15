@@ -7,405 +7,408 @@
     tools:context=".GameActivity">
 
 
-
     <!-- from https://stackoverflow.com/questions/59538127/how-do-i-divide-my-screen-in-2-equal-parts-using-constraint-layout -->
-    <androidx.constraintlayout.widget.Guideline
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/gameGuideline"
-        app:layout_constraintGuide_percent="0.5"
-        android:orientation="horizontal"/>
-
-
     <LinearLayout
-        android:id="@+id/gameInstructionListLayout"
         android:layout_width="match_parent"
-
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="visible"
-
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/gameInstructionListLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="right">
 
-            <ImageButton
-                android:id="@+id/gameTaskButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:src="@android:drawable/ic_dialog_info" />
-
-
-            <ImageButton
-                android:id="@+id/gamePlayButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@android:drawable/ic_media_play" />
-        </LinearLayout>
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/gameInstructionRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/operatorKeyboardLayout"
-        android:layout_width="match_parent"
-
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/gameGuideline">
-
-        <LinearLayout
-            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:orientation="vertical"
 
-            <Button
-                android:id="@+id/buttonR"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="R" />
-
-            <Button
-                android:id="@+id/buttonI"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="J and I" />
-
-            <Button
-                android:id="@+id/buttonL"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Labels" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <GridView
-                android:id="@+id/keyboardRGridView"
-                android:layout_width="0dp"
-                android:layout_weight="7"
-                android:layout_height="wrap_content"
-                android:horizontalSpacing="4dp"
-                android:numColumns="3"
-                android:padding="8dp"
-                android:verticalSpacing="4dp" />
-
-            <GridView
-                android:id="@+id/keyboardIGridView"
-                android:layout_width="0dp"
-                android:layout_weight="7"
-                android:layout_height="wrap_content"
-                android:horizontalSpacing="4dp"
-                android:numColumns="3"
-                android:padding="8dp"
-                android:verticalSpacing="4dp"
-                android:visibility="gone"
-                />
-
-            <GridView
-                android:id="@+id/keyboardLabelsGridView"
-                android:layout_width="0dp"
-                android:layout_weight="7"
-                android:layout_height="wrap_content"
-                android:horizontalSpacing="4dp"
-                android:numColumns="3"
-                android:padding="8dp"
-                android:verticalSpacing="4dp"
-                android:visibility="gone"/>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/backspace5"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="top"
-                    android:padding="0dp"
-                    android:scaleType="centerInside"
-                    app:srcCompat="@drawable/backspace" />
-            </LinearLayout>
-        </LinearLayout>
-
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/shamtDigitKeyboardLayout"
-        android:layout_width="match_parent"
-
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/gameGuideline">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Numpad" />
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <GridView
-                android:id="@+id/keyboardShamtDigitsGridView"
-                android:layout_width="0dp"
-                android:layout_weight="7"
-                android:layout_height="wrap_content"
-                android:horizontalSpacing="4dp"
-                android:numColumns="3"
-                android:padding="8dp"
-                android:verticalSpacing="4dp" />
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/backspace4"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="top"
-                    android:padding="0dp"
-                    android:scaleType="centerInside"
-                    app:srcCompat="@drawable/backspace" />
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/immedDigitKeyboardLayout"
-        android:layout_width="match_parent"
-
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/gameGuideline">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Numpad" />
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <GridView
-                android:id="@+id/keyboardImmedDigitsGridView"
-                android:layout_width="0dp"
-                android:layout_weight="7"
-                android:layout_height="wrap_content"
-                android:horizontalSpacing="4dp"
-                android:numColumns="3"
-                android:padding="8dp"
-                android:verticalSpacing="4dp" />
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/backspace3"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="top"
-                    android:padding="0dp"
-                    android:scaleType="centerInside"
-                    app:srcCompat="@drawable/backspace" />
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/lineNumberKeyboardLayout"
-        android:layout_width="match_parent"
-
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/gameGuideline">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="Line Numbers"
-                android:id="@+id/buttonLineNumber"/>
-            <Button
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="Line Numbers"
-                android:id="@+id/buttonLabels"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <GridView
-                android:id="@+id/lineNumberGridView"
-                android:layout_width="0dp"
-                android:layout_weight="7"
-                android:layout_height="wrap_content"
-                android:horizontalSpacing="4dp"
-                android:numColumns="3"
-                android:padding="8dp"
-                android:verticalSpacing="4dp" />
-
-            <GridView
-                android:id="@+id/labelsGridView"
-                android:layout_width="0dp"
-                android:layout_weight="7"
-                android:layout_height="wrap_content"
-                android:horizontalSpacing="4dp"
-                android:numColumns="3"
-                android:padding="8dp"
-                android:verticalSpacing="4dp"
-                android:visibility="gone"/>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/backspace1"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="top"
-                    android:padding="0dp"
-                    android:scaleType="centerInside"
-                    app:srcCompat="@drawable/backspace" />
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/registersKeyboardLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@+id/gameInstructionListLayout"
-        app:layout_constraintTop_toBottomOf="@id/gameGuideline">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Registers" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
             android:visibility="visible">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/gameInstructionRegisterRecyclerView"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="7" />
-
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/backspace2"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="top"
-                    android:padding="0dp"
-                    android:scaleType="centerInside"
-                    app:srcCompat="@drawable/backspace" />
+                    android:id="@+id/gameTaskButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:src="@android:drawable/ic_dialog_info" />
+
+
+                <ImageButton
+                    android:id="@+id/gamePlayButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@android:drawable/ic_media_play" />
             </LinearLayout>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/gameInstructionRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/registers2KeyboardLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@+id/gameInstructionListLayout"
-        app:layout_constraintTop_toBottomOf="@id/gameGuideline">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Registers" />
 
         <LinearLayout
+            android:id="@+id/registers2KeyboardLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:visibility="visible">
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/gameInstructionRegister2RecyclerView"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="7" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Registers" />
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:visibility="visible">
 
-                <ImageButton
-                    android:id="@+id/backspace6"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="top"
-                    android:padding="0dp"
-                    android:scaleType="centerInside"
-                    app:srcCompat="@drawable/backspace" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/gameInstructionRegister2RecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/backspace6"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_gravity="top"
+                        android:padding="0dp"
+                        android:scaleType="centerInside"
+                        app:srcCompat="@drawable/backspace" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/registersKeyboardLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Registers" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/gameInstructionRegisterRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/backspace2"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_gravity="top"
+                        android:padding="0dp"
+                        android:scaleType="centerInside"
+                        app:srcCompat="@drawable/backspace" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lineNumberKeyboardLayout"
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/buttonLineNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Line Numbers" />
+
+                <Button
+                    android:id="@+id/buttonLabels"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Line Numbers" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:baselineAligned="true"
+                android:orientation="horizontal">
+
+                <GridView
+                    android:id="@+id/lineNumberGridView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
+                    android:horizontalSpacing="4dp"
+                    android:numColumns="3"
+                    android:padding="8dp"
+                    android:verticalSpacing="4dp" />
+
+                <GridView
+                    android:id="@+id/labelsGridView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
+                    android:horizontalSpacing="4dp"
+                    android:numColumns="3"
+                    android:padding="8dp"
+                    android:verticalSpacing="4dp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/backspace1"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_gravity="top"
+                        android:padding="0dp"
+                        android:scaleType="centerInside"
+                        app:srcCompat="@drawable/backspace" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/immedDigitKeyboardLayout"
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Numpad" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="true"
+                android:orientation="horizontal">
+
+                <GridView
+                    android:id="@+id/keyboardImmedDigitsGridView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
+                    android:horizontalSpacing="4dp"
+                    android:numColumns="3"
+                    android:padding="8dp"
+                    android:verticalSpacing="4dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/backspace3"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_gravity="top"
+                        android:padding="0dp"
+                        android:scaleType="centerInside"
+                        app:srcCompat="@drawable/backspace" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/shamtDigitKeyboardLayout"
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Numpad" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:baselineAligned="true"
+                android:orientation="horizontal">
+
+                <GridView
+                    android:id="@+id/keyboardShamtDigitsGridView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
+                    android:horizontalSpacing="4dp"
+                    android:numColumns="3"
+                    android:padding="8dp"
+                    android:verticalSpacing="4dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/backspace4"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_gravity="top"
+                        android:padding="0dp"
+                        android:scaleType="centerInside"
+                        app:srcCompat="@drawable/backspace" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/operatorKeyboardLayout"
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/buttonR"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="R" />
+
+                <Button
+                    android:id="@+id/buttonI"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="J and I" />
+
+                <Button
+                    android:id="@+id/buttonL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Labels" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="true"
+                android:orientation="horizontal">
+
+                <GridView
+                    android:id="@+id/keyboardRGridView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
+                    android:horizontalSpacing="4dp"
+                    android:numColumns="3"
+                    android:padding="8dp"
+                    android:verticalSpacing="4dp" />
+
+                <GridView
+                    android:id="@+id/keyboardIGridView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
+                    android:horizontalSpacing="4dp"
+                    android:numColumns="3"
+                    android:padding="8dp"
+                    android:verticalSpacing="4dp"
+                    android:visibility="gone" />
+
+                <GridView
+                    android:id="@+id/keyboardLabelsGridView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
+                    android:horizontalSpacing="4dp"
+                    android:numColumns="3"
+                    android:padding="8dp"
+                    android:verticalSpacing="4dp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/backspace5"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_gravity="top"
+                        android:padding="0dp"
+                        android:scaleType="centerInside"
+                        app:srcCompat="@drawable/backspace" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

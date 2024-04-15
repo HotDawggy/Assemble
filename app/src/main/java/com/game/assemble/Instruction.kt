@@ -32,7 +32,7 @@ class Instruction(
         return when(instr[0]?.removePrefix("\t")) {
             "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu", "sllv", "srlv", "srav", "xor" -> intArrayOf(keyboards[5], keyboards[4], keyboards[4])
             "addi", "addiu", "andi", "ori", "slti", "sltiu", "xori" -> intArrayOf(keyboards[5], keyboards[4], keyboards[2])
-            "sll", "srl" -> intArrayOf(keyboards[5], keyboards[4], keyboards[1])
+            "sll", "srl", "sra" -> intArrayOf(keyboards[5], keyboards[4], keyboards[1])
             "beq", "bne"-> intArrayOf(keyboards[4], keyboards[4], keyboards[3])
             "blez", "bgtz" -> intArrayOf(keyboards[4], keyboards[3])
             "lbu", "lhu", "lw", "lb", "lh" -> intArrayOf(keyboards[5], keyboards[2], keyboards[4])
@@ -65,6 +65,16 @@ class Instruction(
             }
         }
         return false
+    }
+
+    fun logInstr() {
+        val template = getTemplateFromOperator()
+        var res = ""
+        for (i in template.indices) {
+            res += if (i % 2 == 0) instr[i/2]!!
+            else template[i]
+        }
+        Log.d("logInstr()", res)
     }
 
     companion object {

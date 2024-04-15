@@ -179,6 +179,7 @@ class MIPSSimulator(
             // printState("\$v0")
             if (line >= instrList.size) return "The program never jumped to exit!"
             val instr: Instruction = instrList[line]
+            instr.logInstr()
             //Log.d("[*] MIPSSimulator.Run", "line " + line.toString())
             if (Calendar.getInstance().time.time - startTime > 2000) {
                 regs = savedRegs
@@ -306,7 +307,7 @@ class MIPSSimulator(
 
                 "addiu" -> {    // addiu
                     regs[instr[1]] =
-                        (regs[instr[2]].toUInt() + instr[3]!!.toUInt()).toInt()
+                        (regs[instr[2]].toUInt() + instr[3]!!.toInt().toUInt()).toInt()
                 }
 
                 "andi" -> {    // andi
@@ -450,7 +451,7 @@ class MIPSSimulator(
 
                 "sltiu" -> {    // sltiu
                     regs[instr[1]] =
-                        if (regs[instr[2]].toUInt() < instr[3]!!.toUInt()) 1 else 0
+                        if (regs[instr[2]].toUInt() < instr[3]!!.toInt().toUInt()) 1 else 0
                 }
 
                 "sb" -> {   // sb
