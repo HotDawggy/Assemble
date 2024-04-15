@@ -75,6 +75,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/theme3"
                 android:backgroundTint="@color/theme3"
+                android:clickable="false"
                 android:text="Registers"
                 android:textColor="@color/tab" />
 
@@ -125,6 +126,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/theme_selected"
                 android:backgroundTint="@color/theme_selected"
+                android:clickable="false"
                 android:text="Registers"
                 android:textColor="@color/tab" />
 
@@ -176,6 +178,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/theme3"
+                android:clickable="false"
                 android:text="Labels"
                 android:textColor="@color/tab"
                 tools:visibility="visible" />
@@ -243,6 +246,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/theme3"
+                android:clickable="false"
                 android:text="Numpad"
                 android:textColor="@color/tab" />
 
@@ -298,6 +302,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/theme3"
+                android:clickable="false"
                 android:text="Numpad"
                 android:textColor="@color/tab" />
 
