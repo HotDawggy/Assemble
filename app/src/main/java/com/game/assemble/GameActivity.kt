@@ -52,7 +52,9 @@ class GameActivity : AppCompatActivity() {
         fun removeSelected() {
             if (lastAccessedGameButton != null) {
                 lastAccessedGameButton!!.setBackgroundResource(R.color.theme)
-                lastAccessedGameButton!!.setBackgroundTintList(lastAccessedGameButton!!.context.getColorStateList(R.color.theme))
+                lastAccessedGameButton!!.setBackgroundTintList(lastAccessedGameButton!!.context.getColorStateList(R.color.theme).withAlpha(0))
+                (lastAccessedGameButton!!.parent as LinearLayout).setBackgroundResource(R.color.theme)
+                (lastAccessedGameButton!!.parent as LinearLayout).setBackgroundTintList(lastAccessedGameButton!!.context.getColorStateList(R.color.theme))
                 lastAccessedGameButton!!.setTextColor(lastAccessedGameButton!!.textColors.withAlpha(255)) // Reset color
                 lastAccessedGameButton!!.setTypeface(ResourcesCompat.getFont(lastAccessedGameButton!!.context, R.font.consolas)) // Unbold text
                 timeout.removeCallbacks(lastRunnable!!)
@@ -65,6 +67,8 @@ class GameActivity : AppCompatActivity() {
             lastAccessedGameButton = button
             button.setBackgroundResource(R.color.theme_selected)
             button.setBackgroundTintList(button.context.getColorStateList(R.color.theme_selected))
+            (button.parent as LinearLayout).setBackgroundResource(R.color.theme4)
+            (button.parent as LinearLayout).setBackgroundTintList(lastAccessedGameButton!!.context.getColorStateList(R.color.theme4))
             lastRunnable = Runnable {
                 lastAccessedGameButtonVisible = if (lastAccessedGameButtonVisible) {
                     button.setTextColor(button.textColors.withAlpha(0))
