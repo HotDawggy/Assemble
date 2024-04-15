@@ -39,7 +39,7 @@ class KeyboardGridViewAdapter(val context: Context, private val keys: List<Strin
                     targetButton.text = targetButton.text.toString() + button.text.toString()
                 }
                 else if (GameActivity.getVisibleKeyboardLayout() == R.id.operatorKeyboardLayout) {
-                    targetButton.text = button.text.toString()
+                    targetButton.text = "\t" + button.text.toString()
                     changeInstructionOppType(targetButton, targetButton.text.toString())
                 }
                 else { // -> if target button is not "number" -> replace content

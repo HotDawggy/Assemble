@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class GameRegisterRecyclerViewAdapter(private val dataSet: Array<RegisterItem>) :
+class GameRegisterRecyclerViewAdapter(private val dataSet: MutableMap<String, Int>) :
     RecyclerView.Adapter<GameRegisterRecyclerViewAdapter.ViewHolder>() {
 
     /**
@@ -47,8 +47,9 @@ class GameRegisterRecyclerViewAdapter(private val dataSet: Array<RegisterItem>) 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.registerName.text = dataSet[position].name
-        viewHolder.registerValue.text = dataSet[position].value.toString()
+        val pair = dataSet.toList()[position]
+        viewHolder.registerName.text = pair.first
+        viewHolder.registerValue.text = ("0x" + pair.second.toString(16))
     }
 
     // Return the size of your dataset (invoked by the layout manager)

@@ -9,7 +9,7 @@ class GameTask(context: Context) {
     )
     private val taskList: Array<String> = context.resources.getStringArray(R.array.taskList)
     fun getRandomTask() : Int {
-        val idx = taskList.indices.random()
+        val idx = 3 //taskList.indices.random()
         info["text"] = taskList[idx]
         return idx
     }
@@ -34,5 +34,12 @@ class GameTask(context: Context) {
             num1 = temp
         }
         return num1
+    }
+    operator fun get(key: String) : Any? {
+        if (!info.containsKey(key)) throw(IllegalArgumentException("Invalid key"))
+        return info[key]
+    }
+    operator fun set(key: String, value: Any?) {
+        info[key] = value
     }
 }

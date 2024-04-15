@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -25,6 +26,7 @@ class GameActivity : AppCompatActivity() {
         private var lastRunnable: Runnable? = null
         private var lastAccessedGameButtonVisible : Boolean = true
         private val timeout: Handler = Handler(Looper.getMainLooper())
+        lateinit var currentTask: String
         lateinit var keyboardLayouts: Array<LinearLayout>
         lateinit var instrList: MutableList<Instruction>
         lateinit var customAdapter: GameInstructionRecyclerViewAdapter
@@ -84,7 +86,7 @@ class GameActivity : AppCompatActivity() {
                     layout.findViewById(R.id.gameInstructionTextView7)
                 )
                 customAdapter.updateItemAtPosition(i, Instruction(arrayOf(
-                    buttons[0].text.toString(),
+                    buttons[0].text.toString().removePrefix("\t"),
                     buttons[1].text.toString(),
                     buttons[2].text.toString(),
                     buttons[3].text.toString()
@@ -98,10 +100,15 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
-        // MIPSSimulator(this)
-        instrList = mutableListOf()
-        instrList += Instruction(arrayOf("add"))
-        instrList += Instruction(arrayOf("add"))
+        val sim = MIPSSimulator(this)
+        // TODO: Deal with load game case
+        Log.i("GameActivity", "Calling generateTask()")
+        currentTask = sim.generateTask()
+        Log.i("GameActivity", "Returned from generateTask()")
+        Log.i("GameActivity", currentTask)
+        instrList = mutableListOf(Instruction((arrayOf("main:"))))
+        instrList += Instruction(arrayOf("add", "_", "_", "_"))
+        instrList += Instruction(arrayOf("add", "_", "_", "_"))
 
         recyclerView = findViewById(R.id.gameInstructionRecyclerView)
         val layoutManager = LinearLayoutManager(this)
@@ -148,11 +155,12 @@ class GameActivity : AppCompatActivity() {
         // setup register view for keyboard
         val keyboardRecyclerView: RecyclerView = findViewById(R.id.gameInstructionRegisterRecyclerView)
         keyboardRecyclerView.layoutManager = LinearLayoutManager(this)
+        /*
         val registerArray: MutableList<RegisterItem> = mutableListOf()
         for(name in resources.getStringArray(R.array.regsString)) {
             registerArray.add(RegisterItem(name, 0))
-        }
-        keyboardRecyclerView.adapter = GameRegisterRecyclerViewAdapter(registerArray.toTypedArray())
+        }*/
+        keyboardRecyclerView.adapter = GameRegisterRecyclerViewAdapter(sim.regs.getMap())
 
         // setup the operator tab buttons (switch between R-type and J/I-type ops)
         val buttonR: Button = findViewById(R.id.buttonR)
@@ -211,18 +219,8 @@ class GameActivity : AppCompatActivity() {
                         update()
                         if (
                             selectedButton == getSiblingButtonList(selectedButton)[0]     // First item of the line
-                            && instrList.size > 1   // Not the last line remaining
+                            && instrList.size > 2   // Not the last line remaining, excluding main:
                             ) {
-                            // TODO: There's currently a bug
-                            // Since we never update instrList when we input/backspace
-                            // When we notfiyItemRemoved, the RecyclerView re-render all the viewHolder with the unchanged instrList data
-                            // If we have instrList = mutableListOf(Instruction(), Instruction(arrayOf("sll", "$v0"))
-                            // 1. _
-                            // 2. sll $v0, _, _
-                            // and we remove line 1:
-                            // 1. _            (vs the expected output 1. sll $v0, _, _)
-                            // since instrList[0] is unchanged!
-
                             val idx = (selectedButton.parent as ViewGroup).findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).text.toString().toInt() - 1
                             instrList.removeAt(idx)
                             customAdapter.notifyDataSetChanged()
@@ -250,8 +248,23 @@ class GameActivity : AppCompatActivity() {
             }
         }
 
+        val runButton: ImageButton = findViewById(R.id.gamePlayButton)
+        runButton.setOnClickListener {
+            Log.i("runButton", "OnClick!")
+            Log.i("runButton", "Updating instrList")
+            update()
+            if (instrList.any { it.hasNull() }) {
+                Log.i("runButton", "Some fields are empty!");
+                return@setOnClickListener
+            }
+            Log.i("runButton", "Calling validateTask()")
+            val res = sim.validateTask(instrList)
+            Log.i("runButton", "Returned from validateTask()")
+            Log.i("runButton", "res = $res")
+        }
+
         // by default, only have the registerLayout visible
         switchKeyboardLayout(R.id.registersKeyboardLayout)
-        switchKeyboardLayout(R.id.operatorKeyboardLayout)
+        // switchKeyboardLayout(R.id.operatorKeyboardLayout)
     }
 }

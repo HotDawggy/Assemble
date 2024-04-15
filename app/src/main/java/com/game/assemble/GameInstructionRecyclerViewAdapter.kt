@@ -59,39 +59,47 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: MutableList<Instr
             viewHolder.txVArr[5],
             viewHolder.txVArr[7]
         )
-
-        for (i in 0 until 4) {
-            val button = if(i == 0) {
-                opButton
-            } else {
-                paramButtons[i - 1]
-            }
-
-            button.text = if (i < instr.size) {
-                button.visibility = View.VISIBLE
-                instr[i]
-            } else {
-                button.visibility = View.INVISIBLE
-                "_"
-            }
-            if (button.text == "") {
-                button.text = "_"
-            }
-
-            Log.i("text is ", button.text.toString())
-
-            button.setOnClickListener {
-                GameActivity.removeSelected()
-                if (GameActivity.lastAccessedGameButton == button) {
-                    GameActivity.switchKeyboardLayout(R.id.registersKeyboardLayout)
+        if (instr[0] != "main:") {
+            for (i in 0 until 4) {
+                var button = opButton
+                if (i == 0) {
+                    opButton.text = if (instr.isLabel()) {
+                        instr[0]
+                    } else {
+                        "\t" + instr[0]
+                    }
+                } else {
+                    button = paramButtons[i - 1]
+                    button.text = if (i < instr.size) {
+                        button.visibility = View.VISIBLE
+                        instr[i]
+                    } else {
+                        button.visibility = View.INVISIBLE
+                        "_"
+                    }
                 }
-                else {
-                    GameActivity.addSelected(button)
-                    GameActivity.switchKeyboardLayout(
-                        getKeyboardFromOperator(opButton.text.toString())[i]
-                    )
+                if (button.text == "") {
+                    button.text = "_"
+                }
+
+                Log.i("text is ", button.text.toString())
+
+                button.setOnClickListener {
+                    if (GameActivity.lastAccessedGameButton == button) {
+                        GameActivity.removeSelected()
+                        GameActivity.switchKeyboardLayout(R.id.registersKeyboardLayout)
+                    } else {
+                        GameActivity.removeSelected()
+                        GameActivity.addSelected(button)
+                        GameActivity.switchKeyboardLayout(
+                            getKeyboardFromOperator(opButton.text.toString())[i]
+                        )
+                    }
                 }
             }
+        } else {
+            opButton.text = instr[0]
+            opButton.visibility = View.VISIBLE
         }
 
         if (opButton.text == "" || opButton.text == "_") {

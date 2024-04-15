@@ -20,11 +20,14 @@ class Instruction(
     operator fun set(idx: Int, data: String) {
         instr[idx] = data
     }
-    fun hasLabel(label: String) : Boolean {
-        return instr[0] == label
+    fun isLabel(label: String? = null) : Boolean {
+        return when (instr[0]) {
+            "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu","addi", "addiu", "andi", "ori", "slti", "sltiu", "sll", "srl", "beq", "bne", "lbu", "lhu", "lw", "sb", "sh", "sw", "j", "lui", "_" -> false
+            else -> instr[0] == (label?:instr[0]!!.removeSuffix(":")) +  ":"
+        }
     }
     fun getKeyboardFromOperator() : IntArray {
-        return when(instr[0]) {
+        return when(instr[0]?.removePrefix("\t")) {
             "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu" -> intArrayOf(keyboards[5], keyboards[4], keyboards[4])
             "addi", "addiu", "andi", "ori", "slti", "sltiu" -> intArrayOf(keyboards[5], keyboards[4], keyboards[2])
             "sll", "srl" -> intArrayOf(keyboards[5], keyboards[4], keyboards[1])
@@ -42,7 +45,7 @@ class Instruction(
         }
     }
     fun getTemplateFromOperator() : Array<String> {
-        return when (instr[0]) {
+        return when (instr[0]?.removePrefix("\t")) {
             "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu", "addi", "addiu", "andi", "ori", "slti", "sltiu", "sll", "srl", "beq", "bne" -> templates[0]
             "lbu", "lhu", "lw", "sb", "sh", "sw" -> templates[1]
             "j" -> templates[2]
