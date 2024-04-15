@@ -21,11 +21,14 @@
             android:layout_weight="1"
             android:orientation="vertical"
 
-            android:visibility="visible">
+            android:visibility="visible"
+            tools:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/theme3"
+                android:backgroundTint="@color/theme3"
                 android:gravity="right"
                 android:orientation="horizontal">
 
@@ -34,6 +37,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
+                    android:backgroundTint="@color/theme3"
                     android:src="@android:drawable/ic_dialog_info" />
 
 
@@ -42,6 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
+                    android:backgroundTint="@color/theme3"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@android:drawable/ic_media_play" />
             </LinearLayout>
@@ -59,13 +64,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@color/theme_selected"
+            android:backgroundTint="@color/theme_selected"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="gone">
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Registers" />
+                android:background="@color/theme3"
+                android:backgroundTint="@color/theme3"
+                android:text="Registers"
+                android:textColor="@color/tab" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -90,9 +101,10 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_gravity="top"
+                        android:backgroundTint="@color/theme_selected"
                         android:padding="0dp"
                         android:scaleType="centerInside"
-                        app:srcCompat="@drawable/backspace" />
+                        app:srcCompat="@android:drawable/ic_input_delete" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -102,13 +114,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@color/theme_selected"
+            android:backgroundTint="@color/theme_selected"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="gone">
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Registers" />
+                android:background="@color/theme_selected"
+                android:backgroundTint="@color/theme_selected"
+                android:text="Registers"
+                android:textColor="@color/tab" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -133,45 +151,39 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_gravity="top"
+                        android:backgroundTint="@color/theme_selected"
                         android:padding="0dp"
                         android:scaleType="centerInside"
-                        app:srcCompat="@drawable/backspace" />
+                        app:srcCompat="@android:drawable/ic_input_delete" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/lineNumberKeyboardLayout"
+            android:id="@+id/labelsKeyboardLayout"
             android:layout_width="match_parent"
 
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@color/theme_selected"
+            android:backgroundTint="@color/theme_selected"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible"
+            tools:visibility="gone">
 
-            <LinearLayout
+            <Button
+                android:id="@+id/buttonLabels"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/buttonLineNumber"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Line Numbers" />
-
-                <Button
-                    android:id="@+id/buttonLabels"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Line Numbers" />
-            </LinearLayout>
+                android:background="@color/theme3"
+                android:text="Labels"
+                android:textColor="@color/tab"
+                tools:visibility="visible" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:baselineAligned="true"
                 android:orientation="horizontal">
 
@@ -207,9 +219,10 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_gravity="top"
+                        android:backgroundTint="@color/theme_selected"
                         android:padding="0dp"
                         android:scaleType="centerInside"
-                        app:srcCompat="@drawable/backspace" />
+                        app:srcCompat="@android:drawable/ic_input_delete" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -220,13 +233,18 @@
 
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@color/theme_selected"
+            android:backgroundTint="@color/theme_selected"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="gone">
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Numpad" />
+                android:background="@color/theme3"
+                android:text="Numpad"
+                android:textColor="@color/tab" />
 
 
             <LinearLayout
@@ -256,9 +274,10 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_gravity="top"
+                        android:backgroundTint="@color/theme_selected"
                         android:padding="0dp"
                         android:scaleType="centerInside"
-                        app:srcCompat="@drawable/backspace" />
+                        app:srcCompat="@android:drawable/ic_input_delete" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -269,18 +288,26 @@
 
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@color/theme_selected"
+            android:backgroundTint="@color/theme_selected"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="gone">
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Numpad" />
+                android:background="@color/theme3"
+                android:text="Numpad"
+                android:textColor="@color/tab" />
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/theme_selected"
+
+                android:backgroundTint="@color/theme_selected"
                 android:baselineAligned="true"
                 android:orientation="horizontal">
 
@@ -305,9 +332,10 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_gravity="top"
+                        android:backgroundTint="@color/theme_selected"
                         android:padding="0dp"
                         android:scaleType="centerInside"
-                        app:srcCompat="@drawable/backspace" />
+                        app:srcCompat="@android:drawable/ic_input_delete" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -319,40 +347,50 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:visibility="gone"
-            tools:visibility="gone">
+            android:visibility="visible"
+            tools:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/theme_selected"
+                android:backgroundTint="@color/theme_selected"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/buttonR"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="R" />
+                    android:backgroundTint="@color/theme3"
+                    android:text="R-type"
+                    android:textColor="@color/tab" />
 
                 <Button
                     android:id="@+id/buttonI"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="J and I" />
+                    android:backgroundTint="@color/theme3"
+                    android:text="J-type I-type"
+                    android:textColor="@color/tab" />
 
                 <Button
                     android:id="@+id/buttonL"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Labels" />
+                    android:backgroundTint="@color/theme3"
+                    android:text="Labels"
+                    android:textColor="@color/tab" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/theme_selected"
+                android:backgroundTint="@color/theme_selected"
                 android:baselineAligned="true"
                 android:orientation="horizontal">
 
@@ -364,7 +402,8 @@
                     android:horizontalSpacing="4dp"
                     android:numColumns="3"
                     android:padding="8dp"
-                    android:verticalSpacing="4dp" />
+                    android:verticalSpacing="4dp"
+                    tools:visibility="visible" />
 
                 <GridView
                     android:id="@+id/keyboardIGridView"
@@ -375,7 +414,8 @@
                     android:numColumns="3"
                     android:padding="8dp"
                     android:verticalSpacing="4dp"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    tools:visibility="gone" />
 
                 <GridView
                     android:id="@+id/keyboardLabelsGridView"
@@ -399,9 +439,10 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_gravity="top"
+                        android:backgroundTint="@color/theme_selected"
                         android:padding="0dp"
                         android:scaleType="centerInside"
-                        app:srcCompat="@drawable/backspace" />
+                        app:srcCompat="@android:drawable/ic_input_delete" />
                 </LinearLayout>
             </LinearLayout>
 

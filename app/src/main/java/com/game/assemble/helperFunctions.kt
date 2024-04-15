@@ -1,5 +1,6 @@
 package com.game.assemble
 
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -16,7 +17,7 @@ fun getPrevButton(button: TextView): TextView {
     if (index == 0) {
         val recyclerView = parent.parent as RecyclerView
         val position = recyclerView.getChildAdapterPosition(parent)
-        if (position > 0) {
+        if (position > 1) {
             val holder =
                 recyclerView.findViewHolderForAdapterPosition(position - 1) as RecyclerView.ViewHolder
             val ids = arrayOf(

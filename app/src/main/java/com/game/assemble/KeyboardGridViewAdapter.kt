@@ -36,13 +36,25 @@ class KeyboardGridViewAdapter(val context: Context, private val keys: List<Strin
                     || GameActivity.getVisibleKeyboardLayout() == R.id.immedDigitKeyboardLayout) {
                     // append digit to view
                     if (targetButton.text == "_") targetButton.text = ""
+                    targetButton.setTextColor(targetButton.context.getColor(R.color.code_num))
                     targetButton.text = targetButton.text.toString() + button.text.toString()
                 }
                 else if (GameActivity.getVisibleKeyboardLayout() == R.id.operatorKeyboardLayout) {
                     targetButton.text = "\t" + button.text.toString()
+                    if (Instruction(arrayOf(button.text.toString())).isLabel()) {
+                        targetButton.setTextColor(targetButton.context.getColor(R.color.code_label))
+                    } else {
+                        targetButton.setTextColor(targetButton.context.getColor(R.color.code_instr))
+                    }
+                    getSiblingButtonList(targetButton).forEach {
+                        if (it != targetButton) it.setTextColor(targetButton.context.getColor(R.color.code))
+                    }
                     changeInstructionOppType(targetButton, targetButton.text.toString())
                 }
-                else { // -> if target button is not "number" -> replace content
+                else if (GameActivity.getVisibleKeyboardLayout() == R.id.labelsKeyboardLayout) { // -> if target button is not "number" -> replace content
+                    targetButton.setTextColor(targetButton.context.getColor(R.color.code_label))
+                    targetButton.text = button.text.toString()
+                } else {
                     targetButton.text = button.text.toString()
                 }
             }

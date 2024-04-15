@@ -9,16 +9,18 @@ class MIPSSimulator(
     context: Context,
     ) {
     var regs: Registers = Registers()
+    private var exit = false
     private val gameTask: GameTask = GameTask(context)
     private val stack: ByteArray = byteArrayOf()
-    private fun parseLabel(label: String, instrList: MutableList<Instruction>) : Int? {
-        if (label == "exit") return null
-        for (instr in instrList) {
-            if (instr.isLabel(label)) return instrList.indexOf(instr)
+    companion object {
+        fun parseLabel(label: String, instrList: MutableList<Instruction>) : Int? {
+            if (label == "exit") return null
+            for (instr in instrList) {
+                if (instr.isLabel(label)) return instrList.indexOf(instr)
+            }
+            return null
         }
-        throw(IllegalArgumentException("Invalid label"))
     }
-
     private fun parseStackAddress(addr: Int) : Int? {
         val temp = STACK_START - addr - 1
         return if (temp < 0) {
@@ -317,7 +319,10 @@ class MIPSSimulator(
                 "beq" -> {    // beq
                     if (regs[instr[2]] == regs[instr[1]]) {
                         val temp = parseLabel(instr[3]!!, instrList)
-                        if (temp == null) return "" // Exit is jumped to
+                        if (exit == true) return "" // Exit is jumped to
+                        else if (temp == null) {
+                            return "Invalid label!"
+                        }
                         else line = temp
                     }
                 }
@@ -325,28 +330,40 @@ class MIPSSimulator(
                 "bne" -> {    // bne
                     if (regs[instr[2]] != regs[instr[1]]) {
                         val temp = parseLabel(instr[3]!!, instrList)
-                        if (temp == null) return "" // Exit is jumped to
+                        if (exit == true) return "" // Exit is jumped to
+                        else if (temp == null) {
+                            return "Invalid label!"
+                        }
                         else line = temp
                     }
                 }
                 "blez" -> {
                     if (regs[instr[1]] <= 0) {
                         val temp = parseLabel(instr[2]!!, instrList)
-                        if (temp == null) return "" // Exit is jumped to
+                        if (exit == true) return "" // Exit is jumped to
+                        else if (temp == null) {
+                            return "Invalid label!"
+                        }
                         else line = temp
                     }
                 }
                 "bgtz" -> {
                     if (regs[instr[1]] > 0) {
                         val temp = parseLabel(instr[2]!!, instrList)
-                        if (temp == null) return "" // Exit is jumped to
+                        if (exit == true) return "" // Exit is jumped to
+                        else if (temp == null) {
+                            return "Invalid label!"
+                        }
                         else line = temp
                     }
                 }
 
                 "j" -> {    // j
                     val temp = parseLabel(instr[1]!!, instrList)
-                    if (temp == null) return "" // Exit is jumped to
+                    if (exit == true) return "" // Exit is jumped to
+                    else if (temp == null) {
+                        return "Invalid label!"
+                    }
                     else line = temp
                 }
 
@@ -360,7 +377,10 @@ class MIPSSimulator(
                     regs["\$ra"] + 8
 
                     val temp = parseLabel(instr[1]!!, instrList)
-                    if (temp == null) return "" // Exit is jumped to
+                    if (exit == true) return "" // Exit is jumped to
+                    else if (temp == null) {
+                        return "Invalid label!"
+                    }
                     else line = temp
 
                 }

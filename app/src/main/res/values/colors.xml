@@ -6,8 +6,15 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
-    <color name="code_font_color">#FF606060</color>
-    <color name="code_font_selected_color">#FF14b000</color>
-    <color name="code_font_color_light">#FF606060</color>
+    <color name="code">#FFBBBDC3</color>
+    <color name="theme">#FF1E1F22</color>
+    <color name="theme3">#FF2B2D30</color>
+    <color name="theme2">#FFBBBDC3</color>
+    <color name="theme_selected">#FF26282E</color>
+    <color name="tab">#FFBAB56A</color>
+    <color name="code_label">#FFCF8E6D</color>
+    <color name="code_instr">#FF56A8F5</color>
+    <color name="code_num">#FF2AACB8</color>
+
     <color name="white">#FFFFFFFF</color>
 </resources>

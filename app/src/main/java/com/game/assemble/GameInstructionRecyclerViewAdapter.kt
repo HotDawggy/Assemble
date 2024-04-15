@@ -63,19 +63,29 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: MutableList<Instr
             for (i in 0 until 4) {
                 var button = opButton
                 if (i == 0) {
-                    opButton.text = if (instr.isLabel()) {
-                        instr[0]
+                    if (instr.isLabel()) {
+                        opButton.text = instr[0]
+                        opButton.setTextColor(opButton.context.getColor(R.color.code_label))
                     } else {
-                        "\t" + instr[0]
+                        opButton.text = "\t" + instr[0]
+                        opButton.setTextColor(opButton.context.getColor(R.color.code_instr))
                     }
                 } else {
                     button = paramButtons[i - 1]
-                    button.text = if (i < instr.size) {
+                    if (i < getKeyboardFromOperator(instr[0]!!).size) {
+                        val color = when(getKeyboardFromOperator(instr[0]!!)[i]) {
+                            R.id.immedDigitKeyboardLayout, R.id.shamtDigitKeyboardLayout -> R.color.code_num
+                            R.id.labelsKeyboardLayout -> R.color.code_label
+                            else -> R.color.code
+                        }
+                        button.setTextColor(button.context.getColor(color))
+                    }
+                    if (i < instr.size) {
                         button.visibility = View.VISIBLE
-                        instr[i]
+                        button.text = instr[i]
                     } else {
                         button.visibility = View.INVISIBLE
-                        "_"
+                        button.text = "_"
                     }
                 }
                 if (button.text == "") {
@@ -99,6 +109,7 @@ class GameInstructionRecyclerViewAdapter(private val instrArr: MutableList<Instr
             }
         } else {
             opButton.text = instr[0]
+            opButton.setTextColor(opButton.context.getColor(R.color.code_label))
             opButton.visibility = View.VISIBLE
         }
 

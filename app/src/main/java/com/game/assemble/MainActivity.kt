@@ -3,16 +3,17 @@ package com.game.assemble
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val gameButton = findViewById<Button>(R.id.homePageGameButton)
-        val leaderboardButton = findViewById<Button>(R.id.homePageLeaderboardButton)
-        val profilePageButton = findViewById<Button>(R.id.homePageProfilePageButton)
-        val encyclopediaButton = findViewById<Button>(R.id.homePageEncyclopediaButton)
+        val gameButton = findViewById<TextView>(R.id.homePageGameButton)
+        val leaderboardButton = findViewById<TextView>(R.id.homePageLeaderboardButton)
+        val profilePageButton = findViewById<TextView>(R.id.homePageProfilePageButton)
+        val encyclopediaButton = findViewById<TextView>(R.id.homePageEncyclopediaButton)
 
         gameButton.setOnClickListener {
             val myIntent = Intent(

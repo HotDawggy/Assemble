@@ -51,7 +51,8 @@ class GameActivity : AppCompatActivity() {
         }
         fun removeSelected() {
             if (lastAccessedGameButton != null) {
-                lastAccessedGameButton!!.setTextColor(lastAccessedGameButton!!.context.getColor(R.color.code_font_color)) // Reset color
+                lastAccessedGameButton!!.setBackgroundResource(R.color.theme)
+                lastAccessedGameButton!!.setTextColor(lastAccessedGameButton!!.textColors.withAlpha(255)) // Reset color
                 lastAccessedGameButton!!.setTypeface(ResourcesCompat.getFont(lastAccessedGameButton!!.context, R.font.consolas)) // Unbold text
                 timeout.removeCallbacks(lastRunnable!!)
                 lastAccessedGameButtonVisible = true
@@ -61,7 +62,7 @@ class GameActivity : AppCompatActivity() {
 
         fun addSelected(button:TextView) {
             lastAccessedGameButton = button
-            button.setTextColor(button.context.getColor(R.color.code_font_selected_color))
+            button.setBackgroundResource(R.color.theme_selected)
             lastRunnable = Runnable {
                 lastAccessedGameButtonVisible = if (lastAccessedGameButtonVisible) {
                     button.setTextColor(button.textColors.withAlpha(0))
@@ -128,7 +129,7 @@ class GameActivity : AppCompatActivity() {
             findViewById(R.id.shamtDigitKeyboardLayout),
             findViewById(R.id.immedDigitKeyboardLayout),
             findViewById(R.id.operatorKeyboardLayout),
-            findViewById(R.id.lineNumberKeyboardLayout),
+            findViewById(R.id.labelsKeyboardLayout),
             findViewById(R.id.registersKeyboardLayout),
             findViewById(R.id.registers2KeyboardLayout)
         )
@@ -172,7 +173,6 @@ class GameActivity : AppCompatActivity() {
         val buttonI: Button = findViewById(R.id.buttonI)
         val buttonL: Button = findViewById(R.id.buttonL)
 
-        val buttonLineNumber: Button = findViewById(R.id.buttonLineNumber)
         val buttonLabels: Button = findViewById(R.id.buttonLabels)
 
         buttonR.setOnClickListener {
@@ -189,15 +189,6 @@ class GameActivity : AppCompatActivity() {
             gridViews[0].visibility = View.GONE
             gridViews[1].visibility = View.GONE
             gridViews[5].visibility = View.VISIBLE
-        }
-
-        buttonLineNumber.setOnClickListener {
-            gridViews[3].visibility = View.VISIBLE
-            gridViews[4].visibility = View.GONE
-        }
-        buttonLabels.setOnClickListener {
-            gridViews[3].visibility = View.GONE
-            gridViews[4].visibility = View.VISIBLE
         }
 
 
@@ -243,6 +234,13 @@ class GameActivity : AppCompatActivity() {
                     }
                     else { // else delete thing
                         lastAccessedGameButton!!.text = "_"
+                        if (getSiblingButtonList(lastAccessedGameButton!!)[0] == lastAccessedGameButton) {
+                            getSiblingButtonList(lastAccessedGameButton!!).forEach {
+                                it.setTextColor(it.context.getColor(R.color.code))
+                            }
+                        } else {
+                            lastAccessedGameButton!!.setTextColor(lastAccessedGameButton!!.context.getColor(R.color.code))
+                        }
                         // UPDATE
                         if (lastAccessedGameButton!! == getSiblingButtonList(lastAccessedGameButton!!)[0]) {
                             changeInstructionOppType(lastAccessedGameButton!!, lastAccessedGameButton!!.text.toString())

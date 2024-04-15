@@ -82,7 +82,7 @@ class Instruction(
             R.id.operatorKeyboardLayout,
             R.id.shamtDigitKeyboardLayout,
             R.id.immedDigitKeyboardLayout,
-            R.id.lineNumberKeyboardLayout,
+            R.id.labelsKeyboardLayout,
             R.id.registersKeyboardLayout,
             R.id.registers2KeyboardLayout
         )
