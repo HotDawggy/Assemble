@@ -52,6 +52,7 @@ class GameActivity : AppCompatActivity() {
         fun removeSelected() {
             if (lastAccessedGameButton != null) {
                 lastAccessedGameButton!!.setBackgroundResource(R.color.theme)
+                lastAccessedGameButton!!.setBackgroundTintList(lastAccessedGameButton!!.context.getColorStateList(R.color.theme))
                 lastAccessedGameButton!!.setTextColor(lastAccessedGameButton!!.textColors.withAlpha(255)) // Reset color
                 lastAccessedGameButton!!.setTypeface(ResourcesCompat.getFont(lastAccessedGameButton!!.context, R.font.consolas)) // Unbold text
                 timeout.removeCallbacks(lastRunnable!!)
@@ -63,6 +64,7 @@ class GameActivity : AppCompatActivity() {
         fun addSelected(button:TextView) {
             lastAccessedGameButton = button
             button.setBackgroundResource(R.color.theme_selected)
+            button.setBackgroundTintList(button.context.getColorStateList(R.color.theme_selected))
             lastRunnable = Runnable {
                 lastAccessedGameButtonVisible = if (lastAccessedGameButtonVisible) {
                     button.setTextColor(button.textColors.withAlpha(0))
@@ -235,6 +237,7 @@ class GameActivity : AppCompatActivity() {
                         lastAccessedGameButton!!.text = lastAccessedGameButton!!.text.toString().dropLast(1)
                         if (lastAccessedGameButton!!.text == "") {
                             lastAccessedGameButton!!.text = "_"
+                            lastAccessedGameButton!!.setTextColor(lastAccessedGameButton!!.context.getColor(R.color.code))
                         }
                     }
                     else { // else delete thing

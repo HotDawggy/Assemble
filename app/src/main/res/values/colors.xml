@@ -10,7 +10,8 @@
     <color name="theme">#FF1E1F22</color>
     <color name="theme3">#FF2B2D30</color>
     <color name="theme2">#FFBBBDC3</color>
-    <color name="theme_selected">#FF26282E</color>
+    <color name="theme4">#FF26282E</color>
+    <color name="theme_selected">#FF515359</color>
     <color name="tab">#FFBAB56A</color>
     <color name="code_label">#FFCF8E6D</color>
     <color name="code_instr">#FF56A8F5</color>
