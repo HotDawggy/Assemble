@@ -39,8 +39,8 @@ class MIPSSimulator(
         }
         return null
     }
-    private fun zeroExtendImmediate(source: Int) : Int {
-        return ((source shl 17) ushr 17)
+    private fun zeroExtendImmediate(source: Int, amount: Int = 16) : Int {
+        return ((source shl amount) ushr amount)
     }
 
     private fun bigEndianConversion(bytes: ByteArray): Int {
@@ -209,7 +209,36 @@ class MIPSSimulator(
                 "and" -> {   // and
                     regs[instr[1]] = regs[instr[2]] and (regs[instr[3]])
                 }
-
+                "div" -> {
+                    regs["\$hi"] = regs[instr[1]] % regs[instr[2]]
+                    regs["\$lo"] = regs[instr[1]].floorDiv(regs[instr[2]])
+                }
+                "divu" -> {
+                    regs["\$hi"] = (regs[instr[1]].toUInt() % regs[instr[2]].toUInt()).toInt()
+                    regs["\$lo"] = ((regs[instr[1]]).toUInt().floorDiv(regs[instr[2]].toUInt())).toInt()
+                }
+                "mult" -> {
+                    val temp = regs[instr[1]].toLong() * regs[instr[2]].toLong()
+                    regs["\$hi"] = (temp ushr 16).toInt()
+                    regs["\$lo"] = (temp shl 16 ushr 16).toInt()
+                }
+                "multu" -> {
+                    val temp = (regs[instr[1]].toULong() * regs[instr[2]].toULong()).toLong()
+                    regs["\$hi"] = (temp ushr 16).toInt()
+                    regs["\$lo"] = (temp shl 16 ushr 16).toInt()
+                }
+                "mfhi" -> {
+                    regs[instr[1]] = regs["\$hi"]
+                }
+                "mflo" -> {
+                    regs[instr[1]] = regs["\$lo"]
+                }
+                "mthi" -> {
+                    regs["\$hi"] = regs[instr[1]]
+                }
+                "mtlo" -> {
+                    regs["\$lo"] = regs[instr[1]]
+                }
                 "nor" -> {   // nor
                     regs[instr[1]] = (regs[instr[2]] or regs[instr[3]]).inv()
                 }
@@ -227,12 +256,27 @@ class MIPSSimulator(
                         if (regs[instr[2]].toUInt() < regs[instr[3]].toUInt()) 1 else 0
                 }
 
-                "sll" -> {    // sll
+                "sll" -> {
                     regs[instr[1]] = regs[instr[2]] shl (instr[3]!!.toInt())
                 }
+                "sllv" -> {
+                    regs[instr[1]] = regs[instr[2]] shl regs[instr[3]]
+                }
 
-                "srl" -> {    // srl
+                "srl" -> {
+                    regs[instr[1]] = regs[instr[2]] ushr (instr[3]!!.toInt())
+                }
+
+                "srlv" -> {
+                    regs[instr[1]] = regs[instr[2]] ushr regs[instr[3]]
+                }
+
+                "sra" -> {
                     regs[instr[1]] = regs[instr[2]] shr (instr[3]!!.toInt())
+                }
+
+                "srav" -> {
+                    regs[instr[1]] = regs[instr[2]] shr regs[instr[3]]
                 }
 
                 "sub" -> {   // sub
@@ -284,6 +328,20 @@ class MIPSSimulator(
                         else line = temp
                     }
                 }
+                "blez" -> {
+                    if (regs[instr[1]] <= 0) {
+                        val temp = parseLabel(instr[2]!!, instrList)
+                        if (temp == null) return "" // Exit is jumped to
+                        else line = temp
+                    }
+                }
+                "bgtz" -> {
+                    if (regs[instr[1]] > 0) {
+                        val temp = parseLabel(instr[2]!!, instrList)
+                        if (temp == null) return "" // Exit is jumped to
+                        else line = temp
+                    }
+                }
 
                 "j" -> {    // j
                     val temp = parseLabel(instr[1]!!, instrList)
@@ -306,6 +364,22 @@ class MIPSSimulator(
 
                 }
 
+                "jalr" -> {
+                    regs["\$ra"] = CODE_START
+                    for (i in 0..<line) {
+                        if (!instrList[i].isLabel()) {
+                            regs["\$ra"] += 4
+                        }
+                    }
+                    regs["\$ra"] + 8
+                    val temp = parseCodeAddress(regs["\$rs"], instrList)
+                    if (temp == null) {
+                        regs = savedRegs
+                        return "Invalid code address"
+                    }
+                    line = temp
+                }
+
                 "jr" -> {
                     val temp = parseCodeAddress(regs["\$rs"], instrList)
                     if (temp == null) {
@@ -324,6 +398,15 @@ class MIPSSimulator(
                     regs[instr[1]] = stack[temp].toInt() shl 24 ushr 24
                 }
 
+                "lb" -> {   // lbu
+                    val temp = parseStackAddress(regs[instr[3]] + instr[2]!!.toInt())
+                    if (temp == null) {
+                        regs = savedRegs
+                        return "Invalid stack address"
+                    }
+                    regs[instr[1]] = stack[temp].toInt() shl 24 shr 24
+                }
+
                 "lhu" -> {   // lhu
                     val temp = parseStackAddress(regs[instr[3]] + instr[2]!!.toInt())
                     if (temp == null) {
@@ -332,6 +415,16 @@ class MIPSSimulator(
                     }
                     regs[instr[1]] =
                         bigEndianConversion(stack.copyOfRange(temp - 1, temp + 1)) shl 16 ushr 16
+                }
+
+                "lh" -> {   // lhu
+                    val temp = parseStackAddress(regs[instr[3]] + instr[2]!!.toInt())
+                    if (temp == null) {
+                        regs = savedRegs
+                        return "Invalid stack address"
+                    }
+                    regs[instr[1]] =
+                        bigEndianConversion(stack.copyOfRange(temp - 1, temp + 1)) shl 16 shr 16
                 }
 
                 "lui" -> {    // lui
@@ -397,6 +490,13 @@ class MIPSSimulator(
                     )
                     addToStack(tempArr, temp, 4)
                 }
+                "xor" -> {
+                    regs[instr[1]] = regs[instr[2]] xor regs[instr[3]]
+                }
+                "xori" -> {
+                    regs[instr[1]] = regs[instr[2]] xor zeroExtendImmediate(instr[3]!!.toInt())
+                }
+
                 else -> {
                     regs = savedRegs
                     return "Unknown instruction"

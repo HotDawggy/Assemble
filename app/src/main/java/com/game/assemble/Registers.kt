@@ -11,9 +11,12 @@ class Registers (
     s0: Int = 0,
     s1: Int = 0,
     sp: Int = STACK_START,
-    ra: Int = CODE_START
+    ra: Int = CODE_START,
+    hi: Int = 0,
+    lo: Int = 0
 ) {
-    constructor(other: Registers): this(other["\$v0"], other["\$a0"], other["\$a1"], other["\$t0"], other["\$t1"], other["\$t2"], other["\$t3"], other["\$s0"], other["\$s1"], other["\$sp"], other["\$ra"])
+    constructor(other: Registers): this(other["\$v0"], other["\$a0"], other["\$a1"], other["\$t0"], other["\$t1"],
+        other["\$t2"], other["\$t3"], other["\$s0"], other["\$s1"], other["\$sp"], other["\$ra"], other["\$hi"], other["\$lo"])
     private val regs: MutableMap<String, Int> = mutableMapOf()
     init {
         regs["\$zero"] = 0    // $zero
@@ -28,6 +31,8 @@ class Registers (
         regs["\$s1"] = s1
         regs["\$sp"] = sp
         regs["\$ra"] = ra
+        regs["\$hi"] = hi
+        regs["\$lo"] = lo
     }
     operator fun get(idx: String?) : Int {
         if (idx.isNullOrEmpty() || !regs.contains(idx)) throw(IllegalArgumentException("Invalid register"))

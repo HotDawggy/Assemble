@@ -22,30 +22,36 @@ class Instruction(
     }
     fun isLabel(label: String? = null) : Boolean {
         return when (instr[0]) {
-            "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu","addi", "addiu", "andi", "ori", "slti", "sltiu", "sll", "srl", "beq", "bne", "lbu", "lhu", "lw", "sb", "sh", "sw", "j", "lui", "_" -> false
-            else -> instr[0] == (label?:instr[0]!!.removeSuffix(":")) +  ":"
+            "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu", "addi", "addiu", "andi", "ori", "slti", "sltiu", "sll", "srl", "beq", "bne" -> false
+            "sra", "sllv", "srlv", "srav", "xor", "xori", "lbu", "lhu", "lw", "sb", "sh", "sw", "lb", "lh", "j", "jr", "jal", "jalr", "mfhi", "mflo", "mthi", "mtlo" -> false
+            "lui", "mult", "multu", "div", "divu", "blez", "bgtz" -> false
+            else -> instr[0] == ((label?:instr[0]!!.removeSuffix(":")) + ":")
         }
     }
     fun getKeyboardFromOperator() : IntArray {
         return when(instr[0]?.removePrefix("\t")) {
-            "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu" -> intArrayOf(keyboards[5], keyboards[4], keyboards[4])
-            "addi", "addiu", "andi", "ori", "slti", "sltiu" -> intArrayOf(keyboards[5], keyboards[4], keyboards[2])
+            "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu", "sllv", "srlv", "srav", "xor" -> intArrayOf(keyboards[5], keyboards[4], keyboards[4])
+            "addi", "addiu", "andi", "ori", "slti", "sltiu", "xori" -> intArrayOf(keyboards[5], keyboards[4], keyboards[2])
             "sll", "srl" -> intArrayOf(keyboards[5], keyboards[4], keyboards[1])
             "beq", "bne"-> intArrayOf(keyboards[4], keyboards[4], keyboards[3])
-            "lbu", "lhu", "lw" -> intArrayOf(keyboards[5], keyboards[2], keyboards[4])
+            "blez", "bgtz" -> intArrayOf(keyboards[4], keyboards[3])
+            "lbu", "lhu", "lw", "lb", "lh" -> intArrayOf(keyboards[5], keyboards[2], keyboards[4])
             "sb", "sh", "sw" -> intArrayOf(keyboards[4], keyboards[2], keyboards[4])
-            "jr" -> intArrayOf(keyboards[5])
+            "jr", "jalr", "mfhi", "mflo"-> intArrayOf(keyboards[5])
             "j", "jal" -> intArrayOf(keyboards[3])
             "lui" -> intArrayOf(keyboards[5], keyboards[2])
+            "mthi", "mtlo" -> intArrayOf(keyboards[4])
+            "mult", "multu", "div", "divu" -> intArrayOf(keyboards[4], keyboards[4])
             else -> intArrayOf()
         }
     }
     fun getTemplateFromOperator() : Array<String> {
         return when (instr[0]?.removePrefix("\t")) {
             "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu", "addi", "addiu", "andi", "ori", "slti", "sltiu", "sll", "srl", "beq", "bne" -> templates[0]
-            "lbu", "lhu", "lw", "sb", "sh", "sw" -> templates[1]
-            "j", "jr", "jal" -> templates[2]
-            "lui" -> templates[3]
+            "sra", "sllv", "srlv", "srav", "xor", "xori" -> templates[0]
+            "lbu", "lhu", "lw", "sb", "sh", "sw", "lb", "lh" -> templates[1]
+            "j", "jr", "jal", "jalr", "mfhi", "mflo", "mthi", "mtlo" -> templates[2]
+            "lui", "mult", "multu", "div", "divu", "blez", "bgtz" -> templates[3]
             null -> arrayOf("_")
             "_" -> arrayOf("_")
             else -> arrayOf("_")
@@ -73,8 +79,8 @@ class Instruction(
         private var templates: Array<Array<String>> = arrayOf(
             arrayOf("_", "\t", "_", ",\t", "_", ",\t", "_"),
             arrayOf("_", "\t", "_", ",\t", "_", "(", "_", ")"),
-            arrayOf("_", "\t", "_"),    // j, jr
-            arrayOf("_", "\t", "_", ",\t" , "_")   // lui
+            arrayOf("_", "\t", "_"),
+            arrayOf("_", "\t", "_", ",\t" , "_")
         )
     }
 }

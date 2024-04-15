@@ -8,14 +8,27 @@
         <item>and</item>
         <item>andi</item>
         <item>beq</item>
+        <item>blez</item>   //
+        <item>bgtq</item>   //
         <item>bne</item>
+        <item>div</item>    //
+        <item>divu</item>   //
         <item>j</item>
         <item>jal</item>
+        <item>jalr</item>   //
         <item>jr</item>
+        <item>lb</item>     //
         <item>lbu</item>
+        <item>lh</item>     //
         <item>lhu</item>
         <item>lui</item>
         <item>lw</item>
+        <item>mfhi</item>   //
+        <item>mthi</item>   //
+        <item>mflo</item>   //
+        <item>mtlo</item>   //
+        <item>mult</item>   //
+        <item>multu</item>  //
         <item>nor</item>
         <item>or</item>
         <item>ori</item>
@@ -24,12 +37,18 @@
         <item>sltiu</item>
         <item>sltu</item>
         <item>sll</item>
+        <item>sllv</item>   //
         <item>srl</item>
+        <item>srlv</item>   //
+        <item>srav</item>   //
+        <item>sra</item>    //
         <item>sb</item>
         <item>sh</item>
         <item>sw</item>
         <item>sub</item>
         <item>subu</item>
+        <item>xor</item>    //
+        <item>xori</item>   //
     </string-array>
     <string-array name="instrDescription">
         <item>Adds the values of two registers and stores the result in another. May cause overflow exception</item>
@@ -141,37 +160,41 @@
         <item>add</item>
         <item>addu</item>
         <item>and</item>
+        <item>div</item>
+        <item>divu</item>
         <item>jr</item>
+        <item>jalr</item>
+        <item>mfhi</item>
+        <item>mthi</item>
+        <item>mflo</item>
+        <item>mtlo</item>
+        <item>mult</item>
+        <item>multu</item>
         <item>nor</item>
         <item>or</item>
         <item>slt</item>
         <item>sltu</item>
         <item>sll</item>
+        <item>sllv</item>
         <item>srl</item>
+        <item>srlv</item>
+        <item>sra</item>
+        <item>srav</item>
         <item>sub</item>
         <item>subu</item>
+        <item>xor</item>
     </string-array>
-    <integer-array name="funct_r">
-        <item>0x20</item>
-        <item>0x21</item>
-        <item>0x24</item>
-        <item>0x8</item>
-        <item>0x27</item>
-        <item>0x25</item>
-        <item>0x2a</item>
-        <item>0x2b</item>
-        <item>0x00</item>
-        <item>0x02</item>
-        <item>0x22</item>
-        <item>0x23</item>
-    </integer-array>
     <string-array name="instr_i">
         <item>addi</item>
         <item>addiu</item>
         <item>andi</item>
         <item>beq</item>
+        <item>blez</item>
+        <item>bgtz</item>
         <item>bne</item>
+        <item>lb</item>
         <item>lbu</item>
+        <item>lh</item>
         <item>lhu</item>
         <item>lui</item>
         <item>lw</item>
@@ -181,30 +204,10 @@
         <item>sb</item>
         <item>sh</item>
         <item>sw</item>
+        <item>xori</item>
     </string-array>
-    <integer-array name="opcode_i">
-        <item>0x8</item>
-        <item>0x9</item>
-        <item>0xc</item>
-        <item>0x4</item>
-        <item>0x5</item>
-        <item>0x24</item>
-        <item>0x25</item>
-        <item>0xf</item>
-        <item>0x23</item>
-        <item>0xd</item>
-        <item>0xa</item>
-        <item>0xb</item>
-        <item>0x28</item>
-        <item>0x29</item>
-        <item>0x2b</item>
-    </integer-array>
     <string-array name="instr_j">
         <item>j</item>
         <item>jal</item>
     </string-array>
-    <integer-array name="opcode_j">
-        <item>0x2</item>
-        <item>0x3</item>
-    </integer-array>
 </resources>
