@@ -84,9 +84,8 @@ class GameActivity : AppCompatActivity() {
         }
 
         fun update() {
-            // note: we have customAdapter and recyclerView
-            for(i in 0 until recyclerView.childCount) {
-                val layout: View = recyclerView.getChildAt(i)
+            for(i in 0 until recyclerView.adapter!!.itemCount) {
+                val layout: View = recyclerView.findViewHolderForAdapterPosition(i)!!.itemView
                 val buttons = arrayOf(
                     layout.findViewById<TextView>(R.id.gameInstructionTextView1),
                     layout.findViewById(R.id.gameInstructionTextView3),
@@ -99,6 +98,9 @@ class GameActivity : AppCompatActivity() {
                     buttons[2].text.toString(),
                     buttons[3].text.toString()
                 )))
+
+                layout.findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).text = (i + 1).toString()
+                Log.i("line num", layout.findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).text.toString())
             }
         }
 
@@ -228,14 +230,16 @@ class GameActivity : AppCompatActivity() {
                     if (selectedButton!!.text == "_" || selectedButton.text == "") {
                         removeSelected()
                         var prevButton = getPrevButton(selectedButton)
+                        update()
                         // if first item of the line => get prev button and highlight it
-                        if (selectedButton == getSiblingButtonList(selectedButton)[0]) {
+                        if (selectedButton == getSiblingButtonList(selectedButton)[0] && selectedButton != prevButton) {
                             val idx = (selectedButton.parent as ViewGroup).findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).text.toString().toInt() - 1
                             if (idx > 0) {
                                 Log.i("index is", idx.toString())
                                 update()
                                 instrList.removeAt(idx)
                                 customAdapter.notifyItemRemoved(idx)
+                                update()
                                 prevButton.callOnClick()
                             }
                         }
