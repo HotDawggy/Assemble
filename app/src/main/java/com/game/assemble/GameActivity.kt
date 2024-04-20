@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class GameActivity : AppCompatActivity() {
 
+    private var round = 1
     companion object {
         @SuppressLint("StaticFieldLeak")
         var lastAccessedGameButton: TextView? = null
@@ -284,6 +285,9 @@ class GameActivity : AppCompatActivity() {
             update()
             if (instrList.any { it.hasNull() }) {
                 Log.i("runButton", "Some fields are empty!");
+                this.findViewById<TextView>(R.id.gameInfoTextView).text = "Some fields are empty!"
+                this.findViewById<TextView>(R.id.gameInfoTextView).visibility = View.VISIBLE
+                this.findViewById<LinearLayout>(R.id.gameMainLayout).alpha = 0.1F
                 return@setOnClickListener
             }
             Log.i("runButton", "Calling validateTask()")
@@ -291,6 +295,8 @@ class GameActivity : AppCompatActivity() {
             Log.i("runButton", "Returned from validateTask()")
             Log.i("runButton", "res = $res")
         }
+
+        findViewById<TextView>(R.id.gameRoundTextView).text = "Round $round"
 
         // by default, only have the registerLayout visible
         switchKeyboardLayout(R.id.registersKeyboardLayout)

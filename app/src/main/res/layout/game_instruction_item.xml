@@ -13,6 +13,7 @@
         android:gravity="bottom"
         android:text="1"
         android:textSize="20sp"
+        android:textColor="@color/theme_selected"
         android:visibility="visible" />
 
     <Space

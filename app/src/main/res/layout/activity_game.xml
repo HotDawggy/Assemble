@@ -6,12 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".GameActivity">
 
+    <TextView
+        android:id="@+id/gameInfoTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Hello World"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- from https://stackoverflow.com/questions/59538127/how-do-i-divide-my-screen-in-2-equal-parts-using-constraint-layout -->
     <LinearLayout
+        android:id="@+id/gameMainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:alpha="1">
+
 
         <LinearLayout
             android:id="@+id/gameInstructionListLayout"
@@ -32,6 +46,18 @@
                 android:gravity="right"
                 android:orientation="horizontal">
 
+                <Space
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent"/>
+                <TextView
+                    android:id="@+id/gameRoundTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textAllCaps="true"
+                    android:text="Round" />
+
                 <ImageButton
                     android:id="@+id/gameTaskButton"
                     android:layout_width="wrap_content"
@@ -49,6 +75,7 @@
                     android:backgroundTint="@color/theme3"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@android:drawable/ic_media_play" />
+
             </LinearLayout>
 
 
