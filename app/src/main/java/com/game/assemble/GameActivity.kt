@@ -227,18 +227,19 @@ class GameActivity : AppCompatActivity() {
                     // if empty, move back to prev
                     if (selectedButton!!.text == "_" || selectedButton.text == "") {
                         removeSelected()
-                        val prevButton = getPrevButton(selectedButton)
-                        update()
-                        if (
-                            selectedButton == getSiblingButtonList(selectedButton)[0]     // First item of the line
-                            && instrList.size > 2   // Not the last line remaining, excluding main:
-                            ) {
+                        var prevButton = getPrevButton(selectedButton)
+                        // if first item of the line => get prev button and highlight it
+                        if (selectedButton == getSiblingButtonList(selectedButton)[0]) {
                             val idx = (selectedButton.parent as ViewGroup).findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).text.toString().toInt() - 1
-                            update()
-                            instrList.removeAt(idx)
-                            customAdapter.notifyDataSetChanged()
+                            if (idx > 0) {
+                                Log.i("index is", idx.toString())
+                                update()
+                                instrList.removeAt(idx)
+                                customAdapter.notifyItemRemoved(idx)
+                                prevButton.callOnClick()
+                            }
                         }
-                        if (selectedButton != prevButton) {
+                        else if (selectedButton != prevButton) {
                             prevButton.callOnClick()
                         }
                     }
