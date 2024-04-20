@@ -1,6 +1,7 @@
 package com.game.assemble
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
@@ -34,10 +35,28 @@ class KeyboardGridViewAdapter(val context: Context, private val keys: List<Strin
                 // -> if target button is "number" -> append to content
                 if (GameActivity.getVisibleKeyboardLayout() == R.id.shamtDigitKeyboardLayout
                     || GameActivity.getVisibleKeyboardLayout() == R.id.immedDigitKeyboardLayout) {
-                    // append digit to view
-                    if (targetButton.text == "_") targetButton.text = ""
-                    targetButton.setTextColor(targetButton.context.getColor(R.color.code_num))
-                    targetButton.text = targetButton.text.toString() + button.text.toString()
+                    if (button.text.toString() == "-") {
+                        targetButton.setTextColor(targetButton.context.getColor(R.color.code_num))
+                        if (targetButton.text == "_") targetButton.text = "-"
+                    }
+                    else {
+                        // append digit to view
+                        if (targetButton.text == "_") targetButton.text = ""
+                        targetButton.setTextColor(targetButton.context.getColor(R.color.code_num))
+
+                        val res = targetButton.text.toString() + button.text.toString()
+                        val leftLimit =
+                            if (GameActivity.getVisibleKeyboardLayout() == R.id.shamtDigitKeyboardLayout) 0
+                            else -(1 shl 15) + 1
+                        val rightLimit =
+                            if (GameActivity.getVisibleKeyboardLayout() == R.id.shamtDigitKeyboardLayout) (1 shl 4) - 1
+                            else (1 shl 15) - 1
+
+                        if (res.toInt() in leftLimit..rightLimit) {
+                            targetButton.text = res
+                        }
+                    }
+
                 }
                 else if (GameActivity.getVisibleKeyboardLayout() == R.id.operatorKeyboardLayout) {
                     targetButton.text = "\t" + button.text.toString()

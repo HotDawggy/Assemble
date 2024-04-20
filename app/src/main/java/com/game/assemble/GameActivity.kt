@@ -148,7 +148,7 @@ class GameActivity : AppCompatActivity() {
         val keyboardData = arrayOf<Array<String>>(
             resources.getStringArray(R.array.instr_r),
             resources.getStringArray(R.array.instr_i) + resources.getStringArray(R.array.instr_j),
-            arrayOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9"),
+            arrayOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-"),
             arrayOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9"),
             arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9"), // TODO: dynamically set this to the number of active instruction lines
             arrayOf("Panda", "Numpy", "Bunny", "Python"),
