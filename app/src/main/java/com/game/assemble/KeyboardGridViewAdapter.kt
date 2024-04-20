@@ -61,7 +61,7 @@ class KeyboardGridViewAdapter(val context: Context, private val keys: List<Strin
                 }
                 else if (GameActivity.getVisibleKeyboardLayout() == R.id.operatorKeyboardLayout) {
                     if (Instruction(arrayOf(button.text.toString())).isLabel()) {
-                        targetButton.text = button.text.toString()
+                        targetButton.text = button.text.toString() + ":"
                         targetButton.setTextColor(targetButton.context.getColor(R.color.code_label))
                     } else {
                         targetButton.text = "\t" + button.text.toString()

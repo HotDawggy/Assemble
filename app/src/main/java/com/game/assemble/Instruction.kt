@@ -25,7 +25,8 @@ class Instruction(
             "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu", "addi", "addiu", "andi", "ori", "slti", "sltiu", "sll", "srl", "beq", "bne" -> false
             "sra", "sllv", "srlv", "srav", "xor", "xori", "lbu", "lhu", "lw", "sb", "sh", "sw", "lb", "lh", "j", "jr", "jal", "jalr", "mfhi", "mflo", "mthi", "mtlo" -> false
             "lui", "mult", "multu", "div", "divu", "blez", "bgtz" -> false
-            else -> instr[0] == ((label?:instr[0]!!.removeSuffix(":")) + ":")
+            //else -> instr[0] == ((label?:instr[0]!!.removeSuffix(":")) + ":")
+            else -> true
         }
     }
     fun getKeyboardFromOperator() : IntArray {

@@ -95,8 +95,8 @@ class GameActivity : AppCompatActivity() {
                     layout.findViewById(R.id.gameInstructionTextView5),
                     layout.findViewById(R.id.gameInstructionTextView7)
                 )
-                customAdapter.updateItemAtPosition(i, Instruction(arrayOf(
-                    buttons[0].text.toString().removePrefix("\t"),
+                customAdapter.updateItemAtPosition(position, Instruction(arrayOf(
+                    buttons[0].text.toString().removePrefix("\t").removeSuffix(":"),
                     buttons[1].text.toString(),
                     buttons[2].text.toString(),
                     buttons[3].text.toString()
