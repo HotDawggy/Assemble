@@ -210,4 +210,10 @@
         <item>j</item>
         <item>jal</item>
     </string-array>
+    <string-array name="label_names">
+        <item>panda:</item>
+        <item>python:</item>
+        <item>bunny:</item>
+        <item>koala:</item>
+    </string-array>
 </resources>

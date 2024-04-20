@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
+import android.widget.GridView
 import android.widget.TextView
 
 class KeyboardGridViewAdapter(val context: Context, private val keys: List<String>): BaseAdapter() {
@@ -28,7 +29,7 @@ class KeyboardGridViewAdapter(val context: Context, private val keys: List<Strin
 
         button.setOnClickListener {
             val targetButton: TextView? = GameActivity.lastAccessedGameButton
-            if (targetButton == null) {
+            if (targetButton == null || targetButton.text.toString() == "main:") {
                 // do nothing
             }
             else {
@@ -59,10 +60,11 @@ class KeyboardGridViewAdapter(val context: Context, private val keys: List<Strin
 
                 }
                 else if (GameActivity.getVisibleKeyboardLayout() == R.id.operatorKeyboardLayout) {
-                    targetButton.text = "\t" + button.text.toString()
                     if (Instruction(arrayOf(button.text.toString())).isLabel()) {
+                        targetButton.text = button.text.toString()
                         targetButton.setTextColor(targetButton.context.getColor(R.color.code_label))
                     } else {
+                        targetButton.text = "\t" + button.text.toString()
                         targetButton.setTextColor(targetButton.context.getColor(R.color.code_instr))
                     }
                     getSiblingButtonList(targetButton).forEach {

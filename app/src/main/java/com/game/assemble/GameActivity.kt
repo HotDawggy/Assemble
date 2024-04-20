@@ -31,6 +31,7 @@ class GameActivity : AppCompatActivity() {
         lateinit var instrList: MutableList<Instruction>
         lateinit var customAdapter: GameInstructionRecyclerViewAdapter
         lateinit var recyclerView: RecyclerView
+        lateinit var gridViews: Array<GridView>
         fun switchKeyboardLayout(selectedLayoutId: Int) {
             for (layout in keyboardLayouts) {
                 if (layout.id == selectedLayoutId) {
@@ -151,11 +152,11 @@ class GameActivity : AppCompatActivity() {
             arrayOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9"),
             arrayOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-"),
             arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9"), // TODO: dynamically set this to the number of active instruction lines
-            arrayOf("Panda", "Numpy", "Bunny", "Python"),
-            arrayOf("Panda", "Numpy", "Bunny", "Python")
+            resources.getStringArray(R.array.label_names),
+            resources.getStringArray(R.array.label_names)
         )
 
-        val gridViews = arrayOf<GridView>(
+        gridViews = arrayOf<GridView>(
             findViewById(R.id.keyboardRGridView),
             findViewById(R.id.keyboardIGridView),
             findViewById(R.id.keyboardShamtDigitsGridView),
@@ -233,6 +234,7 @@ class GameActivity : AppCompatActivity() {
                             && instrList.size > 2   // Not the last line remaining, excluding main:
                             ) {
                             val idx = (selectedButton.parent as ViewGroup).findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).text.toString().toInt() - 1
+                            update()
                             instrList.removeAt(idx)
                             customAdapter.notifyDataSetChanged()
                         }
@@ -247,6 +249,9 @@ class GameActivity : AppCompatActivity() {
                             lastAccessedGameButton!!.text = "_"
                             lastAccessedGameButton!!.setTextColor(lastAccessedGameButton!!.context.getColor(R.color.code))
                         }
+                    }
+                    else if (lastAccessedGameButton!!.text.toString() == "main:") {
+                        // do nothing
                     }
                     else { // else delete thing
                         lastAccessedGameButton!!.text = "_"
