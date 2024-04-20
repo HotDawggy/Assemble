@@ -148,8 +148,8 @@ class GameActivity : AppCompatActivity() {
         val keyboardData = arrayOf<Array<String>>(
             resources.getStringArray(R.array.instr_r),
             resources.getStringArray(R.array.instr_i) + resources.getStringArray(R.array.instr_j),
-            arrayOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-"),
             arrayOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9"),
+            arrayOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-"),
             arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9"), // TODO: dynamically set this to the number of active instruction lines
             arrayOf("Panda", "Numpy", "Bunny", "Python"),
             arrayOf("Panda", "Numpy", "Bunny", "Python")
@@ -160,7 +160,7 @@ class GameActivity : AppCompatActivity() {
             findViewById(R.id.keyboardIGridView),
             findViewById(R.id.keyboardShamtDigitsGridView),
             findViewById(R.id.keyboardImmedDigitsGridView),
-            findViewById(R.id.lineNumberGridView),
+            findViewById(R.id.labelsGridView),
             findViewById(R.id.labelsGridView),
             findViewById(R.id.keyboardLabelsGridView),
         )
@@ -179,6 +179,10 @@ class GameActivity : AppCompatActivity() {
         }*/
         keyboardRecyclerView.adapter = GameRegisterRecyclerViewAdapter(sim.regs.getMap())
 
+        val keyboardRecyclerView2: RecyclerView = findViewById(R.id.gameInstructionRegister2RecyclerView)
+        keyboardRecyclerView2.layoutManager = LinearLayoutManager(this)
+        keyboardRecyclerView2.adapter = GameRegisterRecyclerViewAdapter(sim.regs.getMap())
+
         // setup the operator tab buttons (switch between R-type and J/I-type ops)
         val buttonR: Button = findViewById(R.id.buttonR)
         val buttonI: Button = findViewById(R.id.buttonI)
@@ -187,19 +191,19 @@ class GameActivity : AppCompatActivity() {
         val buttonLabels: Button = findViewById(R.id.buttonLabels)
 
         buttonR.setOnClickListener {
-            gridViews[0].visibility = View.VISIBLE
-            gridViews[1].visibility = View.GONE
-            gridViews[5].visibility = View.GONE
+            findViewById<GridView>(R.id.keyboardRGridView).visibility = View.VISIBLE
+            findViewById<GridView>(R.id.keyboardIGridView).visibility = View.GONE
+            findViewById<GridView>(R.id.keyboardLabelsGridView).visibility = View.GONE
         }
         buttonI.setOnClickListener {
-            gridViews[0].visibility = View.GONE
-            gridViews[1].visibility = View.VISIBLE
-            gridViews[5].visibility = View.GONE
+            findViewById<GridView>(R.id.keyboardRGridView).visibility = View.GONE
+            findViewById<GridView>(R.id.keyboardIGridView).visibility = View.VISIBLE
+            findViewById<GridView>(R.id.keyboardLabelsGridView).visibility = View.GONE
         }
         buttonL.setOnClickListener {
-            gridViews[0].visibility = View.GONE
-            gridViews[1].visibility = View.GONE
-            gridViews[5].visibility = View.VISIBLE
+            findViewById<GridView>(R.id.keyboardRGridView).visibility = View.GONE
+            findViewById<GridView>(R.id.keyboardIGridView).visibility = View.GONE
+            findViewById<GridView>(R.id.keyboardLabelsGridView).visibility = View.VISIBLE
         }
 
 
