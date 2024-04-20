@@ -38,6 +38,7 @@ class ProfilePage : AppCompatActivity() {
         val famAsmTextView: TextView = findViewById(R.id.profilePageFavAsm)
         famAsmTextView.text = "You used ${sharedPrefs.getString("favAsm", "XOR")} ${sharedPrefs.getInt("favAsmCount", 0)} times!"
 
+        /* TODO: ADD RECYCLER VIEW
         // from https://stackoverflow.com/questions/44148852/how-to-add-a-button-dynamically-in-android-using-kotlin
         val runHistoryLayout = findViewById<LinearLayout>(R.id.profilePageRunHistoryLayout)
         val btnRunHistory = Button(this)
@@ -56,5 +57,7 @@ class ProfilePage : AppCompatActivity() {
             startActivity(myIntent)
         }
         runHistoryLayout.addView(btnRunHistory)
+
+         */
     }
 }
