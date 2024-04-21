@@ -205,7 +205,7 @@ class MIPSSimulator(
             if (instr.isLabel()) {
                 continue
             }
-            when (instr[0]) {
+            when (instr[0]?.removeSuffix(":")?.removePrefix("\t")) {
                 "add" -> {   // add
                     val temp: Long = regs[instr[2]].toLong() + regs[instr[3]].toLong()
                     if (temp <= Int.MAX_VALUE && temp >= Int.MIN_VALUE) {

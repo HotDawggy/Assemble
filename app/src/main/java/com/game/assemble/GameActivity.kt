@@ -5,9 +5,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.Spannable
-import android.text.SpannableStringBuilder
-import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +19,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
+import okhttp3.internal.wait
 
 class GameActivity : AppCompatActivity() {
 
@@ -102,10 +101,10 @@ class GameActivity : AppCompatActivity() {
 
                 instructionLinearLayout.getChildAt(i).findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).text = (i + 1).toString()
                 instrList[i] = Instruction(arrayOf<String?>(
-                    buttons[0].text.toString()?.removeSuffix(":")?.removePrefix("\t"),
-                    buttons[1].text.toString()?.removePrefix("\t"),
-                    buttons[2].text.toString()?.removePrefix("\t"),
-                    buttons[3].text.toString()?.removePrefix("\t")
+                    buttons[0].text.toString(),
+                    buttons[1].text.toString(),
+                    buttons[2].text.toString(),
+                    buttons[3].text.toString()
                 ))
             }
         }
@@ -295,7 +294,7 @@ class GameActivity : AppCompatActivity() {
                         }
                         // UPDATE
                         if (lastAccessedGameButton!! == getSiblingButtonList(lastAccessedGameButton!!)[0]) {
-                            changeInstructionOppType(lastAccessedGameButton!!, lastAccessedGameButton!!.text.toString().removePrefix("\t").removeSuffix(":"))
+                            changeInstructionOppType(lastAccessedGameButton!!, lastAccessedGameButton!!.text.toString())
                         }
                     }
                 }
@@ -307,50 +306,24 @@ class GameActivity : AppCompatActivity() {
             this.findViewById<LinearLayout>(R.id.gameMainLayout).visibility = View.VISIBLE
         }
         val runButton: ImageButton = findViewById(R.id.gamePlayButton)
+        val infoTypewriter: Typewriter = findViewById(R.id.gameInfoTypewriter)
         runButton.setOnClickListener {
-            val infoTypewriter = this.findViewById<Typewriter>(R.id.gameInfoTypewriter)
-            Log.i("runButton", "OnClick!")
-            Log.i("runButton", "Updating instrList")
             update()
-            infoTypewriter.clearText()
-            if (instrList.any { it.hasNull() }) {
-                val msg = "Error:\nSome fields are empty!"
-                Log.i("runButton", msg);
-                this.findViewById<TextView>(R.id.gameInfoTitleTextView).text = "Running"
-                this.findViewById<LinearLayout>(R.id.gameInfoLayout).visibility = View.VISIBLE
-                infoTypewriter.animateText(msg)
-                this.findViewById<LinearLayout>(R.id.gameMainLayout).visibility = View.GONE
-                return@setOnClickListener
-            }
             this.findViewById<TextView>(R.id.gameInfoTitleTextView).text = "Running"
             this.findViewById<LinearLayout>(R.id.gameInfoLayout).visibility = View.VISIBLE
             this.findViewById<LinearLayout>(R.id.gameMainLayout).visibility = View.GONE
-            Log.i("runButton", "Calling validateTask()")
+            if (instrList.any{ it.hasNull() }) { infoTypewriter.appendText("Error!\nSome fields are empty!"); return@setOnClickListener}
             var res = sim.validateTask(instrList)
-            var code = res[0]
-            var msg =  res[1]
-            if (res[0] != "Success!") {
-                infoTypewriter.appendText("Known test case: $code\n")
-                infoTypewriter.appendText("$msg\n")
-                return@setOnClickListener
-            } else {
-                infoTypewriter.appendText("Known test case: $code\n")
-            }
-            for (i in 0 until 10) {
-                sim.generateTask(sim.gameTask["id"] as Int?)
+            infoTypewriter.appendText("Known test case:")
+            infoTypewriter.appendText(res[0] + "\n")
+            if (res[0] != "Success!") infoTypewriter.appendText(res[1] + "\n")
+            for (i in 0..<10) {
+                sim.generateTask(sim.gameTask["id"] as Int)
                 res = sim.validateTask(instrList)
-                code = res[0]
-                msg =  res[1]
-                if (res[0] != "Success!") {
-                    infoTypewriter.appendText("Hidden test case $i: $code\n")
-                    infoTypewriter.appendText("$msg\n")
-                    return@setOnClickListener
-                } else {
-                    infoTypewriter.appendText("Hidden test case $i: $code\n")
-                }
+                infoTypewriter.appendText("Hidden test case $i:")
+                infoTypewriter.appendText(res[0] + "\n")
+                if (res[0] != "Success!") infoTypewriter.appendText(res[1] + "\n")
             }
-            Log.i("runButton", "Returned from validateTask()")
-            Log.i("runButton", "res = $res")
         }
 
         findViewById<TextView>(R.id.gameRoundTextView).text = "Round $round"
@@ -414,7 +387,7 @@ class GameActivity : AppCompatActivity() {
                         removeSelected()
                         addSelected(button)
                         switchKeyboardLayout(
-                            getKeyboardFromOperator(opButton.text.toString().removePrefix("\t").removeSuffix(":"))[i]
+                            getKeyboardFromOperator(opButton.text.toString())[i]
                         )
                     }
                 }

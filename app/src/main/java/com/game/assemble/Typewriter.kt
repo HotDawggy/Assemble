@@ -9,8 +9,8 @@ class Typewriter(ctx: Context, attrSet: AttributeSet): androidx.appcompat.widget
     private var text: CharSequence = ""
     private var idx: Int = 0
     private var delay: Long = 20;
+    private lateinit var adder: Runnable
     private var handler = Handler(Looper.getMainLooper())
-    private lateinit var adder : Runnable
     init {
         adder = Runnable {
             setText(text.subSequence(0, idx++))
@@ -19,6 +19,7 @@ class Typewriter(ctx: Context, attrSet: AttributeSet): androidx.appcompat.widget
             }
         }
     }
+
     fun clearText() {
         text = ""
         idx = 0
@@ -31,13 +32,11 @@ class Typewriter(ctx: Context, attrSet: AttributeSet): androidx.appcompat.widget
         handler.removeCallbacks(adder)
         handler.postDelayed(adder, delay)
     }
-
     fun appendText(input: CharSequence) {
         text = (text.toString() + input)
         handler.removeCallbacks(adder)
         handler.postDelayed(adder, delay)
     }
-
     fun setDelay(input: Long) {
         delay = input
     }

@@ -22,17 +22,17 @@ class Instruction(
     }
     fun isLabel(label: String? = null) : Boolean {
         Log.d("isLabel","label = $label, instr[0] = " + instr[0])
-        return when (instr[0]) {
+        return when (instr[0]?.removeSuffix(":")?.removePrefix("\t")) {
             "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu", "addi", "addiu", "andi", "ori", "slti", "sltiu", "sll", "srl", "beq", "bne" -> false
             "sra", "sllv", "srlv", "srav", "xor", "xori", "lbu", "lhu", "lw", "sb", "sh", "sw", "lb", "lh", "j", "jr", "jal", "jalr", "mfhi", "mflo", "mthi", "mtlo" -> false
             "lui", "mult", "multu", "div", "divu", "blez", "bgtz" -> false
             else -> {
-                instr[0] == (label ?: instr[0])
+                instr[0]?.removeSuffix(":")?.removePrefix("\t") == (label ?: instr[0]?.removeSuffix(":")?.removePrefix("\t"))
             }
         }
     }
     fun getKeyboardFromOperator() : IntArray {
-        return when(instr[0]) {
+        return when(instr[0]?.removeSuffix(":")?.removePrefix("\t")) {
             "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu", "sllv", "srlv", "srav", "xor" -> intArrayOf(keyboards[5], keyboards[4], keyboards[4])
             "addi", "addiu", "andi", "ori", "slti", "sltiu", "xori" -> intArrayOf(keyboards[5], keyboards[4], keyboards[2])
             "sll", "srl", "sra" -> intArrayOf(keyboards[5], keyboards[4], keyboards[1])
