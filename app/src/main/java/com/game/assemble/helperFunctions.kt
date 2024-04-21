@@ -45,7 +45,7 @@ fun getPrevButton(button: TextView): TextView {
     val index = siblingButtons.indexOf(button)
     if (index == 0) {
         val position = GameActivity.instructionLinearLayout.indexOfChild(parent)
-        if (position > 1) {
+        if (position > 0) {
             val holder =
                 GameActivity.instructionLinearLayout.getChildAt(position - 1)
             val ids = arrayOf(

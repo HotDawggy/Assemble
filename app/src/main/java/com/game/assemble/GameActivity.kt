@@ -230,23 +230,7 @@ class GameActivity : AppCompatActivity() {
                     }
                 }
             }
-
-            // TODO 3 - set up add line button
-            val addLineButton = view.findViewById<ImageButton>(R.id.gameInstructionAddLineButton)
-            addLineButton.setOnClickListener {
-                val parent = addLineButton.parent as ViewGroup
-                val position = GameActivity.instructionLinearLayout.indexOfChild(parent)
-
-                val newInstr = Instruction(arrayOf("_"))
-                GameActivity.instrList.add(position + 1, newInstr)
-                val view = LayoutInflater.from(myHelper.context).inflate(R.layout.game_instruction_item, null)
-                GameActivity.modifyView(view, position + 1, newInstr)
-                GameActivity.instructionLinearLayout.addView(view, position + 1)
-
-                update()
-            }
         }
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -354,6 +338,50 @@ class GameActivity : AppCompatActivity() {
             findViewById<GridView>(R.id.keyboardLabelsGridView).visibility = View.VISIBLE
         }
 
+        // handle new lines
+        val newLineButtons = arrayOf(
+            findViewById<ImageButton>(R.id.gameInstructionAddLineButton1),
+            findViewById<ImageButton>(R.id.gameInstructionAddLineButton2),
+            findViewById<ImageButton>(R.id.gameInstructionAddLineButton3),
+            findViewById<ImageButton>(R.id.gameInstructionAddLineButton4),
+            findViewById<ImageButton>(R.id.gameInstructionAddLineButton5),
+            findViewById<ImageButton>(R.id.gameInstructionAddLineButton6)
+        )
+
+        for (button in newLineButtons) {
+            button.setOnClickListener {
+                if (GameActivity.lastAccessedGameButton != null) {
+                    val parent = GameActivity.lastAccessedGameButton!!.parent as ViewGroup
+                    var position = GameActivity.instructionLinearLayout.indexOfChild(parent)
+
+                    // if operator, add new line on *next* line
+                    if (GameActivity.lastAccessedGameButton == parent.findViewById(R.id.gameInstructionTextView1)) {
+                        position += 1
+                    }
+
+                    val newInstr = Instruction(arrayOf("_"))
+                    GameActivity.instrList.add(position, newInstr)
+                    val view = LayoutInflater.from(myHelper.context)
+                        .inflate(R.layout.game_instruction_item, null)
+                    GameActivity.modifyView(view, position, newInstr)
+                    GameActivity.instructionLinearLayout.addView(view, position)
+
+                    update()
+                }
+                else {
+                    // add new line on last
+                    val position = GameActivity.instrList.size
+
+                    val newInstr = Instruction(arrayOf("_"))
+                    GameActivity.instrList.add(position, newInstr)
+                    val view = LayoutInflater.from(myHelper.context)
+                        .inflate(R.layout.game_instruction_item, null)
+                    GameActivity.modifyView(view, position, newInstr)
+                    GameActivity.instructionLinearLayout.addView(view, position)
+
+                }
+            }
+        }
 
         // handle backspace
         val backspaceButtons = arrayOf(
@@ -379,28 +407,37 @@ class GameActivity : AppCompatActivity() {
                         if (selectedButton == getSiblingButtonList(selectedButton)[0] && selectedButton != prevButton) {
                             val idx = (selectedButton.parent as ViewGroup).findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).text.toString().toInt() - 1
                             if (idx > 0) {
-                                Log.i("index is", idx.toString())
                                 instrList.removeAt(idx)
                                 instructionLinearLayout.removeViewAt(idx)
                                 update()
-
                                 lastAccessedGameButton = null
-                                var prevButton: TextView? = null
-                                val buttons = arrayOf<TextView>(
-                                    instructionLinearLayout.getChildAt(idx - 1).findViewById(R.id.gameInstructionTextView1),
-                                    instructionLinearLayout.getChildAt(idx - 1).findViewById(R.id.gameInstructionTextView3),
-                                    instructionLinearLayout.getChildAt(idx - 1).findViewById(R.id.gameInstructionTextView5),
-                                    instructionLinearLayout.getChildAt(idx - 1).findViewById(R.id.gameInstructionTextView7),
-                                )
-                                for(button in buttons) {
-                                    if (button.visibility == View.VISIBLE) {
-                                        prevButton = button
+
+                                if (idx > 1) {
+                                    var prevButton: TextView? = null
+                                    val buttons = arrayOf<TextView>(
+                                        instructionLinearLayout.getChildAt(idx - 1)
+                                            .findViewById(R.id.gameInstructionTextView1),
+                                        instructionLinearLayout.getChildAt(idx - 1)
+                                            .findViewById(R.id.gameInstructionTextView3),
+                                        instructionLinearLayout.getChildAt(idx - 1)
+                                            .findViewById(R.id.gameInstructionTextView5),
+                                        instructionLinearLayout.getChildAt(idx - 1)
+                                            .findViewById(R.id.gameInstructionTextView7),
+                                    )
+                                    for (button in buttons) {
+                                        if (button.visibility == View.VISIBLE) {
+                                            prevButton = button
+                                        }
+                                    }
+
+                                    if (prevButton != null) {
+                                        Log.i("calling", "IS ON CLICK")
+                                        prevButton!!.callOnClick()
                                     }
                                 }
-
-                                if (prevButton != null) {
-                                    Log.i("calling" , "IS ON CLICK")
-                                    prevButton!!.callOnClick()
+                                else if (instrList.size >= 2) {
+                                    // highlight the 2nd line's operator
+                                    instructionLinearLayout.getChildAt(1).findViewById<TextView>(R.id.gameInstructionTextView1).callOnClick()
                                 }
                             }
                         }

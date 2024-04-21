@@ -17,18 +17,8 @@
         android:textColor="@color/theme_selected"
         android:visibility="visible" />
 
-    <ImageButton
-        android:id="@+id/gameInstructionAddLineButton"
-        android:layout_width="15dp"
-        android:layout_gravity="left"
-
-        android:layout_height="match_parent"
-        android:layout_weight="0"
-        app:srcCompat="@android:drawable/ic_input_add"
-        android:scaleType="centerCrop"/>
-
     <Space
-        android:layout_width="10dp"
+        android:layout_width="20dp"
         android:layout_height="match_parent" />
 
     <TextView

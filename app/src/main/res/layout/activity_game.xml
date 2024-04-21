@@ -180,6 +180,13 @@
                         android:padding="0dp"
                         android:scaleType="centerInside"
                         app:srcCompat="@android:drawable/ic_input_delete" />
+                    <ImageButton
+                        android:id="@+id/gameInstructionAddLineButton6"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:srcCompat="@android:drawable/ic_input_add"
+                        android:scaleType="centerCrop"/>
+
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -231,6 +238,13 @@
                         android:padding="0dp"
                         android:scaleType="centerInside"
                         app:srcCompat="@android:drawable/ic_input_delete" />
+                    <ImageButton
+                        android:id="@+id/gameInstructionAddLineButton2"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:srcCompat="@android:drawable/ic_input_add"
+                        android:scaleType="centerCrop"/>
+
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -289,6 +303,13 @@
                         android:padding="0dp"
                         android:scaleType="centerInside"
                         app:srcCompat="@android:drawable/ic_input_delete" />
+                    <ImageButton
+                        android:id="@+id/gameInstructionAddLineButton1"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:srcCompat="@android:drawable/ic_input_add"
+                        android:scaleType="centerCrop"/>
+
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -345,6 +366,13 @@
                         android:padding="0dp"
                         android:scaleType="centerInside"
                         app:srcCompat="@android:drawable/ic_input_delete" />
+                    <ImageButton
+                        android:id="@+id/gameInstructionAddLineButton3"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:srcCompat="@android:drawable/ic_input_add"
+                        android:scaleType="centerCrop"/>
+
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -404,6 +432,12 @@
                         android:padding="0dp"
                         android:scaleType="centerInside"
                         app:srcCompat="@android:drawable/ic_input_delete" />
+                    <ImageButton
+                        android:id="@+id/gameInstructionAddLineButton4"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:srcCompat="@android:drawable/ic_input_add"
+                        android:scaleType="centerCrop"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -510,6 +544,13 @@
                         android:padding="0dp"
                         android:scaleType="centerInside"
                         app:srcCompat="@android:drawable/ic_input_delete" />
+                    <ImageButton
+                        android:id="@+id/gameInstructionAddLineButton5"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:srcCompat="@android:drawable/ic_input_add"
+                        android:scaleType="centerCrop"/>
+
                 </LinearLayout>
             </LinearLayout>
 
