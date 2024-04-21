@@ -142,7 +142,7 @@
             android:backgroundTint="@color/theme4"
             android:orientation="vertical"
             android:visibility="gone"
-            tools:visibility="gone">
+            tools:visibility="visible">
 
             <Button
                 android:layout_width="match_parent"
@@ -180,12 +180,15 @@
                         android:padding="0dp"
                         android:scaleType="centerInside"
                         app:srcCompat="@android:drawable/ic_input_delete" />
+
                     <ImageButton
                         android:id="@+id/gameInstructionAddLineButton6"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        app:srcCompat="@android:drawable/ic_input_add"
-                        android:scaleType="centerCrop"/>
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:backgroundTint="@color/theme4"
+                        android:scaleType="centerCrop"
+                        android:tint="@color/white"
+                        app:srcCompat="@android:drawable/ic_input_add" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -238,12 +241,15 @@
                         android:padding="0dp"
                         android:scaleType="centerInside"
                         app:srcCompat="@android:drawable/ic_input_delete" />
+
                     <ImageButton
                         android:id="@+id/gameInstructionAddLineButton2"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        app:srcCompat="@android:drawable/ic_input_add"
-                        android:scaleType="centerCrop"/>
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:backgroundTint="@color/theme4"
+                        android:scaleType="centerCrop"
+                        android:tint="@color/white"
+                        app:srcCompat="@android:drawable/ic_input_add" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -303,12 +309,15 @@
                         android:padding="0dp"
                         android:scaleType="centerInside"
                         app:srcCompat="@android:drawable/ic_input_delete" />
+
                     <ImageButton
                         android:id="@+id/gameInstructionAddLineButton1"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        app:srcCompat="@android:drawable/ic_input_add"
-                        android:scaleType="centerCrop"/>
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:backgroundTint="@color/theme4"
+                        android:scaleType="centerCrop"
+                        android:tint="@color/white"
+                        app:srcCompat="@android:drawable/ic_input_add" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -366,12 +375,15 @@
                         android:padding="0dp"
                         android:scaleType="centerInside"
                         app:srcCompat="@android:drawable/ic_input_delete" />
+
                     <ImageButton
                         android:id="@+id/gameInstructionAddLineButton3"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        app:srcCompat="@android:drawable/ic_input_add"
-                        android:scaleType="centerCrop"/>
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:backgroundTint="@color/theme4"
+                        android:scaleType="centerCrop"
+                        android:tint="@color/white"
+                        app:srcCompat="@android:drawable/ic_input_add" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -432,12 +444,15 @@
                         android:padding="0dp"
                         android:scaleType="centerInside"
                         app:srcCompat="@android:drawable/ic_input_delete" />
+
                     <ImageButton
                         android:id="@+id/gameInstructionAddLineButton4"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        app:srcCompat="@android:drawable/ic_input_add"
-                        android:scaleType="centerCrop"/>
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:backgroundTint="@color/theme4"
+                        android:scaleType="centerCrop"
+                        android:tint="@color/white"
+                        app:srcCompat="@android:drawable/ic_input_add" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -449,8 +464,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:visibility="visible"
-            tools:visibility="visible">
+            android:visibility="gone"
+            tools:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -544,12 +559,15 @@
                         android:padding="0dp"
                         android:scaleType="centerInside"
                         app:srcCompat="@android:drawable/ic_input_delete" />
+
                     <ImageButton
                         android:id="@+id/gameInstructionAddLineButton5"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        app:srcCompat="@android:drawable/ic_input_add"
-                        android:scaleType="centerCrop"/>
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:backgroundTint="@color/theme4"
+                        android:scaleType="centerCrop"
+                        android:tint="@color/white"
+                        app:srcCompat="@android:drawable/ic_input_add" />
 
                 </LinearLayout>
             </LinearLayout>

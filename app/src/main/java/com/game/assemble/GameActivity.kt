@@ -17,24 +17,14 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.concurrent.Executor
-import java.util.concurrent.Executors
 
 class GameActivity : AppCompatActivity() {
 
@@ -473,13 +463,12 @@ class GameActivity : AppCompatActivity() {
                 }
             }
         }
-
+        val runButton: ImageButton = findViewById(R.id.gamePlayButton)
         findViewById<ImageButton>(R.id.gameInfoExit).setOnClickListener {
             this.findViewById<LinearLayout>(R.id.gameInfoLayout).visibility = View.GONE
             this.findViewById<LinearLayout>(R.id.gameMainLayout).visibility = View.VISIBLE
-            lifecycleScope.cancel()
+            runButton.isClickable = true
         }
-        val runButton: ImageButton = findViewById(R.id.gamePlayButton)
         val infoTypewriter: Typewriter = findViewById(R.id.gameInfoTypewriter)
         runButton.setOnClickListener {
             runButton.isClickable = false
