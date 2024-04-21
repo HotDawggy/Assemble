@@ -6,25 +6,64 @@
     android:layout_height="match_parent"
     tools:context=".GameActivity">
 
-    <TextView
-        android:id="@+id/gameInfoTextView"
+    <LinearLayout
+        android:id="@+id/gameInfoLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello World"
-        android:gravity="center"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:alpha="1"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                app:srcCompat="@android:drawable/ic_delete" />
+
+            <TextView
+                android:id="@+id/gameInfoTitleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textSize="30sp" />
+
+            <ImageButton
+                android:id="@+id/gameInfoExit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@android:drawable/ic_delete"
+                app:tint="@color/white" />
+        </LinearLayout>
+
+        <com.game.assemble.Typewriter
+            android:id="@+id/gameInfoTypewriter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
 
     <!-- from https://stackoverflow.com/questions/59538127/how-do-i-divide-my-screen-in-2-equal-parts-using-constraint-layout -->
     <LinearLayout
         android:id="@+id/gameMainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:alpha="1"
         android:orientation="vertical"
-        android:alpha="1">
+        android:visibility="visible">
 
 
         <LinearLayout
@@ -48,15 +87,16 @@
 
                 <Space
                     android:layout_width="10dp"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent" />
+
                 <TextView
                     android:id="@+id/gameRoundTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:textAllCaps="true"
-                    android:text="Round" />
+                    android:text="Round"
+                    android:textAllCaps="true" />
 
                 <ImageButton
                     android:id="@+id/gameTaskButton"

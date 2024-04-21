@@ -280,16 +280,22 @@ class GameActivity : AppCompatActivity() {
             }
         }
 
+        findViewById<ImageButton>(R.id.gameInfoExit).setOnClickListener {
+            this.findViewById<LinearLayout>(R.id.gameInfoLayout).visibility = View.GONE
+            this.findViewById<LinearLayout>(R.id.gameMainLayout).visibility = View.VISIBLE
+        }
         val runButton: ImageButton = findViewById(R.id.gamePlayButton)
         runButton.setOnClickListener {
             Log.i("runButton", "OnClick!")
             Log.i("runButton", "Updating instrList")
             update()
             if (instrList.any { it.hasNull() }) {
-                Log.i("runButton", "Some fields are empty!");
-                this.findViewById<TextView>(R.id.gameInfoTextView).text = "Some fields are empty!"
-                this.findViewById<TextView>(R.id.gameInfoTextView).visibility = View.VISIBLE
-                this.findViewById<LinearLayout>(R.id.gameMainLayout).alpha = 0.1F
+                val msg = "Some fields are empty!"
+                Log.i("runButton", msg);
+                this.findViewById<LinearLayout>(R.id.gameInfoLayout).visibility = View.VISIBLE
+                this.findViewById<Typewriter>(R.id.gameInfoTypewriter).animateText(msg)
+                this.findViewById<LinearLayout>(R.id.gameMainLayout).visibility = View.GONE
+
                 return@setOnClickListener
             }
             Log.i("runButton", "Calling validateTask()")
