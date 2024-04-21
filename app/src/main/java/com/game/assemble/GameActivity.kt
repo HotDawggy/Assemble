@@ -110,8 +110,113 @@ class GameActivity : AppCompatActivity() {
             }
         }
 
-        fun addLine() {
-            TODO("Not yet implemented")
+        fun modifyView(view: View, index: Int, instr: Instruction) {
+            view.findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).text = (index + 1).toString()
+            view.findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).visibility = View.VISIBLE // TODO: SET THIS IN XML INSTEAD
+
+            // set on click listener and stuff
+            val opButton = view.findViewById<TextView>(R.id.gameInstructionTextView1)
+            val paramButtons = arrayOf<TextView>(
+                view.findViewById(R.id.gameInstructionTextView3),
+                view.findViewById(R.id.gameInstructionTextView5),
+                view.findViewById(R.id.gameInstructionTextView7)
+            )
+            if (instr[0] != "main:") {
+                for (i in 0 until 4) {
+                    var button = opButton
+                    if (i == 0) {
+                        if (instr.isLabel()) {
+                            opButton.text = instr[0]
+                            opButton.setTextColor(opButton.context.getColor(R.color.code_label))
+                        } else {
+                            opButton.text = "\t" + instr[0]
+                            opButton.setTextColor(opButton.context.getColor(R.color.code_instr))
+                        }
+                    } else {
+                        button = paramButtons[i - 1]
+                        if (i < getKeyboardFromOperator(instr[0]).size) {
+                            val color = when(getKeyboardFromOperator(instr[0]!!)[i]) {
+                                R.id.immedDigitKeyboardLayout, R.id.shamtDigitKeyboardLayout -> R.color.code_num
+                                R.id.labelsKeyboardLayout -> R.color.code_label
+                                else -> R.color.code
+                            }
+                            button.setTextColor(button.context.getColor(color))
+                        }
+                        if (i < instr.size) {
+                            button.visibility = View.VISIBLE
+                            button.text = instr[i]
+                        } else {
+                            button.visibility = View.INVISIBLE
+                            button.text = "_"
+                        }
+                    }
+                    if (button.text == "") {
+                        button.text = "_"
+                    }
+
+                    Log.i("text is ", button.text.toString())
+
+                    button.setOnClickListener {
+                        if (lastAccessedGameButton == button) {
+                            removeSelected()
+                            switchKeyboardLayout(R.id.registersKeyboardLayout)
+                        } else {
+                            removeSelected()
+                            addSelected(button)
+                            switchKeyboardLayout(
+                                getKeyboardFromOperator(opButton.text.toString().removePrefix("\t").removeSuffix(":"))[i]
+                            )
+                        }
+                    }
+                }
+            } else {
+                opButton.text = instr[0]
+                opButton.setTextColor(opButton.context.getColor(R.color.code_label))
+                opButton.visibility = View.VISIBLE
+            }
+
+            // TODO 2 - set template
+            val allButtons = arrayOf<TextView>(
+                view.findViewById(R.id.gameInstructionTextView1),
+                view.findViewById(R.id.gameInstructionTextView2),
+                view.findViewById(R.id.gameInstructionTextView3),
+                view.findViewById(R.id.gameInstructionTextView4),
+                view.findViewById(R.id.gameInstructionTextView5),
+                view.findViewById(R.id.gameInstructionTextView6),
+                view.findViewById(R.id.gameInstructionTextView7),
+                view.findViewById(R.id.gameInstructionTextView8),
+            )
+            if (opButton.text == "" || opButton.text == "_") {
+                for (button in allButtons) {
+                    button.text = ""
+                    button.visibility = View.INVISIBLE
+                }
+                allButtons[0].text = "_"
+                allButtons[0].visibility = View.VISIBLE
+            }
+            else {
+                val template = Instruction(arrayOf(opButton.text.toString())).getTemplateFromOperator()
+                for (i in 0 until 8) {
+                    val currentButton = allButtons[i]
+                    if (i >= template.size) {
+                        currentButton.visibility = View.INVISIBLE
+                        currentButton.text = "_"
+                    }
+                    else if (template[i] != "_") {
+                        currentButton.visibility = View.VISIBLE
+                        currentButton.text = template[i]
+                    }
+                    else {
+                        currentButton.visibility = View.VISIBLE
+                        currentButton.text = if (currentButton.text == "") {
+                            "_"
+                        }
+                        else {
+                            currentButton.text
+                        }
+                    }
+                }
+            }
         }
 
     }
@@ -144,7 +249,7 @@ class GameActivity : AppCompatActivity() {
         instructionLinearLayout = findViewById<LinearLayout>(R.id.gameInstructionLinearLayout)
         instrList.forEachIndexed { index, instruction ->
             val view = LayoutInflater.from(this).inflate(R.layout.game_instruction_item, null)
-            this.modifyView(view, index, instruction)
+            modifyView(view, index, instruction)
             instructionLinearLayout.addView(view)
         }
 
@@ -360,110 +465,4 @@ class GameActivity : AppCompatActivity() {
         // switchKeyboardLayout(R.id.operatorKeyboardLayout)
     }
 
-    fun modifyView(view: View, index: Int, instr: Instruction) {
-        view.findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).text = (index + 1).toString()
-        view.findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).visibility = View.VISIBLE // TODO: SET THIS IN XML INSTEAD
-
-        // set on click listener and stuff
-        val opButton = view.findViewById<TextView>(R.id.gameInstructionTextView1)
-        val paramButtons = arrayOf<TextView>(
-            view.findViewById(R.id.gameInstructionTextView3),
-            view.findViewById(R.id.gameInstructionTextView5),
-            view.findViewById(R.id.gameInstructionTextView7)
-        )
-        if (instr[0] != "main:") {
-            for (i in 0 until 4) {
-                var button = opButton
-                if (i == 0) {
-                    if (instr.isLabel()) {
-                        opButton.text = instr[0]
-                        opButton.setTextColor(opButton.context.getColor(R.color.code_label))
-                    } else {
-                        opButton.text = "\t" + instr[0]
-                        opButton.setTextColor(opButton.context.getColor(R.color.code_instr))
-                    }
-                } else {
-                    button = paramButtons[i - 1]
-                    if (i < getKeyboardFromOperator(instr[0]!!).size) {
-                        val color = when(getKeyboardFromOperator(instr[0]!!)[i]) {
-                            R.id.immedDigitKeyboardLayout, R.id.shamtDigitKeyboardLayout -> R.color.code_num
-                            R.id.labelsKeyboardLayout -> R.color.code_label
-                            else -> R.color.code
-                        }
-                        button.setTextColor(button.context.getColor(color))
-                    }
-                    if (i < instr.size) {
-                        button.visibility = View.VISIBLE
-                        button.text = instr[i]
-                    } else {
-                        button.visibility = View.INVISIBLE
-                        button.text = "_"
-                    }
-                }
-                if (button.text == "") {
-                    button.text = "_"
-                }
-
-                Log.i("text is ", button.text.toString())
-
-                button.setOnClickListener {
-                    if (lastAccessedGameButton == button) {
-                        removeSelected()
-                        switchKeyboardLayout(R.id.registersKeyboardLayout)
-                    } else {
-                        removeSelected()
-                        addSelected(button)
-                        switchKeyboardLayout(
-                            getKeyboardFromOperator(opButton.text.toString().removePrefix("\t").removeSuffix(":"))[i]
-                        )
-                    }
-                }
-            }
-        } else {
-            opButton.text = instr[0]
-            opButton.setTextColor(opButton.context.getColor(R.color.code_label))
-            opButton.visibility = View.VISIBLE
-        }
-
-        // TODO 2 - set template
-        val allButtons = arrayOf<TextView>(
-            view.findViewById(R.id.gameInstructionTextView1),
-            view.findViewById(R.id.gameInstructionTextView2),
-            view.findViewById(R.id.gameInstructionTextView3),
-            view.findViewById(R.id.gameInstructionTextView4),
-            view.findViewById(R.id.gameInstructionTextView5),
-            view.findViewById(R.id.gameInstructionTextView6),
-            view.findViewById(R.id.gameInstructionTextView7),
-            view.findViewById(R.id.gameInstructionTextView8),
-        )
-        if (opButton.text == "" || opButton.text == "_") {
-            for (button in paramButtons) {
-                button.text = "_"
-                button.visibility = View.INVISIBLE
-            }
-        }
-        else {
-            val template = Instruction(arrayOf(opButton.text.toString())).getTemplateFromOperator()
-            for (i in 0 until 8) {
-                val currentButton = allButtons[i]
-                if (i >= template.size) {
-                    currentButton.visibility = View.INVISIBLE
-                    currentButton.text = "_"
-                }
-                else if (template[i] != "_") {
-                    currentButton.visibility = View.VISIBLE
-                    currentButton.text = template[i]
-                }
-                else {
-                    currentButton.visibility = View.VISIBLE
-                    currentButton.text = if (currentButton.text == "") {
-                        "_"
-                    }
-                    else {
-                        currentButton.text
-                    }
-                }
-            }
-        }
-    }
 }

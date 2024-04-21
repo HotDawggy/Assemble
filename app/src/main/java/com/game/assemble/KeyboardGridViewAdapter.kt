@@ -10,6 +10,10 @@ import android.widget.GridView
 import android.widget.TextView
 
 class KeyboardGridViewAdapter(val context: Context, private val keys: List<String>): BaseAdapter() {
+
+    init {
+        myHelper = Helper(context)
+    }
     override fun getCount(): Int {
         return keys.size
     }
@@ -71,16 +75,43 @@ class KeyboardGridViewAdapter(val context: Context, private val keys: List<Strin
                         if (it != targetButton) it.setTextColor(targetButton.context.getColor(R.color.code))
                     }
                     changeInstructionOppType(targetButton, targetButton.text.toString().removePrefix("\t").removeSuffix((":")))
+
+                    if (GameActivity.lastAccessedGameButton != null) {
+                        val nextButton = myHelper.getNextButton(GameActivity.lastAccessedGameButton!!)
+                        GameActivity.removeSelected()
+                        nextButton.callOnClick()
+                        //GameActivity.addSelected(nextButton)
+                    }
                 }
                 else if (GameActivity.getVisibleKeyboardLayout() == R.id.labelsKeyboardLayout) { // -> if target button is not "number" -> replace content
                     targetButton.setTextColor(targetButton.context.getColor(R.color.code_label))
                     targetButton.text = button.text.toString()
+
+                    if (GameActivity.lastAccessedGameButton != null) {
+                        val nextButton = myHelper.getNextButton(GameActivity.lastAccessedGameButton!!)
+                        GameActivity.removeSelected()
+                        nextButton.callOnClick()
+                        //GameActivity.addSelected(nextButton)
+                    }
+
                 } else {
                     targetButton.text = button.text.toString()
+
+                    if (GameActivity.lastAccessedGameButton != null) {
+                        val nextButton = myHelper.getNextButton(GameActivity.lastAccessedGameButton!!)
+                        GameActivity.removeSelected()
+                        nextButton.callOnClick()
+                        //GameActivity.addSelected(nextButton)
+                    }
+
                 }
             }
         }
 
         return button
+    }
+
+    companion object {
+        lateinit var myHelper: Helper
     }
 }
