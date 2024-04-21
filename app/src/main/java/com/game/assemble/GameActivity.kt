@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -33,6 +34,7 @@ class GameActivity : AppCompatActivity() {
         lateinit var customAdapter: GameInstructionRecyclerViewAdapter
         lateinit var recyclerView: RecyclerView
         lateinit var gridViews: Array<GridView>
+        lateinit var instructionLinearLayout: LinearLayout
         fun switchKeyboardLayout(selectedLayoutId: Int) {
             for (layout in keyboardLayouts) {
                 if (layout.id == selectedLayoutId) {
@@ -84,26 +86,17 @@ class GameActivity : AppCompatActivity() {
             timeout.postDelayed(lastRunnable!!, 350)
         }
 
-        fun update() {
-            for(i in 0 until recyclerView.childCount) {
-                val layout = recyclerView.getChildAt(i)
-                val position = recyclerView.getChildAdapterPosition(layout)
-
-                val buttons = arrayOf(
-                    layout.findViewById<TextView>(R.id.gameInstructionTextView1),
-                    layout.findViewById(R.id.gameInstructionTextView3),
-                    layout.findViewById(R.id.gameInstructionTextView5),
-                    layout.findViewById(R.id.gameInstructionTextView7)
+        fun update() { // fix line number; instrList <- view text
+            for(i in 0 until instrList.size) {
+                val buttons = arrayOf<TextView>(
+                    instructionLinearLayout.getChildAt(i).findViewById(R.id.gameInstructionTextView1),
+                    instructionLinearLayout.getChildAt(i).findViewById(R.id.gameInstructionTextView3),
+                    instructionLinearLayout.getChildAt(i).findViewById(R.id.gameInstructionTextView5),
+                    instructionLinearLayout.getChildAt(i).findViewById(R.id.gameInstructionTextView7)
                 )
-                customAdapter.updateItemAtPosition(position, Instruction(arrayOf(
-                    buttons[0].text.toString().removePrefix("\t").removeSuffix(":"),
-                    buttons[1].text.toString(),
-                    buttons[2].text.toString(),
-                    buttons[3].text.toString()
-                )))
 
-                layout.findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).text = (position + 1).toString()
-                Log.i("line num", layout.findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).text.toString())
+                instructionLinearLayout.getChildAt(i).findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).text = (i + 1).toString()
+                instrList[i] = Instruction(arrayOf<String?>(buttons[0].text.toString(), buttons[1].text.toString(), buttons[2].text.toString(), buttons[3].text.toString()))
             }
         }
 
@@ -121,25 +114,35 @@ class GameActivity : AppCompatActivity() {
         //Log.i("GameActivity", currentTask)
         instrList = mutableListOf(Instruction((arrayOf("main:"))))
         instrList += Instruction(arrayOf("add", "_", "_", "_"))
+        instrList += Instruction(arrayOf("nor", "_", "_", "_"))
+        instrList += Instruction(arrayOf("and", "_", "_", "_"))
+        instrList += Instruction(arrayOf("xor", "_", "_", "_"))
         instrList += Instruction(arrayOf("add", "_", "_", "_"))
-        instrList += Instruction(arrayOf("add", "_", "_", "_"))
-        instrList += Instruction(arrayOf("add", "_", "_", "_"))
-        instrList += Instruction(arrayOf("add", "_", "_", "_"))
-        instrList += Instruction(arrayOf("add", "_", "_", "_"))
+        instrList += Instruction(arrayOf("nor", "_", "_", "_"))
+        instrList += Instruction(arrayOf("and", "_", "_", "_"))
+        instrList += Instruction(arrayOf("xor", "_", "_", "_"))
         instrList += Instruction(arrayOf("and", "\$v0", "\$v0", "\$zero"))
         instrList += Instruction(arrayOf("multiply:"))
         instrList += Instruction(arrayOf("add", "\$v0", "\$v0", "\$a0"))
         instrList += Instruction(arrayOf("addi", "\$a1", "\$a1", "-1"))
         instrList += Instruction(arrayOf("bne", "\$a1", "\$zero", "multiply"))
         instrList += Instruction(arrayOf("j", "exit"))
+        instrList += Instruction(arrayOf("add", "_", "_", "_"))
+        instrList += Instruction(arrayOf("nor", "_", "_", "_"))
+        instrList += Instruction(arrayOf("and", "_", "_", "_"))
+        instrList += Instruction(arrayOf("xor", "_", "_", "_"))
+        instrList += Instruction(arrayOf("add", "_", "_", "_"))
+        instrList += Instruction(arrayOf("nor", "_", "_", "_"))
+        instrList += Instruction(arrayOf("and", "_", "_", "_"))
+        instrList += Instruction(arrayOf("xor", "_", "_", "_"))
 
-        recyclerView = findViewById(R.id.gameInstructionRecyclerView)
-        val layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
 
-        // Set adapter for the RecyclerView
-        customAdapter = GameInstructionRecyclerViewAdapter(instrList)
-        recyclerView.adapter = customAdapter
+        instructionLinearLayout = findViewById<LinearLayout>(R.id.gameInstructionLinearLayout)
+        instrList.forEachIndexed { index, instruction ->
+            val view = LayoutInflater.from(this).inflate(R.layout.game_instruction_item, null)
+            this.modifyView(view, index, instruction)
+            instructionLinearLayout.addView(view)
+        }
 
         // initialize keyboard layouts
         keyboardLayouts = arrayOf(
@@ -233,17 +236,33 @@ class GameActivity : AppCompatActivity() {
                     if (selectedButton!!.text == "_" || selectedButton.text == "") {
                         removeSelected()
                         var prevButton = getPrevButton(selectedButton)
-                        update()
                         // if first item of the line => get prev button and highlight it
                         if (selectedButton == getSiblingButtonList(selectedButton)[0] && selectedButton != prevButton) {
                             val idx = (selectedButton.parent as ViewGroup).findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).text.toString().toInt() - 1
                             if (idx > 0) {
                                 Log.i("index is", idx.toString())
-                                update()
                                 instrList.removeAt(idx)
-                                customAdapter.notifyItemRemoved(idx)
+                                instructionLinearLayout.removeViewAt(idx)
                                 update()
-                                prevButton.callOnClick()
+
+                                GameActivity.lastAccessedGameButton = null
+                                var prevButton: TextView? = null
+                                val buttons = arrayOf<TextView>(
+                                    instructionLinearLayout.getChildAt(idx - 1).findViewById(R.id.gameInstructionTextView1),
+                                    instructionLinearLayout.getChildAt(idx - 1).findViewById(R.id.gameInstructionTextView3),
+                                    instructionLinearLayout.getChildAt(idx - 1).findViewById(R.id.gameInstructionTextView5),
+                                    instructionLinearLayout.getChildAt(idx - 1).findViewById(R.id.gameInstructionTextView7),
+                                )
+                                for(button in buttons) {
+                                    if (button.visibility == View.VISIBLE) {
+                                        prevButton = button
+                                    }
+                                }
+
+                                if (prevButton != null) {
+                                    Log.i("calling" , "IS ON CLICK")
+                                    prevButton!!.callOnClick()
+                                }
                             }
                         }
                         else if (selectedButton != prevButton) {
@@ -274,7 +293,6 @@ class GameActivity : AppCompatActivity() {
                         if (lastAccessedGameButton!! == getSiblingButtonList(lastAccessedGameButton!!)[0]) {
                             changeInstructionOppType(lastAccessedGameButton!!, lastAccessedGameButton!!.text.toString())
                         }
-                        update()
                     }
                 }
             }
@@ -309,5 +327,112 @@ class GameActivity : AppCompatActivity() {
         // by default, only have the registerLayout visible
         switchKeyboardLayout(R.id.registersKeyboardLayout)
         // switchKeyboardLayout(R.id.operatorKeyboardLayout)
+    }
+
+    fun modifyView(view: View, index: Int, instr: Instruction) {
+        view.findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).text = (index + 1).toString()
+        view.findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).visibility = View.VISIBLE // TODO: SET THIS IN XML INSTEAD
+
+        // set on click listener and stuff
+        val opButton = view.findViewById<TextView>(R.id.gameInstructionTextView1)
+        val paramButtons = arrayOf<TextView>(
+            view.findViewById(R.id.gameInstructionTextView3),
+            view.findViewById(R.id.gameInstructionTextView5),
+            view.findViewById(R.id.gameInstructionTextView7)
+        )
+        if (instr[0] != "main:") {
+            for (i in 0 until 4) {
+                var button = opButton
+                if (i == 0) {
+                    if (instr.isLabel()) {
+                        opButton.text = instr[0]
+                        opButton.setTextColor(opButton.context.getColor(R.color.code_label))
+                    } else {
+                        opButton.text = "\t" + instr[0]
+                        opButton.setTextColor(opButton.context.getColor(R.color.code_instr))
+                    }
+                } else {
+                    button = paramButtons[i - 1]
+                    if (i < getKeyboardFromOperator(instr[0]!!).size) {
+                        val color = when(getKeyboardFromOperator(instr[0]!!)[i]) {
+                            R.id.immedDigitKeyboardLayout, R.id.shamtDigitKeyboardLayout -> R.color.code_num
+                            R.id.labelsKeyboardLayout -> R.color.code_label
+                            else -> R.color.code
+                        }
+                        button.setTextColor(button.context.getColor(color))
+                    }
+                    if (i < instr.size) {
+                        button.visibility = View.VISIBLE
+                        button.text = instr[i]
+                    } else {
+                        button.visibility = View.INVISIBLE
+                        button.text = "_"
+                    }
+                }
+                if (button.text == "") {
+                    button.text = "_"
+                }
+
+                Log.i("text is ", button.text.toString())
+
+                button.setOnClickListener {
+                    if (GameActivity.lastAccessedGameButton == button) {
+                        GameActivity.removeSelected()
+                        GameActivity.switchKeyboardLayout(R.id.registersKeyboardLayout)
+                    } else {
+                        GameActivity.removeSelected()
+                        GameActivity.addSelected(button)
+                        GameActivity.switchKeyboardLayout(
+                            getKeyboardFromOperator(opButton.text.toString())[i]
+                        )
+                    }
+                }
+            }
+        } else {
+            opButton.text = instr[0]
+            opButton.setTextColor(opButton.context.getColor(R.color.code_label))
+            opButton.visibility = View.VISIBLE
+        }
+
+        // TODO 2 - set template
+        val allButtons = arrayOf<TextView>(
+            view.findViewById(R.id.gameInstructionTextView1),
+            view.findViewById(R.id.gameInstructionTextView2),
+            view.findViewById(R.id.gameInstructionTextView3),
+            view.findViewById(R.id.gameInstructionTextView4),
+            view.findViewById(R.id.gameInstructionTextView5),
+            view.findViewById(R.id.gameInstructionTextView6),
+            view.findViewById(R.id.gameInstructionTextView7),
+            view.findViewById(R.id.gameInstructionTextView8),
+        )
+        if (opButton.text == "" || opButton.text == "_") {
+            for (button in paramButtons) {
+                button.text = "_"
+                button.visibility = View.INVISIBLE
+            }
+        }
+        else {
+            val template = Instruction(arrayOf(opButton.text.toString())).getTemplateFromOperator()
+            for (i in 0 until 8) {
+                val currentButton = allButtons[i]
+                if (i >= template.size) {
+                    currentButton.visibility = View.INVISIBLE
+                    currentButton.text = "_"
+                }
+                else if (template[i] != "_") {
+                    currentButton.visibility = View.VISIBLE
+                    currentButton.text = template[i]
+                }
+                else {
+                    currentButton.visibility = View.VISIBLE
+                    currentButton.text = if (currentButton.text == "") {
+                        "_"
+                    }
+                    else {
+                        currentButton.text
+                    }
+                }
+            }
+        }
     }
 }

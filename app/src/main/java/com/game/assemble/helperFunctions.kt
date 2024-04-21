@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.allViews
 import androidx.recyclerview.widget.RecyclerView
 
 fun setButtonOnClickKeyboard(button: TextView, keyboardLayout: Int) {
@@ -12,19 +13,20 @@ fun setButtonOnClickKeyboard(button: TextView, keyboardLayout: Int) {
 
 fun getPrevButton(button: TextView): TextView {
     val parent = button.parent as ViewGroup
+    assert(parent in GameActivity.instructionLinearLayout.allViews) // TODO: CHECK AND REMOVE THIS IF PASSED
+
     val siblingButtons = getSiblingTextViewButtonList(button)
     val index = siblingButtons.indexOf(button)
     if (index == 0) {
-        val recyclerView = parent.parent as RecyclerView
-        val position = recyclerView.getChildAdapterPosition(parent)
+        val position = GameActivity.instructionLinearLayout.indexOfChild(parent)
         if (position > 1) {
             val holder =
-                recyclerView.findViewHolderForAdapterPosition(position - 1) as RecyclerView.ViewHolder
+                GameActivity.instructionLinearLayout.getChildAt(position - 1)
             val ids = arrayOf(
-                holder.itemView.findViewById<TextView>(R.id.gameInstructionTextView7),
-                holder.itemView.findViewById(R.id.gameInstructionTextView5),
-                holder.itemView.findViewById(R.id.gameInstructionTextView3),
-                holder.itemView.findViewById(R.id.gameInstructionTextView1)
+                holder.findViewById<TextView>(R.id.gameInstructionTextView7),
+                holder.findViewById<TextView>(R.id.gameInstructionTextView5),
+                holder.findViewById<TextView>(R.id.gameInstructionTextView3),
+                holder.findViewById<TextView>(R.id.gameInstructionTextView1),
             )
             for (button in ids) {
                 if (button.visibility == View.VISIBLE) {
