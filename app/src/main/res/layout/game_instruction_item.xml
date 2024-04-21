@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/gameInstructionItemLayout"
     android:layout_width="match_parent"
     android:layout_height="30dp"
@@ -8,13 +9,23 @@
 
     <TextView
         android:id="@+id/gameInstructionItemLineNumberTextView"
-        android:layout_width="40dp"
+        android:layout_width="20dp"
         android:layout_height="match_parent"
-        android:gravity="bottom"
+        android:gravity="center"
         android:text="1"
         android:textSize="20sp"
         android:textColor="@color/theme_selected"
         android:visibility="visible" />
+
+    <ImageButton
+        android:id="@+id/gameInstructionAddLineButton"
+        android:layout_width="15dp"
+        android:layout_gravity="left"
+
+        android:layout_height="match_parent"
+        android:layout_weight="0"
+        app:srcCompat="@android:drawable/ic_input_add"
+        android:scaleType="centerCrop"/>
 
     <Space
         android:layout_width="10dp"

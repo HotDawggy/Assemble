@@ -40,6 +40,7 @@ class GameActivity : AppCompatActivity() {
         lateinit var recyclerView: RecyclerView
         lateinit var gridViews: Array<GridView>
         lateinit var instructionLinearLayout: LinearLayout
+        lateinit var myHelper: Helper
         fun switchKeyboardLayout(selectedLayoutId: Int) {
             for (layout in keyboardLayouts) {
                 if (layout.id == selectedLayoutId) {
@@ -217,6 +218,21 @@ class GameActivity : AppCompatActivity() {
                     }
                 }
             }
+
+            // TODO 3 - set up add line button
+            val addLineButton = view.findViewById<ImageButton>(R.id.gameInstructionAddLineButton)
+            addLineButton.setOnClickListener {
+                val parent = addLineButton.parent as ViewGroup
+                val position = GameActivity.instructionLinearLayout.indexOfChild(parent)
+
+                val newInstr = Instruction(arrayOf("_"))
+                GameActivity.instrList.add(position + 1, newInstr)
+                val view = LayoutInflater.from(myHelper.context).inflate(R.layout.game_instruction_item, null)
+                GameActivity.modifyView(view, position + 1, newInstr)
+                GameActivity.instructionLinearLayout.addView(view, position + 1)
+
+                update()
+            }
         }
 
     }
@@ -224,6 +240,8 @@ class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+
+        myHelper = Helper(this)
 
         val sim = MIPSSimulator(this)
         // TODO: Deal with load game case
