@@ -1,5 +1,6 @@
 package com.game.assemble
 
+import android.content.Context
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,7 @@ fun setButtonOnClickKeyboard(button: TextView, keyboardLayout: Int) {
 
 fun getPrevButton(button: TextView): TextView {
     val parent = button.parent as ViewGroup
-    assert(parent in GameActivity.instructionLinearLayout.allViews) // TODO: CHECK AND REMOVE THIS IF PASSED
+    assert(parent in GameActivity.instructionLinearLayout.allViews)
 
     val siblingButtons = getSiblingTextViewButtonList(button)
     val index = siblingButtons.indexOf(button)
@@ -38,6 +39,24 @@ fun getPrevButton(button: TextView): TextView {
     }
     else {
         return siblingButtons[index - 1]
+    }
+}
+
+fun getNextButton(context: Context, button: TextView): TextView {
+    val parent = button.parent as ViewGroup
+    assert(parent in GameActivity.instructionLinearLayout.allViews)
+
+    val siblingButtons = getSiblingTextViewButtonList(button)
+    val index = siblingButtons.indexOf(button)
+    if (index == 3 || siblingButtons[index + 1].visibility != View.VISIBLE) {
+        val position = GameActivity.instructionLinearLayout.indexOfChild(parent)
+        if (position >= GameActivity.instrList.size) {
+            GameActivity.addLine()
+        }
+        return GameActivity.instructionLinearLayout.getChildAt(position).findViewById(R.id.gameInstructionTextView1)
+    }
+    else {
+        return siblingButtons[index + 1]
     }
 }
 

@@ -70,7 +70,7 @@ class KeyboardGridViewAdapter(val context: Context, private val keys: List<Strin
                     getSiblingButtonList(targetButton).forEach {
                         if (it != targetButton) it.setTextColor(targetButton.context.getColor(R.color.code))
                     }
-                    changeInstructionOppType(targetButton, targetButton.text.toString())
+                    changeInstructionOppType(targetButton, targetButton.text.toString().removePrefix("\t").removeSuffix((":")))
                 }
                 else if (GameActivity.getVisibleKeyboardLayout() == R.id.labelsKeyboardLayout) { // -> if target button is not "number" -> replace content
                     targetButton.setTextColor(targetButton.context.getColor(R.color.code_label))

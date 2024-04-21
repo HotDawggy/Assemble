@@ -102,12 +102,16 @@ class GameActivity : AppCompatActivity() {
 
                 instructionLinearLayout.getChildAt(i).findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).text = (i + 1).toString()
                 instrList[i] = Instruction(arrayOf<String?>(
-                    buttons[0].text.toString().removeSuffix(":").removePrefix("\t"),
-                    buttons[1].text.toString().removePrefix("\t"),
-                    buttons[2].text.toString().removePrefix("\t"),
-                    buttons[3].text.toString().removePrefix("\t")
+                    buttons[0].text.toString()?.removeSuffix(":")?.removePrefix("\t"),
+                    buttons[1].text.toString()?.removePrefix("\t"),
+                    buttons[2].text.toString()?.removePrefix("\t"),
+                    buttons[3].text.toString()?.removePrefix("\t")
                 ))
             }
+        }
+
+        fun addLine() {
+            TODO("Not yet implemented")
         }
 
     }
@@ -291,7 +295,7 @@ class GameActivity : AppCompatActivity() {
                         }
                         // UPDATE
                         if (lastAccessedGameButton!! == getSiblingButtonList(lastAccessedGameButton!!)[0]) {
-                            changeInstructionOppType(lastAccessedGameButton!!, lastAccessedGameButton!!.text.toString())
+                            changeInstructionOppType(lastAccessedGameButton!!, lastAccessedGameButton!!.text.toString().removePrefix("\t").removeSuffix(":"))
                         }
                     }
                 }
@@ -410,7 +414,7 @@ class GameActivity : AppCompatActivity() {
                         removeSelected()
                         addSelected(button)
                         switchKeyboardLayout(
-                            getKeyboardFromOperator(opButton.text.toString())[i]
+                            getKeyboardFromOperator(opButton.text.toString().removePrefix("\t").removeSuffix(":"))[i]
                         )
                     }
                 }
