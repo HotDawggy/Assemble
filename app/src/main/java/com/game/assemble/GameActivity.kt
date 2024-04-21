@@ -1,9 +1,13 @@
 package com.game.assemble
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +22,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.delay
 
 class GameActivity : AppCompatActivity() {
 
@@ -96,7 +101,12 @@ class GameActivity : AppCompatActivity() {
                 )
 
                 instructionLinearLayout.getChildAt(i).findViewById<TextView>(R.id.gameInstructionItemLineNumberTextView).text = (i + 1).toString()
-                instrList[i] = Instruction(arrayOf<String?>(buttons[0].text.toString(), buttons[1].text.toString(), buttons[2].text.toString(), buttons[3].text.toString()))
+                instrList[i] = Instruction(arrayOf<String?>(
+                    buttons[0].text.toString().removeSuffix(":").removePrefix("\t"),
+                    buttons[1].text.toString().removePrefix("\t"),
+                    buttons[2].text.toString().removePrefix("\t"),
+                    buttons[3].text.toString().removePrefix("\t")
+                ))
             }
         }
 
@@ -113,28 +123,18 @@ class GameActivity : AppCompatActivity() {
         //Log.i("GameActivity", "Returned from generateTask()")
         //Log.i("GameActivity", currentTask)
         instrList = mutableListOf(Instruction((arrayOf("main:"))))
-        instrList += Instruction(arrayOf("add", "_", "_", "_"))
-        instrList += Instruction(arrayOf("nor", "_", "_", "_"))
-        instrList += Instruction(arrayOf("and", "_", "_", "_"))
-        instrList += Instruction(arrayOf("xor", "_", "_", "_"))
-        instrList += Instruction(arrayOf("add", "_", "_", "_"))
-        instrList += Instruction(arrayOf("nor", "_", "_", "_"))
-        instrList += Instruction(arrayOf("and", "_", "_", "_"))
-        instrList += Instruction(arrayOf("xor", "_", "_", "_"))
+        //instrList += Instruction(arrayOf("add", "_", "_", "_"))
+        //instrList += Instruction(arrayOf("add", "_", "_", "_"))
+        //instrList += Instruction(arrayOf("add", "_", "_", "_"))
+        //instrList += Instruction(arrayOf("add", "_", "_", "_"))
+        //instrList += Instruction(arrayOf("add", "_", "_", "_"))
+        //instrList += Instruction(arrayOf("add", "_", "_", "_"))
         instrList += Instruction(arrayOf("and", "\$v0", "\$v0", "\$zero"))
         instrList += Instruction(arrayOf("multiply:"))
         instrList += Instruction(arrayOf("add", "\$v0", "\$v0", "\$a0"))
         instrList += Instruction(arrayOf("addi", "\$a1", "\$a1", "-1"))
         instrList += Instruction(arrayOf("bne", "\$a1", "\$zero", "multiply"))
         instrList += Instruction(arrayOf("j", "exit"))
-        instrList += Instruction(arrayOf("add", "_", "_", "_"))
-        instrList += Instruction(arrayOf("nor", "_", "_", "_"))
-        instrList += Instruction(arrayOf("and", "_", "_", "_"))
-        instrList += Instruction(arrayOf("xor", "_", "_", "_"))
-        instrList += Instruction(arrayOf("add", "_", "_", "_"))
-        instrList += Instruction(arrayOf("nor", "_", "_", "_"))
-        instrList += Instruction(arrayOf("and", "_", "_", "_"))
-        instrList += Instruction(arrayOf("xor", "_", "_", "_"))
 
 
         instructionLinearLayout = findViewById<LinearLayout>(R.id.gameInstructionLinearLayout)
@@ -245,7 +245,7 @@ class GameActivity : AppCompatActivity() {
                                 instructionLinearLayout.removeViewAt(idx)
                                 update()
 
-                                GameActivity.lastAccessedGameButton = null
+                                lastAccessedGameButton = null
                                 var prevButton: TextView? = null
                                 val buttons = arrayOf<TextView>(
                                     instructionLinearLayout.getChildAt(idx - 1).findViewById(R.id.gameInstructionTextView1),
@@ -304,20 +304,47 @@ class GameActivity : AppCompatActivity() {
         }
         val runButton: ImageButton = findViewById(R.id.gamePlayButton)
         runButton.setOnClickListener {
+            val infoTypewriter = this.findViewById<Typewriter>(R.id.gameInfoTypewriter)
             Log.i("runButton", "OnClick!")
             Log.i("runButton", "Updating instrList")
             update()
+            infoTypewriter.clearText()
             if (instrList.any { it.hasNull() }) {
-                val msg = "Some fields are empty!"
+                val msg = "Error:\nSome fields are empty!"
                 Log.i("runButton", msg);
+                this.findViewById<TextView>(R.id.gameInfoTitleTextView).text = "Running"
                 this.findViewById<LinearLayout>(R.id.gameInfoLayout).visibility = View.VISIBLE
-                this.findViewById<Typewriter>(R.id.gameInfoTypewriter).animateText(msg)
+                infoTypewriter.animateText(msg)
                 this.findViewById<LinearLayout>(R.id.gameMainLayout).visibility = View.GONE
-
                 return@setOnClickListener
             }
+            this.findViewById<TextView>(R.id.gameInfoTitleTextView).text = "Running"
+            this.findViewById<LinearLayout>(R.id.gameInfoLayout).visibility = View.VISIBLE
+            this.findViewById<LinearLayout>(R.id.gameMainLayout).visibility = View.GONE
             Log.i("runButton", "Calling validateTask()")
-            val res = sim.validateTask(instrList)
+            var res = sim.validateTask(instrList)
+            var code = res[0]
+            var msg =  res[1]
+            if (res[0] != "Success!") {
+                infoTypewriter.appendText("Known test case: $code\n")
+                infoTypewriter.appendText("$msg\n")
+                return@setOnClickListener
+            } else {
+                infoTypewriter.appendText("Known test case: $code\n")
+            }
+            for (i in 0 until 10) {
+                sim.generateTask(sim.gameTask["id"] as Int?)
+                res = sim.validateTask(instrList)
+                code = res[0]
+                msg =  res[1]
+                if (res[0] != "Success!") {
+                    infoTypewriter.appendText("Hidden test case $i: $code\n")
+                    infoTypewriter.appendText("$msg\n")
+                    return@setOnClickListener
+                } else {
+                    infoTypewriter.appendText("Hidden test case $i: $code\n")
+                }
+            }
             Log.i("runButton", "Returned from validateTask()")
             Log.i("runButton", "res = $res")
         }
@@ -376,13 +403,13 @@ class GameActivity : AppCompatActivity() {
                 Log.i("text is ", button.text.toString())
 
                 button.setOnClickListener {
-                    if (GameActivity.lastAccessedGameButton == button) {
-                        GameActivity.removeSelected()
-                        GameActivity.switchKeyboardLayout(R.id.registersKeyboardLayout)
+                    if (lastAccessedGameButton == button) {
+                        removeSelected()
+                        switchKeyboardLayout(R.id.registersKeyboardLayout)
                     } else {
-                        GameActivity.removeSelected()
-                        GameActivity.addSelected(button)
-                        GameActivity.switchKeyboardLayout(
+                        removeSelected()
+                        addSelected(button)
+                        switchKeyboardLayout(
                             getKeyboardFromOperator(opButton.text.toString())[i]
                         )
                     }

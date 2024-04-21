@@ -10,16 +10,19 @@ class MIPSSimulator(
     ) {
     var regs: Registers = Registers()
     private var exit = false
-    private val gameTask: GameTask = GameTask(context)
-    private val stack: ByteArray = byteArrayOf()
-    companion object {
-        fun parseLabel(label: String, instrList: MutableList<Instruction>) : Int? {
-            if (label == "exit") return null
-            for (instr in instrList) {
-                if (instr.isLabel(label)) return instrList.indexOf(instr)
+    val gameTask: GameTask = GameTask(context)
+    private var stack: ByteArray = byteArrayOf()
+
+    private fun parseLabel(label: String, instrList: MutableList<Instruction>) : Int? {
+        if (label == "exit") {Log.d("parseLabel", "Exit!"); exit = true; return null}
+        for (instr in instrList) {
+            if (instr.isLabel(label)) {
+                Log.d("parseLabel", "label = $label, instr = " + instr[0])
+                Log.d("parseLabel", "Label at " + instrList.indexOf(instr).toString())
+                return instrList.indexOf(instr)
             }
-            return null
         }
+        return null
     }
     private fun parseStackAddress(addr: Int) : Int? {
         val temp = STACK_START - addr - 1
@@ -120,46 +123,51 @@ class MIPSSimulator(
         //Log.i("generateTask()", "Returning...")
         return gameTask["text"].toString()
     }
-    fun validateTask(instrList: MutableList<Instruction>) : Boolean {
+    fun validateTask(instrList: MutableList<Instruction>) : Array<String> {
         val initState = Registers(regs)
-        for (i in 0 until 10) {
-            Log.i("validateTask()", "Running test case $i")
-            Log.i("validateTask()", "Expected output: " + regs["\$a0"] + " * " + regs["\$a1"] + " = " + ((gameTask["goal"]?: -999999) as Int).toString())
-            //printState()
-            val err = run(instrList)
-            if (err.isNotBlank()) {
-                Log.i("validateTask()", err)
-                return false
-            }
-            Log.i("validateTask()", "Obtained output: " + regs["\$v0"].toString())
-            when (gameTask.info["id"] as Int) {
-                0 -> {  // LCM of a0, a1, return in v0
-                    if (regs["\$v0"] != gameTask["goal"] as Int) return false
-                }
-
-                1 -> {  // Sort array in ascending order
-                    for (j in (gameTask["addr"] as Int)..<(gameTask["addr"] as Int) + (gameTask["size"] as Int) - 1) {
-                        if (stack[j] > stack[j + 1]) return false
-                    }
-                }
-
-                2 -> {  // GCD of a0, a1, return in v0
-                    if (regs["\$v0"] != gameTask.info["goal"] as Int) return false
-                }
-
-                3 -> { // Sum of all even primes into v0
-                    if (regs["\$v0"] != gameTask.info["goal"] as Int) return false
-                }
-
-                4 -> {  // Multiply a0 and a1 and return in v0
-                    if (regs["\$v0"] != gameTask.info["goal"] as Int) return false
-                }
-            }
-            Log.i("validateTask", "Test case $i completed")
-            regs = Registers(initState)
-            GameActivity.currentTask = generateTask(gameTask.info["id"] as Int?)
+        Log.i("validateTask()", "Running test case")
+        //printState()
+        val err = run(instrList)
+        if (err.isNotBlank()) {
+            Log.i("validateTask()", err)
+            return arrayOf("Error!",err)
         }
-        return true
+        Log.i("validateTask()", "Obtained output: " + regs["\$v0"].toString())
+        when (gameTask.info["id"] as Int) {
+            0 -> {  // LCM of a0, a1, return in v0
+                if (regs["\$v0"] != gameTask["goal"] as Int) {
+                    return arrayOf("Failed!", "Expected: " + gameTask["goal"] + "\nObtained: " + regs["\$v0"])
+                }
+            }
+
+            1 -> {  // Sort array in ascending order
+                for (j in (gameTask["addr"] as Int)..<(gameTask["addr"] as Int) + (gameTask["size"] as Int) - 1) {
+                    return arrayOf("Failed!", "Array not sorted")
+                }
+            }
+
+            2 -> {  // GCD of a0, a1, return in v0
+                if (regs["\$v0"] != gameTask.info["goal"] as Int) {
+                    return arrayOf("Failed!", "Expected: " + gameTask["goal"] + "\nObtained: " + regs["\$v0"])
+                }
+            }
+
+            3 -> { // Sum of all even primes into v0
+                if (regs["\$v0"] != gameTask.info["goal"] as Int) {
+                    return arrayOf("Failed!", "Expected: " + gameTask["goal"] + "\nObtained: " + regs["\$v0"])
+                }
+            }
+
+            4 -> {  // Multiply a0 and a1 and return in v0
+                if (regs["\$v0"] != gameTask.info["goal"] as Int) {
+                    return arrayOf("Failed!", "Expected: " + gameTask["goal"] + "\nObtained: " + regs["\$v0"])
+                }
+            }
+        }
+        Log.i("validateTask", "Test case completed")
+        regs = Registers(initState)
+        stack = byteArrayOf()
+        return arrayOf("Success!", "")
     }
 
     fun printState(idx: String? = null) {
@@ -177,6 +185,7 @@ class MIPSSimulator(
         val savedRegs = Registers(regs)
         val startTime = Calendar.getInstance().time.time
         var line = 0
+        exit = false
         while (true) {
             // printState("\$v0")
             if (line >= instrList.size) return "The program never jumped to exit!"
@@ -192,7 +201,10 @@ class MIPSSimulator(
                 return "Some fields are empty!"
             }
             line++
-            if (instr.isLabel()) continue
+            Log.d("Run", instr.isLabel().toString())
+            if (instr.isLabel()) {
+                continue
+            }
             when (instr[0]) {
                 "add" -> {   // add
                     val temp: Long = regs[instr[2]].toLong() + regs[instr[3]].toLong()
@@ -319,7 +331,7 @@ class MIPSSimulator(
                 "beq" -> {    // beq
                     if (regs[instr[2]] == regs[instr[1]]) {
                         val temp = parseLabel(instr[3]!!, instrList)
-                        if (exit == true) return "" // Exit is jumped to
+                        if (exit) return "" // Exit is jumped to
                         else if (temp == null) {
                             return "Invalid label!"
                         }
@@ -330,7 +342,7 @@ class MIPSSimulator(
                 "bne" -> {    // bne
                     if (regs[instr[2]] != regs[instr[1]]) {
                         val temp = parseLabel(instr[3]!!, instrList)
-                        if (exit == true) return "" // Exit is jumped to
+                        if (exit) return "" // Exit is jumped to
                         else if (temp == null) {
                             return "Invalid label!"
                         }
@@ -340,7 +352,7 @@ class MIPSSimulator(
                 "blez" -> {
                     if (regs[instr[1]] <= 0) {
                         val temp = parseLabel(instr[2]!!, instrList)
-                        if (exit == true) return "" // Exit is jumped to
+                        if (exit) return "" // Exit is jumped to
                         else if (temp == null) {
                             return "Invalid label!"
                         }

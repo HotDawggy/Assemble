@@ -19,10 +19,21 @@ class Typewriter(ctx: Context, attrSet: AttributeSet): androidx.appcompat.widget
             }
         }
     }
+    fun clearText() {
+        text = ""
+        idx = 0
+        handler.removeCallbacks(adder)
+    }
     fun animateText(input: CharSequence) {
         text = input
         idx = 0
         setText("")
+        handler.removeCallbacks(adder)
+        handler.postDelayed(adder, delay)
+    }
+
+    fun appendText(input: CharSequence) {
+        text = (text.toString() + input)
         handler.removeCallbacks(adder)
         handler.postDelayed(adder, delay)
     }
