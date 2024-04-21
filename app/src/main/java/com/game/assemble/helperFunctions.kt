@@ -23,7 +23,7 @@ class Helper(val context: Context) {
                 val newInstr = Instruction(arrayOf("_"))
                 GameActivity.instrList.add(newInstr)
                 val view = LayoutInflater.from(context).inflate(R.layout.game_instruction_item, null)
-                GameActivity.modifyView(view, index, newInstr)
+                GameActivity.modifyView(view, position + 1, newInstr)
                 GameActivity.instructionLinearLayout.addView(view)
             }
             return GameActivity.instructionLinearLayout.getChildAt(position + 1).findViewById(R.id.gameInstructionTextView1)
