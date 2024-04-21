@@ -17,9 +17,24 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.async
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 
 class GameActivity : AppCompatActivity() {
 
@@ -425,25 +440,43 @@ class GameActivity : AppCompatActivity() {
         findViewById<ImageButton>(R.id.gameInfoExit).setOnClickListener {
             this.findViewById<LinearLayout>(R.id.gameInfoLayout).visibility = View.GONE
             this.findViewById<LinearLayout>(R.id.gameMainLayout).visibility = View.VISIBLE
+            lifecycleScope.cancel()
         }
         val runButton: ImageButton = findViewById(R.id.gamePlayButton)
         val infoTypewriter: Typewriter = findViewById(R.id.gameInfoTypewriter)
         runButton.setOnClickListener {
+            runButton.isClickable = false
             update()
+            findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.INVISIBLE
+            infoTypewriter.clearText()
             this.findViewById<TextView>(R.id.gameInfoTitleTextView).text = "Running"
             this.findViewById<LinearLayout>(R.id.gameInfoLayout).visibility = View.VISIBLE
             this.findViewById<LinearLayout>(R.id.gameMainLayout).visibility = View.GONE
-            if (instrList.any{ it.hasNull() }) { infoTypewriter.appendText("Error!\nSome fields are empty!"); return@setOnClickListener}
-            var res = sim.validateTask(instrList)
-            infoTypewriter.appendText("Known test case:")
-            infoTypewriter.appendText(res[0] + "\n")
-            if (res[0] != "Success!") infoTypewriter.appendText(res[1] + "\n")
-            for (i in 0..<10) {
-                sim.generateTask(sim.gameTask["id"] as Int)
-                res = sim.validateTask(instrList)
-                infoTypewriter.appendText("Hidden test case $i:")
+            if (instrList.any { it.hasNull() }) {
+                infoTypewriter.appendText("Error!\nSome fields are empty!"); return@setOnClickListener
+            }
+            lifecycleScope.launch {
+                var res = sim.validateTask(instrList)
+                infoTypewriter.appendText("Known test case: ")
+                delay(500)
                 infoTypewriter.appendText(res[0] + "\n")
                 if (res[0] != "Success!") infoTypewriter.appendText(res[1] + "\n")
+                for (i in 0..<10) {
+                    delay(500)
+                    infoTypewriter.clearText()
+                    infoTypewriter.appendText("Hidden test case $i: ")
+                    async {
+                        withContext(Dispatchers.Default) {
+                            sim.generateTask(sim.gameTask["id"] as Int)
+                            res = sim.validateTask(instrList)
+                        }
+                    }.await()
+                    delay(500)
+                    infoTypewriter.appendText(res[0] + "\n")
+                    if (res[0] != "Success!") infoTypewriter.appendText(res[1] + "\n")
+                }
+                findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
+                runButton.isClickable = true
             }
         }
 
