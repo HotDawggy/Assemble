@@ -2,12 +2,37 @@ package com.game.assemble
 
 import android.content.Context
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.allViews
 import androidx.recyclerview.widget.RecyclerView
 
+class Helper(val context: Context) {
+    fun getNextButton(button: TextView): TextView { // returns null if
+        val parent = button.parent as ViewGroup
+        assert(parent in GameActivity.instructionLinearLayout.allViews)
+
+        val siblingButtons = getSiblingTextViewButtonList(button)
+        val index = siblingButtons.indexOf(button)
+        if (index == 3 || siblingButtons[index + 1].visibility != View.VISIBLE) {
+            val position = GameActivity.instructionLinearLayout.indexOfChild(parent)
+            if (position + 1 == GameActivity.instrList.size) {
+                Log.i("ADDING", "NEW LINE")
+                val newInstr = Instruction(arrayOf("_"))
+                GameActivity.instrList.add(newInstr)
+                val view = LayoutInflater.from(context).inflate(R.layout.game_instruction_item, null)
+                GameActivity.modifyView(view, position + 1, newInstr)
+                GameActivity.instructionLinearLayout.addView(view)
+            }
+            return GameActivity.instructionLinearLayout.getChildAt(position + 1).findViewById(R.id.gameInstructionTextView1)
+        }
+        else {
+            return siblingButtons[index + 1]
+        }
+    }
+}
 fun setButtonOnClickKeyboard(button: TextView, keyboardLayout: Int) {
     // TODO: THIS
 }
@@ -42,24 +67,6 @@ fun getPrevButton(button: TextView): TextView {
     }
 }
 
-fun getNextButton(context: Context, button: TextView): TextView {
-    val parent = button.parent as ViewGroup
-    assert(parent in GameActivity.instructionLinearLayout.allViews)
-
-    val siblingButtons = getSiblingTextViewButtonList(button)
-    val index = siblingButtons.indexOf(button)
-    if (index == 3 || siblingButtons[index + 1].visibility != View.VISIBLE) {
-        val position = GameActivity.instructionLinearLayout.indexOfChild(parent)
-        if (position >= GameActivity.instrList.size) {
-            GameActivity.addLine()
-        }
-        return GameActivity.instructionLinearLayout.getChildAt(position).findViewById(R.id.gameInstructionTextView1)
-    }
-    else {
-        return siblingButtons[index + 1]
-    }
-}
-
 fun getSiblingButtonList(button: TextView): Array<TextView> {
     val parent = button.parent as ViewGroup
     return arrayOf(
@@ -85,7 +92,7 @@ fun getSiblingTextViewButtonList(button: TextView): Array<TextView> {
 
 }
 
-fun getKeyboardFromOperator(op: String): Array<Int> {
+fun getKeyboardFromOperator(op: String?): Array<Int> {
     return arrayOf(R.id.operatorKeyboardLayout) + Instruction(arrayOf(op)).getKeyboardFromOperator().toTypedArray()
 }
 

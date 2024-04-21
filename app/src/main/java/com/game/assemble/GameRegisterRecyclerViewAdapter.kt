@@ -29,6 +29,13 @@ class GameRegisterRecyclerViewAdapter(private val dataSet: MutableMap<String, In
                 }
                 else {
                     targetButton.text = registerName.text.toString()
+                    if (GameActivity.lastAccessedGameButton != null) {
+                        val nextButton = KeyboardGridViewAdapter.myHelper.getNextButton(GameActivity.lastAccessedGameButton!!)
+                        GameActivity.removeSelected()
+                        nextButton.callOnClick()
+                        //GameActivity.addSelected(nextButton)
+                    }
+
                 }
             }
         }
