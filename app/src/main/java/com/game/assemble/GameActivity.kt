@@ -345,7 +345,7 @@ class GameActivity : AppCompatActivity() {
                     var position = GameActivity.instructionLinearLayout.indexOfChild(parent)
 
                     // if operator, add new line on *next* line
-                    if (GameActivity.lastAccessedGameButton == parent.findViewById(R.id.gameInstructionTextView1)) {
+                    if (GameActivity.lastAccessedGameButton != parent.findViewById(R.id.gameInstructionTextView1)) {
                         position += 1
                     }
 
