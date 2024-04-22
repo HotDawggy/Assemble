@@ -44,6 +44,7 @@ class GameActivity : AppCompatActivity() {
         lateinit var instructionLinearLayout: LinearLayout
         lateinit var myHelper: Helper
         lateinit var heartsRemaining: String
+        lateinit var sim: MIPSSimulator
         fun switchKeyboardLayout(selectedLayoutId: Int) {
             for (layout in keyboardLayouts) {
                 if (layout.id == selectedLayoutId) {
@@ -230,13 +231,22 @@ class GameActivity : AppCompatActivity() {
 
         myHelper = Helper(this)
 
-        val sim = MIPSSimulator(this)
+        sim = MIPSSimulator(this)
         // TODO: Deal with load game case
         // i can has save data
         val sharedPrefs = getSharedPreferences("MyPrefs", MODE_PRIVATE)
-        currentTask = sharedPrefs.getString("currentTask", sim.generateTask())!!
+
         heartsRemaining = sharedPrefs.getString("heartsRemaining", "HH")!!
         instrList = stringToInstrList(sharedPrefs.getString("instrList","")!!)
+
+        // currentTask = sharedPrefs.getString("currentTask", sim.generateTask())!!
+        if (sharedPrefs.contains("gameTaskId")) {
+            val id = sharedPrefs.getString("gameTaskId", "0")?.toInt()
+            sim.generateTask(id)
+        }
+        else {
+            sim.generateTask()
+        }
 
         // TODO: REMOVE SOON
         if (instrList.size == 0) {
@@ -563,6 +573,7 @@ class GameActivity : AppCompatActivity() {
             update()
             editor.putString("heartsRemaining", heartsRemaining)
             editor.putString("instrList", instrListToString(instrList))
+            editor.putString("gameTaskId", sim.gameTask.info["id"].toString())
         }
         editor.apply()
     }
