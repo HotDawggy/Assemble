@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.PersistableBundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -34,11 +35,15 @@ class GameActivity : AppCompatActivity() {
         private var lastRunnable: Runnable? = null
         private var lastAccessedGameButtonVisible : Boolean = true
         private val timeout: Handler = Handler(Looper.getMainLooper())
+        lateinit var currentTask: String
         lateinit var keyboardLayouts: Array<LinearLayout>
         lateinit var instrList: MutableList<Instruction>
+        lateinit var customAdapter: GameInstructionRecyclerViewAdapter
+        lateinit var recyclerView: RecyclerView
         lateinit var gridViews: Array<GridView>
         lateinit var instructionLinearLayout: LinearLayout
         lateinit var myHelper: Helper
+        lateinit var heartsRemaining: String
         fun switchKeyboardLayout(selectedLayoutId: Int) {
             for (layout in keyboardLayouts) {
                 if (layout.id == selectedLayoutId) {
@@ -227,21 +232,23 @@ class GameActivity : AppCompatActivity() {
 
         val sim = MIPSSimulator(this)
         // TODO: Deal with load game case
-        //Log.i("GameActivity", "Calling generateTask()")
-        sim.generateTask()
-        //Log.i("GameActivity", "Returned from generateTask()")
-        //Log.i("GameActivity", currentTask)
-        instrList = mutableListOf(Instruction((arrayOf("main:"))))
-        //instrList += Instruction(arrayOf("add", "_", "_", "_"))
-        //instrList += Instruction(arrayOf("add", "_", "_", "_"))
-        //instrList += Instruction(arrayOf("add", "_", "_", "_"))
-        //instrList += Instruction(arrayOf("add", "_", "_", "_"))
-        //instrList += Instruction(arrayOf("add", "_", "_", "_"))
-        //instrList += Instruction(arrayOf("add", "_", "_", "_"))
-        instrList += Instruction(arrayOf("mult", "\$a0", "\$a1"))
-        instrList += Instruction(arrayOf("mflo", "\$v0"))
-        instrList += Instruction(arrayOf("j", "exit"))
+        // i can has save data
+        val sharedPrefs = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        currentTask = sharedPrefs.getString("currentTask", sim.generateTask())!!
+        heartsRemaining = sharedPrefs.getString("heartsRemaining", "HH")!!
+        instrList = stringToInstrList(sharedPrefs.getString("instrList","")!!)
 
+        // TODO: REMOVE SOON
+        if (instrList.size == 0) {
+            Log.i("SOMEHOW ITS ZERO", "ZEROOOOO")
+            instrList = mutableListOf(Instruction((arrayOf("main:"))))
+            instrList += Instruction(arrayOf("and", "\$v0", "\$v0", "\$zero"))
+            instrList += Instruction(arrayOf("multiply:"))
+            instrList += Instruction(arrayOf("add", "\$v0", "\$v0", "\$a0"))
+            instrList += Instruction(arrayOf("addi", "\$a1", "\$a1", "-1"))
+            instrList += Instruction(arrayOf("bne", "\$a1", "\$zero", "multiply"))
+            instrList += Instruction(arrayOf("j", "exit"))
+        }
 
         instructionLinearLayout = findViewById<LinearLayout>(R.id.gameInstructionLinearLayout)
         instrList.forEachIndexed { index, instruction ->
@@ -297,6 +304,11 @@ class GameActivity : AppCompatActivity() {
         val keyboardRecyclerView2: RecyclerView = findViewById(R.id.gameInstructionRegister2RecyclerView)
         keyboardRecyclerView2.layoutManager = LinearLayoutManager(this)
         keyboardRecyclerView2.adapter = GameRegisterRecyclerViewAdapter(sim.regs.getMap())
+
+        for(i in 0 until instructionLinearLayout.childCount) {
+            val view = instructionLinearLayout.getChildAt(i).findViewById<TextView>(R.id.gameInstructionTextView1)
+            view.callOnClick()
+        }
 
         // setup the operator tab buttons (switch between R-type and J/I-type ops)
         val buttonR: Button = findViewById(R.id.buttonR)
@@ -537,4 +549,21 @@ class GameActivity : AppCompatActivity() {
         // switchKeyboardLayout(R.id.operatorKeyboardLayout)
     }
 
+    override fun onPause() {
+        super.onPause()
+
+        val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        Log.i("HERE", "HERE")
+        editor.remove("heartsRemaining")
+        editor.remove("instrList")
+
+        if (heartsRemaining.isNotEmpty()) {
+            update()
+            editor.putString("heartsRemaining", heartsRemaining)
+            editor.putString("instrList", instrListToString(instrList))
+        }
+        editor.apply()
+    }
 }

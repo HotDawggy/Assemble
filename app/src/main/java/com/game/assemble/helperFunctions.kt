@@ -37,6 +37,36 @@ fun setButtonOnClickKeyboard(button: TextView, keyboardLayout: Int) {
     // TODO: THIS
 }
 
+fun instrListToString(instrList: MutableList<Instruction>): String {
+    var res = mutableListOf<String>()
+    for (instruction in instrList) {
+        for(i in 0 until 4) {
+            if (instruction[i] == null || instruction[i] == "") {
+                res.add("_")
+            }
+            else {
+                res.add(instruction[i]!!.removePrefix("\t").removeSuffix(":"))
+            }
+        }
+    }
+    Log.i("SAVING", res.joinToString("+++"))
+    return res.joinToString("+++")
+}
+
+fun stringToInstrList(instructions: String): MutableList<Instruction> {
+    Log.i("instructions is", instructions)
+    var splitString = instructions.split("+++")
+    var res = mutableListOf<Instruction>()
+    Log.i("instruction size is ", splitString.size.toString())
+    for(i in splitString.indices step 4) {
+        if (i + 3 >= splitString.size) break
+        res.add(Instruction(arrayOf(
+            splitString[i], splitString[i + 1], splitString[i + 2], splitString[i + 3]
+        )))
+    }
+    return res.toMutableList()
+}
+
 fun getPrevButton(button: TextView): TextView {
     val parent = button.parent as ViewGroup
     assert(parent in GameActivity.instructionLinearLayout.allViews)
