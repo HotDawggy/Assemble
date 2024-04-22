@@ -48,8 +48,10 @@
             android:id="@+id/gameInfoTypewriter"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:visibility="visible"
+            android:gravity="center_vertical"
+            android:layout_marginStart="20sp"
+            android:layout_marginEnd="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -187,8 +189,8 @@
                         android:layout_height="60dp"
                         android:backgroundTint="@color/theme4"
                         android:scaleType="centerCrop"
-                        android:tint="@color/white"
-                        app:srcCompat="@android:drawable/ic_input_add" />
+                        app:srcCompat="@android:drawable/ic_input_add"
+                        app:tint="@color/white" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -248,8 +250,8 @@
                         android:layout_height="60dp"
                         android:backgroundTint="@color/theme4"
                         android:scaleType="centerCrop"
-                        android:tint="@color/white"
-                        app:srcCompat="@android:drawable/ic_input_add" />
+                        app:srcCompat="@android:drawable/ic_input_add"
+                        app:tint="@color/white" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -316,8 +318,8 @@
                         android:layout_height="60dp"
                         android:backgroundTint="@color/theme4"
                         android:scaleType="centerCrop"
-                        android:tint="@color/white"
-                        app:srcCompat="@android:drawable/ic_input_add" />
+                        app:srcCompat="@android:drawable/ic_input_add"
+                        app:tint="@color/white" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -382,8 +384,8 @@
                         android:layout_height="60dp"
                         android:backgroundTint="@color/theme4"
                         android:scaleType="centerCrop"
-                        android:tint="@color/white"
-                        app:srcCompat="@android:drawable/ic_input_add" />
+                        app:srcCompat="@android:drawable/ic_input_add"
+                        app:tint="@color/white" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -451,8 +453,8 @@
                         android:layout_height="60dp"
                         android:backgroundTint="@color/theme4"
                         android:scaleType="centerCrop"
-                        android:tint="@color/white"
-                        app:srcCompat="@android:drawable/ic_input_add" />
+                        app:srcCompat="@android:drawable/ic_input_add"
+                        app:tint="@color/white" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -566,8 +568,8 @@
                         android:layout_height="60dp"
                         android:backgroundTint="@color/theme4"
                         android:scaleType="centerCrop"
-                        android:tint="@color/white"
-                        app:srcCompat="@android:drawable/ic_input_add" />
+                        app:srcCompat="@android:drawable/ic_input_add"
+                        app:tint="@color/white" />
 
                 </LinearLayout>
             </LinearLayout>
