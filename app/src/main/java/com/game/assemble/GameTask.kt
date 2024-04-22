@@ -1,6 +1,7 @@
 package com.game.assemble
 
 import android.content.Context
+import android.util.Log
 
 class GameTask(context: Context) {
     val info: MutableMap<String, Any?> = mutableMapOf(
@@ -9,7 +10,7 @@ class GameTask(context: Context) {
     )
     private val taskList: Array<String> = context.resources.getStringArray(R.array.taskList)
     fun getRandomTask() : Int {
-        val idx = 4 //taskList.indices.random()
+        val idx = 0 //taskList.indices.random()
         info["text"] = taskList[idx]
         return idx
     }
@@ -36,6 +37,8 @@ class GameTask(context: Context) {
         return num1
     }
     operator fun get(key: String) : Any? {
+        Log.d("GameTask", key)
+        Log.d("GameTask", info.containsKey(key).toString())
         if (!info.containsKey(key)) throw(IllegalArgumentException("Invalid key"))
         return info[key]
     }

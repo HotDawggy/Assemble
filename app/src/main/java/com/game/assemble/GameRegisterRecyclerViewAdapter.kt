@@ -56,7 +56,8 @@ class GameRegisterRecyclerViewAdapter(private val dataSet: MutableMap<String, In
         // contents of the view with that element
         val pair = dataSet.toList()[position]
         viewHolder.registerName.text = pair.first
-        viewHolder.registerValue.text = ("0x" + pair.second.toString(16))
+        if (pair.second < 0) viewHolder.registerValue.text = ("-0x" + pair.second.toString(16).removePrefix("-"))
+        else viewHolder.registerValue.text = ("0x" + pair.second.toString(16))
     }
 
     // Return the size of your dataset (invoked by the layout manager)

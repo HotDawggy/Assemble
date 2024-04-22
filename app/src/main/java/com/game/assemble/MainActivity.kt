@@ -10,10 +10,24 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val gameButton = findViewById<TextView>(R.id.homePageGameButton)
-        val leaderboardButton = findViewById<TextView>(R.id.homePageLeaderboardButton)
-        val profilePageButton = findViewById<TextView>(R.id.homePageProfilePageButton)
-        val encyclopediaButton = findViewById<TextView>(R.id.homePageEncyclopediaButton)
+        findViewById<Typewriter>(R.id.homeTitleTypewriter).also { it.setDelay(50) ; it.animateText("ASSEMBLE!", true) }
+        findViewById<Typewriter>(R.id.homeAuthorTypewriter).also { it.setDelay(10) ; it.animateText("A game by Sam and Kenneth!") }
+        val gameButton = findViewById<Typewriter>(R.id.homePageGameButton).also {
+            it.setDelay(50)
+            it.animateText("New Game")
+        }
+        val leaderboardButton = findViewById<Typewriter>(R.id.homePageLeaderboardButton).also {
+            it.setDelay(50)
+            it.animateText("Leaderboard")
+        }
+        val profilePageButton = findViewById<Typewriter>(R.id.homePageProfilePageButton).also {
+            it.setDelay(50)
+            it.animateText("Profile")
+        }
+        val encyclopediaButton = findViewById<Typewriter>(R.id.homePageEncyclopediaButton).also {
+            it.setDelay(50)
+            it.animateText("Encyclopedia")
+        }
 
         gameButton.setOnClickListener {
             val myIntent = Intent(

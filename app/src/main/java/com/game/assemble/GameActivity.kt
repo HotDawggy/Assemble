@@ -1,7 +1,6 @@
 package com.game.assemble
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -35,11 +34,8 @@ class GameActivity : AppCompatActivity() {
         private var lastRunnable: Runnable? = null
         private var lastAccessedGameButtonVisible : Boolean = true
         private val timeout: Handler = Handler(Looper.getMainLooper())
-        lateinit var currentTask: String
         lateinit var keyboardLayouts: Array<LinearLayout>
         lateinit var instrList: MutableList<Instruction>
-        lateinit var customAdapter: GameInstructionRecyclerViewAdapter
-        lateinit var recyclerView: RecyclerView
         lateinit var gridViews: Array<GridView>
         lateinit var instructionLinearLayout: LinearLayout
         lateinit var myHelper: Helper
@@ -232,7 +228,7 @@ class GameActivity : AppCompatActivity() {
         val sim = MIPSSimulator(this)
         // TODO: Deal with load game case
         //Log.i("GameActivity", "Calling generateTask()")
-        currentTask = sim.generateTask()
+        sim.generateTask()
         //Log.i("GameActivity", "Returned from generateTask()")
         //Log.i("GameActivity", currentTask)
         instrList = mutableListOf(Instruction((arrayOf("main:"))))
@@ -242,11 +238,8 @@ class GameActivity : AppCompatActivity() {
         //instrList += Instruction(arrayOf("add", "_", "_", "_"))
         //instrList += Instruction(arrayOf("add", "_", "_", "_"))
         //instrList += Instruction(arrayOf("add", "_", "_", "_"))
-        instrList += Instruction(arrayOf("and", "\$v0", "\$v0", "\$zero"))
-        instrList += Instruction(arrayOf("multiply:"))
-        instrList += Instruction(arrayOf("add", "\$v0", "\$v0", "\$a0"))
-        instrList += Instruction(arrayOf("addi", "\$a1", "\$a1", "-1"))
-        instrList += Instruction(arrayOf("bne", "\$a1", "\$zero", "multiply"))
+        instrList += Instruction(arrayOf("mult", "\$a0", "\$a1"))
+        instrList += Instruction(arrayOf("mflo", "\$v0"))
         instrList += Instruction(arrayOf("j", "exit"))
 
 
@@ -464,10 +457,12 @@ class GameActivity : AppCompatActivity() {
             }
         }
         val runButton: ImageButton = findViewById(R.id.gamePlayButton)
+        val taskButton: ImageButton = findViewById(R.id.gameTaskButton)
         findViewById<ImageButton>(R.id.gameInfoExit).setOnClickListener {
             this.findViewById<LinearLayout>(R.id.gameInfoLayout).visibility = View.GONE
             this.findViewById<LinearLayout>(R.id.gameMainLayout).visibility = View.VISIBLE
             runButton.isClickable = true
+            taskButton.isClickable = true
         }
         val infoTypewriter: Typewriter = findViewById(R.id.gameInfoTypewriter)
         runButton.setOnClickListener {
@@ -475,35 +470,64 @@ class GameActivity : AppCompatActivity() {
             update()
             findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.INVISIBLE
             infoTypewriter.clearText()
-            this.findViewById<TextView>(R.id.gameInfoTitleTextView).text = "Running"
+            this.findViewById<TextView>(R.id.gameInfoTitleTextView).text = "Test Running"
             this.findViewById<LinearLayout>(R.id.gameInfoLayout).visibility = View.VISIBLE
             this.findViewById<LinearLayout>(R.id.gameMainLayout).visibility = View.GONE
             if (instrList.any { it.hasNull() }) {
                 infoTypewriter.appendText("Error!\nSome fields are empty!"); return@setOnClickListener
             }
+            var res = ""
             lifecycleScope.launch {
-                var res = sim.validateTask(instrList)
-                infoTypewriter.appendText("Known test case: ")
-                delay(500)
-                infoTypewriter.appendText(res[0] + "\n")
-                if (res[0] != "Success!") infoTypewriter.appendText(res[1] + "\n")
+                infoTypewriter.appendText("Known test case: \n\n")
+                infoTypewriter.appendText("Expected output: \n" + (sim.gameTask["goal"]).toString() + "\n\n")
+                res = async {
+                    withContext(Dispatchers.Default) {
+                        sim.validateTask(instrList)
+                    }
+                }.await()
+                delay(1000)
+                if (res != "Success!" && res != "Failed!") {
+                    infoTypewriter.appendText(res + "\n")
+                    return@launch
+                }
+                infoTypewriter.appendText("Obtained output: \n" + (sim.gameTask["obtained"]).toString() + "\n\n")
+                infoTypewriter.appendText(res + "\n")
+                if (res != "Success!") {
+                    findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
+                    return@launch
+                }
                 for (i in 0..<10) {
-                    delay(500)
+                    delay(1000)
                     infoTypewriter.clearText()
-                    infoTypewriter.appendText("Hidden test case $i: ")
-                    async {
+                    sim.generateTask(sim.gameTask["id"] as Int)
+                    infoTypewriter.appendText("Hidden test case " + (i + 1).toString() + ": \n\n")
+                    infoTypewriter.appendText("Expected output: \n" + (sim.gameTask["goal"]).toString() + "\n\n")
+                    res = async {
                         withContext(Dispatchers.Default) {
-                            sim.generateTask(sim.gameTask["id"] as Int)
-                            res = sim.validateTask(instrList)
+                            sim.validateTask(instrList)
                         }
                     }.await()
-                    delay(500)
-                    infoTypewriter.appendText(res[0] + "\n")
-                    if (res[0] != "Success!") infoTypewriter.appendText(res[1] + "\n")
+                    delay(1000)
+                    if (res != "Success!" && res != "Failed!") {
+                        infoTypewriter.appendText(res + "\n")
+                        return@launch
+                    }
+                    infoTypewriter.appendText("Obtained output: \n" + (sim.gameTask["obtained"]).toString() + "\n\n")
+                    infoTypewriter.appendText(res + "\n")
+                    if (res != "Success!") {
+                        findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
+                        return@launch
+                    }
                 }
                 findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
-                runButton.isClickable = true
             }
+        }
+        taskButton.setOnClickListener {
+            taskButton.isClickable = false
+            this.findViewById<TextView>(R.id.gameInfoTitleTextView).text = "Task Description"
+            this.findViewById<LinearLayout>(R.id.gameInfoLayout).visibility = View.VISIBLE
+            this.findViewById<LinearLayout>(R.id.gameMainLayout).visibility = View.GONE
+            infoTypewriter.animateText(sim.gameTask["text"] as String)
         }
 
         findViewById<TextView>(R.id.gameRoundTextView).text = "Round $round"

@@ -94,6 +94,8 @@ class MIPSSimulator(
                 regs["\$a0"] = (4..999).random()
                 regs["\$a1"] = (4..999).random()
                 gameTask["goal"] = gameTask.findLCM(regs["\$a0"], regs["\$a1"])
+                gameTask["input1"] = regs["\$a0"]
+                gameTask["input2"] = regs["\$a1"]
             }
             1 -> {  // Sort array in ascending order
                 regs["\$a0"] = stack.size + STACK_START
@@ -109,65 +111,48 @@ class MIPSSimulator(
                 regs["\$a0"] = (4..999).random()
                 regs["\$a1"] = (4..999).random()
                 gameTask["goal"] = gameTask.findGCD(regs["\$a0"], regs["\$a1"])
-            }
-            3 -> { // Sum of all even primes
-                //Log.i("generateTask()", "Setting goal...")
-                gameTask["goal"] = 2
-            }
-            4 -> {
-                regs["\$a0"] = (4..999).random()
-                regs["\$a1"] = (4..999).random()
-                gameTask["goal"] = regs["\$a0"] * regs["\$a1"]
+                gameTask["input1"] = regs["\$a0"]
+                gameTask["input2"] = regs["\$a1"]
             }
         }
         //Log.i("generateTask()", "Returning...")
         return gameTask["text"].toString()
     }
-    fun validateTask(instrList: MutableList<Instruction>) : Array<String> {
+    fun validateTask(instrList: MutableList<Instruction>) : String {
         val initState = Registers(regs)
         Log.i("validateTask()", "Running test case")
         //printState()
         val err = run(instrList)
         if (err.isNotBlank()) {
             Log.i("validateTask()", err)
-            return arrayOf("Error!",err)
+            return "Error! $err"
         }
         Log.i("validateTask()", "Obtained output: " + regs["\$v0"].toString())
         when (gameTask.info["id"] as Int) {
             0 -> {  // LCM of a0, a1, return in v0
+                gameTask["obtained"] = regs["\$v0"]
                 if (regs["\$v0"] != gameTask["goal"] as Int) {
-                    return arrayOf("Failed!", "Expected: " + gameTask["goal"] + "\nObtained: " + regs["\$v0"])
+                    return "Failed!"
                 }
             }
 
             1 -> {  // Sort array in ascending order
                 for (j in (gameTask["addr"] as Int)..<(gameTask["addr"] as Int) + (gameTask["size"] as Int) - 1) {
-                    return arrayOf("Failed!", "Array not sorted")
+                    return "Failed!"
                 }
             }
 
             2 -> {  // GCD of a0, a1, return in v0
-                if (regs["\$v0"] != gameTask.info["goal"] as Int) {
-                    return arrayOf("Failed!", "Expected: " + gameTask["goal"] + "\nObtained: " + regs["\$v0"])
-                }
-            }
-
-            3 -> { // Sum of all even primes into v0
-                if (regs["\$v0"] != gameTask.info["goal"] as Int) {
-                    return arrayOf("Failed!", "Expected: " + gameTask["goal"] + "\nObtained: " + regs["\$v0"])
-                }
-            }
-
-            4 -> {  // Multiply a0 and a1 and return in v0
-                if (regs["\$v0"] != gameTask.info["goal"] as Int) {
-                    return arrayOf("Failed!", "Expected: " + gameTask["goal"] + "\nObtained: " + regs["\$v0"])
+                gameTask["obtained"] = regs["\$v0"].toString()
+                if (regs["\$v0"] != gameTask["goal"] as Int) {
+                    return "Failed!"
                 }
             }
         }
         Log.i("validateTask", "Test case completed")
         regs = Registers(initState)
         stack = byteArrayOf()
-        return arrayOf("Success!", "")
+        return "Success!"
     }
 
     fun printState(idx: String? = null) {
@@ -192,7 +177,7 @@ class MIPSSimulator(
             val instr: Instruction = instrList[line]
             instr.logInstr()
             //Log.d("[*] MIPSSimulator.Run", "line " + line.toString())
-            if (Calendar.getInstance().time.time - startTime > 2000) {
+            if (Calendar.getInstance().time.time - startTime > 4000) {
                 regs = savedRegs
                 return "Timed out! Check if your code will result in infinite loop!"
             }
