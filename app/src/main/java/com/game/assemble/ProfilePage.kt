@@ -37,27 +37,5 @@ class ProfilePage : AppCompatActivity() {
         // init fav asm instruction
         val famAsmTextView: TextView = findViewById(R.id.profilePageFavAsm)
         famAsmTextView.text = "You used ${sharedPrefs.getString("favAsm", "XOR")} ${sharedPrefs.getInt("favAsmCount", 0)} times!"
-
-        /* TODO: ADD RECYCLER VIEW
-        // from https://stackoverflow.com/questions/44148852/how-to-add-a-button-dynamically-in-android-using-kotlin
-        val runHistoryLayout = findViewById<LinearLayout>(R.id.profilePageRunHistoryLayout)
-        val btnRunHistory = Button(this)
-        btnRunHistory.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        btnRunHistory.text = "Run 1 - Apr 05"
-        btnRunHistory.setOnClickListener {
-            // from https://stackoverflow.com/questions/2405120/how-to-start-an-intent-by-passing-some-parameters-to-it
-            val myIntent = Intent(
-                this,
-                ViewImageRunHistory::class.java
-            )
-            myIntent.putExtra("fileName", "examplehistory")
-            startActivity(myIntent)
-        }
-        runHistoryLayout.addView(btnRunHistory)
-
-         */
     }
 }

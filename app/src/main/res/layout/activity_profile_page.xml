@@ -60,25 +60,4 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/profilePageRunHistoryLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/profilePageRunHistoryItem"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="Run History List" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="10"
-            android:id="@+id/runHistoryRecyclerView"/>
-
-    </LinearLayout>
 </LinearLayout>
