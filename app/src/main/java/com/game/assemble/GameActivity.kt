@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.os.PersistableBundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -45,6 +44,7 @@ class GameActivity : AppCompatActivity() {
         lateinit var myHelper: Helper
         lateinit var heartsRemaining: String
         lateinit var sim: MIPSSimulator
+        lateinit var keyboardData: Array<Array<String>>
         fun switchKeyboardLayout(selectedLayoutId: Int) {
             for (layout in keyboardLayouts) {
                 if (layout.id == selectedLayoutId) {
@@ -232,7 +232,6 @@ class GameActivity : AppCompatActivity() {
         myHelper = Helper(this)
 
         sim = MIPSSimulator(this)
-        // TODO: Deal with load game case
         // i can has save data
         val sharedPrefs = getSharedPreferences("MyPrefs", MODE_PRIVATE)
 
@@ -277,7 +276,7 @@ class GameActivity : AppCompatActivity() {
             findViewById(R.id.registers2KeyboardLayout)
         )
 
-        val keyboardData = arrayOf<Array<String>>(
+        keyboardData = arrayOf<Array<String>>(
             resources.getStringArray(R.array.instr_r),
             resources.getStringArray(R.array.instr_i) + resources.getStringArray(R.array.instr_j),
             arrayOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9"),
@@ -286,6 +285,16 @@ class GameActivity : AppCompatActivity() {
             resources.getStringArray(R.array.label_names),
             resources.getStringArray(R.array.label_names)
         )
+        // load operators from keyboard
+        if (sharedPrefs.contains("instrR")) {
+            val instrR = regListToStringArray(sharedPrefs.getString("instrR", "")!!)
+            Log.i("restoring", sharedPrefs.getString("instrR", "")!!)
+            keyboardData[0] = instrR
+        }
+        if (sharedPrefs.contains("instrIJ")) {
+            val instrIJ = regListToStringArray(sharedPrefs.getString("instrIJ", "")!!)
+            keyboardData[1] = instrIJ
+        }
 
         gridViews = arrayOf<GridView>(
             findViewById(R.id.keyboardRGridView),
@@ -557,6 +566,7 @@ class GameActivity : AppCompatActivity() {
         // by default, only have the registerLayout visible
         switchKeyboardLayout(R.id.registersKeyboardLayout)
         // switchKeyboardLayout(R.id.operatorKeyboardLayout)
+
     }
 
     override fun onPause() {
@@ -565,15 +575,17 @@ class GameActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 
-        Log.i("HERE", "HERE")
-        editor.remove("heartsRemaining")
-        editor.remove("instrList")
-
+        for(key in arrayOf("heartsRemaining", "instrList", "gameTaskId", "instrR", "instrIJ")) {
+            editor.remove(key)
+        }
         if (heartsRemaining.isNotEmpty()) {
             update()
             editor.putString("heartsRemaining", heartsRemaining)
             editor.putString("instrList", instrListToString(instrList))
             editor.putString("gameTaskId", sim.gameTask.info["id"].toString())
+
+            editor.putString("instrR", stringArrayToRegList(keyboardData[0]))
+            editor.putString("instrIJ", stringArrayToRegList(keyboardData[1]))
         }
         editor.apply()
     }

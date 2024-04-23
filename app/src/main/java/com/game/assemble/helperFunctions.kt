@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.allViews
-import androidx.recyclerview.widget.RecyclerView
 
 class Helper(val context: Context) {
     fun getNextButton(button: TextView): TextView { // returns null if
@@ -32,9 +31,6 @@ class Helper(val context: Context) {
             return siblingButtons[index + 1]
         }
     }
-}
-fun setButtonOnClickKeyboard(button: TextView, keyboardLayout: Int) {
-    // TODO: THIS
 }
 
 fun instrListToString(instrList: MutableList<Instruction>): String {
@@ -65,6 +61,27 @@ fun stringToInstrList(instructions: String): MutableList<Instruction> {
         )))
     }
     return res.toMutableList()
+}
+
+fun regListToStringArray(regList: String): Array<String> {
+    return regList.split("+++").toTypedArray()
+}
+
+fun stringArrayToRegList(strings: Array<String>): String {
+    return strings.joinToString("+++")
+}
+
+fun removeOpFromKeyboard(operator: String) {
+    if (operator in GameActivity.keyboardData[0]) {
+        var tmpData = GameActivity.keyboardData[0].toMutableList()
+        tmpData.remove(operator)
+        GameActivity.keyboardData[0] = tmpData.toTypedArray()
+    }
+    if (operator in GameActivity.keyboardData[1]) {
+        var tmpData = GameActivity.keyboardData[1].toMutableList()
+        tmpData.remove(operator)
+        GameActivity.keyboardData[1] = tmpData.toTypedArray()
+    }
 }
 
 fun getPrevButton(button: TextView): TextView {
