@@ -668,7 +668,7 @@ class GameActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.gameInfoHeartsRemaining).text = "♥".repeat(heartsRemaining.length + 1)
 
         // by default, only have the registerLayout visible
-        switchKeyboardLayout(R.id.registersKeyboardLayout)
+        switchKeyboardLayout(R.id.operatorKeyboardLayout)
         // switchKeyboardLayout(R.id.operatorKeyboardLayout)
 
 
