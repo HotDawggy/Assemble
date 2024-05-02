@@ -10,11 +10,19 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val sharedPrefs = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+
         findViewById<Typewriter>(R.id.homeTitleTypewriter).also { it.setDelay(50) ; it.animateText("ASSEMBLE!", true) }
         findViewById<Typewriter>(R.id.homeAuthorTypewriter).also { it.setDelay(10) ; it.animateText("A game by Sam and Kenneth!") }
         val gameButton = findViewById<Typewriter>(R.id.homePageGameButton).also {
             it.setDelay(50)
-            it.animateText("New Game")
+            if (sharedPrefs.contains("instrList")) {
+                it.animateText("Resume Game")
+            }
+            else {
+                it.animateText("New Game")
+            }
         }
         val leaderboardButton = findViewById<Typewriter>(R.id.homePageLeaderboardButton).also {
             it.setDelay(50)
@@ -34,8 +42,10 @@ class MainActivity : AppCompatActivity() {
                 this,
                 TransitionGameActivity::class.java
             )
+            myIntent.putExtra("roundNumber", sharedPrefs.getInt("roundNumber", 1))
             startActivity(myIntent)
         }
+
 
         leaderboardButton.setOnClickListener {
             val myIntent = Intent(
