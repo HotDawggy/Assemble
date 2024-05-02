@@ -607,8 +607,18 @@ class GameActivity : AppCompatActivity() {
                         editor.remove(key)
                     }
 
-                    // TODO: REMOVE INSTRUCTIONS
+                    // remove instructions
+                    for(instruction in instrList) {
+                        if (instruction[0] != null) {
+                            val op = instruction[0]!!.removePrefix("\t").removeSuffix(":")
+                            removeOpFromKeyboard(op)
+                        }
+                    }
 
+                    editor.putString("instrR", stringArrayToRegList(keyboardData[0]))
+                    editor.putString("instrIJ", stringArrayToRegList(keyboardData[1]))
+
+                    editor.apply()
 
                     val intent = Intent(this@GameActivity, TransitionGameActivity::class.java)
                     intent.putExtra("roundNumber", round + 1)
