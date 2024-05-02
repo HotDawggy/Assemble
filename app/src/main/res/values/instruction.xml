@@ -51,66 +51,104 @@
         <item>xori</item>   //
     </string-array>
     <string-array name="instrDescription">
-        <item>Adds the values of two registers and stores the result in another. May cause overflow exception</item>
-        <item>Adds a constant value to a register and stores the result in another register. May cause overflow exception</item>
-        <item>Adds a constant value to a register and stores the result in another register. But operands are treated as unsigned i.e. no overflow exception</item>
-        <item>Adds the values of two registers and stores the result in another. But operands are treated as unsigned i.e. no overflow exception</item>
-        <item>Performs a bitwise AND operation between two registers, storing the result in another register.</item>
-        <item>Performs a bitwise AND operation between a register and a constant value, storing the result in another register.</item>
-        <item>Branches to a target label if two registers are equal.</item>
-        <item>Branches to a target label if two registers are not equal.</item>
-        <item>Unconditionally jumps to a target label.</item>
-        <item>Unconditionally jumps and links to a target label. Will update $ra to $pc + 8</item>
-        <item>Unconditionally jumps to the address specified by the register. Can be used in conjunction with $ra</item>
-        <item>Loads an unsigned byte from memory into a register.</item>
-        <item>Loads an unsigned halfword from memory into a register.</item>
-        <item>Loads a 16-bit immediate value into the upper 16 bits of a register.</item>
-        <item>Loads a word from memory into a register.</item>
-        <item>Performs a bitwise NOR operation between two registers, storing the result in another register.</item>
-        <item>Performs a bitwise OR operation between two registers, storing the result in another register.</item>
-        <item>Performs a bitwise OR operation between a register and a constant value, storing the result in another register.</item>
-        <item>Sets a register to 1 if another register is less than the other register; otherwise, sets it to 0.</item>
-        <item>Sets a register to 1 if another register is less than a constant value; otherwise, sets it to 0.</item>
-        <item>Sets a register to 1 if another register is less than a constant value; otherwise, sets it to 0. But operands are treated as unsigned.</item>
-        <item>Sets a register to 1 if another register is less than the other register; otherwise, sets it to 0. But operands are treated as unsigned.</item>
-        <item>Performs a bitwise left shift of the value of a register a constant amount of time and stores it in another register. Equivalent to multiplying by 2 a constant amount of time.</item>
-        <item>Performs a bitwise right shift of the value of a register a constant amount of time and stores it in another register. Zero-extended. </item>
-        <item>Stores the least significant byte of a register into memory.</item>
-        <item>Stores the least significant halfword of a register into memory.</item>
-        <item>Stores a word from a register into memory.</item>
-        <item>Subtracts the values of two registers and stores the result in another. May cause overflow exception</item>
-        <item>Subtracts the values of two registers and stores the result in another. But operands are treated as unsigned i.e. no overflow exception</item>
+        <item> Adds signed numbers (a = b + c)</item>
+        <item> Adds a signed immediate value to a register (add immediate)</item>
+        <item> Adds an unsigned immediate value to a register (add immediate unsigned)</item>
+        <item> Adds unsigned numbers (a = b + c)</item>
+        <item> Bitwise AND (a = b &amp; c)</item>
+        <item> Bitwise AND with a signed immediate value (and immediate)</item>
+        <item> Branches to the specified offset if rs equals rt (branch if equal)</item>
+        <item> Branches to the specified offset if rs is greater than zero (branch if greater than zero)</item>
+        <item> Branches to the specified offset if rs is less than or equal to zero (branch if less than or equal to zero)</item>
+        <item> Branches to the specified offset if rs does not equal rt (branch if not equal)</item>
+        <item> Divides signed numbers (a = b / c, with quotient in LO and remainder in HI)</item>
+        <item> Divides unsigned numbers (a = b / c, with quotient in LO and remainder in HI)</item>
+        <item> Jumps to the specified target address (jump)</item>
+        <item> Jumps to the specified target address and saves the return address in $ra (jump and link)</item>
+        <item> Jumps to the address in register rs and saves the return address in register rd (jump and link register)</item>
+        <item> Jumps to the address in register rs (jump register)</item>
+        <item> Loads a byte from memory into a register (load byte)</item>
+        <item> Loads an unsigned byte from memory into a register (load byte unsigned)</item>
+        <item> Loads a halfword from memory into a register (load halfword)</item>
+        <item> Loads an unsigned halfword from memory into a register (load halfword unsigned)</item>
+        <item> Loads an unsigned immediate value into the upper 16 bits of a register (load upper immediate)</item>
+        <item> Loads a word from memory into a register (load word)</item>
+        <item> Moves the value from the HI register to register rd (move from high)</item>
+        <item> Moves the value from the LO register to register rd (move from low)</item>
+        <item> Moves the value from register rs to the HI register (move to high)</item>
+        <item> Moves the value from register rs to the LO register (move to low)</item>
+        <item> Multiplies signed numbers (HI and LO registers are used for the result)</item>
+        <item> Multiplies unsigned numbers (HI and LO registers are used for the result)</item>
+        <item> Bitwise NOR (a = ~(b | c))</item>
+        <item> Bitwise OR (a = b | c)</item>
+        <item> Bitwise OR with a signed immediate value (or immediate)</item>
+        <item> Stores a byte from a register to memory (store byte)</item>
+        <item> Stores a halfword from a register to memory (store halfword)</item>
+        <item> Shifts the bits in b to the left by c places (shift left logical)</item>
+        <item> Shifts the bits in b to the left by the number of places specified in c (shift left logical variable)</item>
+        <item> Sets a to 1 if b is less than c, otherwise sets a to 0 (set less than)</item>
+        <item> Sets rt to 1 if rs is less than the signed immediate value, otherwise sets rt to 0 (set less than immediate)</item>
+        <item> Sets rt to 1 if rs is less than the unsigned immediate value, otherwise sets rt to 0 (set less than immediate unsigned)</item>
+        <item> Sets a to 1 if b is less than c (unsigned), otherwise sets a to 0 (set less than unsigned)</item>
+        <item> Shifts the bits in b to the right by c places, filling with the sign bit (shift right arithmetic)</item>
+        <item> Shifts the bits in b to the right by the number of places specified in c, filling with the sign bit (shift right arithmetic variable)</item>
+        <item> Shifts the bits in b to the right by c places (shift right logical)</item>
+        <item> Shifts the bits in b to the right by the number of places specified in c (shift right logical variable)</item>
+        <item> Subtracts signed numbers (a = b - c)</item>
+        <item> Subtracts unsigned numbers (a = b - c)</item>
+        <item> Stores a word from a register to memory (store word)</item>
+        <item> Bitwise XOR (a = b ^ c)</item>
+        <item> Bitwise XOR with a signed immediate value (xor immediate)</item>
     </string-array>
     <string-array name="instrUsage">
-        <item>add $dest, $src1, $src2 \t // $dest = $src1 + $src2</item>
-        <item>addi $dest, $src, imm \t // $dest = $src + imm</item>
-        <item>addiu $dest, $src, imm \t // $dest = $src + imm</item>
-        <item>addu $dest, $src1, $src2 \t // $dest = $src1 + $src2</item>
-        <item>and $dest, $src1, $src2 \t // $dest = $src1 and $src2</item>
-        <item>andi $dest, $src, imm \t // $dest = $src and imm</item>
-        <item>beq $src1, $src2, target</item>
-        <item>bne $src1, $src2, target</item>
+        <item>add a b c</item>
+        <item>addi rt rs imm</item>
+        <item>addiu rt rs imm</item>
+        <item>addu a b c</item>
+        <item>and a b c</item>
+        <item>andi rt rs imm</item>
+        <item>beq rs rt offset</item>
+        <item>bgtz rs offset</item>
+        <item>blez rs offset</item>
+        <item>bne rs rt offset</item>
+        <item>div a b</item>
+        <item>divu a b</item>
         <item>j target</item>
         <item>jal target</item>
-        <item>jr $dest</item>
-        <item>lbu $dest, offset($base) \t // $dest = ($base + offset)</item>
-        <item>lhu $dest, offset($base) \t // $dest = ($base + offset)</item>
-        <item>lui $dest, imm \t // $dest = imm sll 16 </item>
-        <item>lw $dest, offset($base) \t // $dest = ($base + offset)</item>
-        <item>nor $dest, $src1, $src2 \t // $dest = $src1 nor $src2</item>
-        <item>or $dest, $src1, $src2 \t // $dest = $src1 or $src2</item>
-        <item>ori $dest, $src, imm \t // $dest = $src or imm</item>
-        <item>slt $dest, $src1, $src2 \t // $dest = ($src1 > $src2)? 1: 0</item>
-        <item>slti $dest, $src, imm \t // $dest = ($src1 > imm)? 1: 0</item>
-        <item>sltiu $dest, $src, imm \t // $dest = ($src1 > imm)? 1: 0</item>
-        <item>sltu $dest, $src1, $src2 \t // $dest = ($src1 > $src2)? 1: 0</item>
-        <item>sll $dest, $src, shamt \t // $dest = $src sll shamt</item>
-        <item>srl $dest, $src, shamt \t // $dest = $src srl shamt</item>
-        <item>sb $src, offset($base)</item>
-        <item>sh $src, offset($base)</item>
-        <item>sw $src, offset($base)</item>
-        <item>sub $dest, $src1, $src2 \t // $dest = $src1 - $src2</item>
-        <item>subu $dest, $src1, $src2 \t // $dest = $src1 - $src2</item>
+        <item>jalr rd rs</item>
+        <item>jr rs</item>
+        <item>lb rt rs offset</item>
+        <item>lbu rt rs offset</item>
+        <item>lh rt rs offset</item>
+        <item>lhu rt rs offset</item>
+        <item>lui rt imm</item>
+        <item>lw rt rs offset</item>
+        <item>mfhi rd</item>
+        <item>mflo rd</item>
+        <item>mthi rs</item>
+        <item>mtlo rs</item>
+        <item>mult rs rt</item>
+        <item>multu rs rt</item>
+        <item>nor a b c</item>
+        <item>or a b c</item>
+        <item>ori rt rs imm</item>
+        <item>sb rs rt offset</item>
+        <item>sh rs rt offset</item>
+        <item>sll a b c</item>
+        <item>sllv a b c</item>
+        <item>slt a b c</item>
+        <item>slti rt rs imm</item>
+        <item>sltiu rt rs imm</item>
+        <item>sltu a b c</item>
+        <item>sra a b c</item>
+        <item>srav a b c</item>
+        <item>srl a b c</item>
+        <item>srlv a b c</item>
+        <item>sub a b c</item>
+        <item>subu a b c</item>
+        <item>sw rs rt offset</item>
+        <item>xor a b c</item>
+        <item>xori rt rs imm</item>
     </string-array>
     <string-array name="regsString">
         <item>$zero</item>
