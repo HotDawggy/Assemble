@@ -680,6 +680,11 @@ class GameActivity : AppCompatActivity() {
             }
         })
 
+        val encyclopediaButton: ImageButton = findViewById(R.id.buttonToEncyclopedia)
+        encyclopediaButton.setOnClickListener {
+            startActivity(Intent(this, Encyclopedia::class.java))
+        }
+
 
         // TODO: REMOVE SOON
         val heartsButton: TextView = findViewById<TextView>(R.id.gameInfoHeartsRemaining)

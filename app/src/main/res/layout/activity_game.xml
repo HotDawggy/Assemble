@@ -101,6 +101,14 @@
                     android:text="Round"
                     android:textAllCaps="true" />
 
+                <ImageButton
+                    android:id="@+id/buttonToEncyclopedia"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="0.4"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/bok" />
+
                 <TextView
                     android:id="@+id/gameInfoHeartsRemaining"
                     android:layout_width="0dp"
