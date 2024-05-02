@@ -45,9 +45,11 @@ class EncyclopediaRecyclerViewAdapter(private val dataSet: Array<EncyclopediaIte
         viewHolder.itemView.setOnClickListener {
             if (viewHolder.descriptionView.visibility == View.GONE) {
                 viewHolder.descriptionView.visibility = View.VISIBLE
+                viewHolder.titleView.text = dataSet[position].usage
             }
             else {
                 viewHolder.descriptionView.visibility = View.GONE
+                viewHolder.titleView.text = dataSet[position].name
             }
         }
     }

@@ -1,3 +1,3 @@
 package com.game.assemble
 
-class EncyclopediaItem(val name: String, val description: String)
+class EncyclopediaItem(val name: String, val description: String, val usage: String)

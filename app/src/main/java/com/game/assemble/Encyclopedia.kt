@@ -21,7 +21,7 @@ class Encyclopedia : AppCompatActivity() {
         }
 
         for((name, description, usage) in zippedOpcodes) {
-            dataSet.add(EncyclopediaItem(name, description + "\n" + usage))
+            dataSet.add(EncyclopediaItem(name, description, usage))
         }
 
         val recyclerView: RecyclerView = findViewById(R.id.encyclopediaList)
