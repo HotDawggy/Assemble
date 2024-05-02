@@ -9,34 +9,40 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/encyclopediaTitleLayout"
-        >
-    <TextView
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Encyclopedia"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:id="@+id/encyclopediaTitle"
-        ></TextView>
-    </LinearLayout>
+        android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/encyclopediaTitleLayout"
-        android:id="@+id/encyclopediaListLayout"
-        >
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/encyclopediaList"
+        <LinearLayout
+            android:id="@+id/encyclopediaTitleLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
-        </androidx.recyclerview.widget.RecyclerView>
+            <TextView
+                android:id="@+id/encyclopediaTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Encyclopedia"></TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/encyclopediaListLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="8"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/encyclopediaList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
