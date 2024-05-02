@@ -1,11 +1,13 @@
 package com.game.assemble
 
 // from https://developer.android.com/develop/ui/views/layout/recyclerview
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 
 class EncyclopediaRecyclerViewAdapter(private val dataSet: Array<EncyclopediaItem>) :
     RecyclerView.Adapter<EncyclopediaRecyclerViewAdapter.ViewHolder>() {
