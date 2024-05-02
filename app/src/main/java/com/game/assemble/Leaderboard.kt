@@ -1,8 +1,10 @@
 package com.game.assemble
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -65,6 +67,15 @@ class Leaderboard : AppCompatActivity() {
         }
 
         allButton.callOnClick()
+
+        onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // https://stackoverflow.com/questions/3141996/android-how-to-override-the-back-button-so-it-doesnt-finish-my-activity
+                startActivity(Intent(this@Leaderboard,MainActivity::class.java))
+                finishAffinity()
+            }
+        })
+
     }
 
     fun parseResponse(response: String): List<LeaderboardItem> {

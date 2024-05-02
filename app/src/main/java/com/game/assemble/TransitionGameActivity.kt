@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -31,5 +32,14 @@ class TransitionGameActivity : AppCompatActivity() {
         readyButton.setOnClickListener {
             startActivity(gameIntent)
         }
+
+        onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // https://stackoverflow.com/questions/3141996/android-how-to-override-the-back-button-so-it-doesnt-finish-my-activity
+                startActivity(Intent(this@TransitionGameActivity,MainActivity::class.java))
+                finishAffinity()
+            }
+        })
+
     }
 }

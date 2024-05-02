@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import okhttp3.internal.userAgent
 
@@ -64,5 +65,14 @@ class ProfilePage : AppCompatActivity() {
             }
         }
         famAsmTextView.text = "You used $favOp $favCount times!"
+
+        onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // https://stackoverflow.com/questions/3141996/android-how-to-override-the-back-button-so-it-doesnt-finish-my-activity
+                startActivity(Intent(this@ProfilePage,MainActivity::class.java))
+                finishAffinity()
+            }
+        })
+
     }
 }

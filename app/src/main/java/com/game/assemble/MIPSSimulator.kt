@@ -124,6 +124,7 @@ class MIPSSimulator(
         return gameTask["text"].toString()
     }
     fun validateTask(instrList: MutableList<Instruction>) : String {
+        Log.i("WHERERU", "HEREAMI")
         val initState = Registers(regs)
         Log.i("validateTask()", "Running test case")
         //printState()
@@ -182,7 +183,7 @@ class MIPSSimulator(
             val instr: Instruction = instrList[line]
             instr.logInstr()
             //Log.d("[*] MIPSSimulator.Run", "line " + line.toString())
-            if (Calendar.getInstance().time.time - startTime > 4000) {
+            if (Calendar.getInstance().time.time - startTime > 8000) { // TODO: REVERT BACK
                 regs = savedRegs
                 return "Timed out! Check if your code will result in infinite loop!"
             }

@@ -14,6 +14,8 @@ import android.widget.GridView
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
@@ -536,38 +538,43 @@ class GameActivity : AppCompatActivity() {
                     findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
                     playerWinRound = false
                 }
-                infoTypewriter.appendText("Obtained output: \n" + (sim.gameTask["obtained"]).toString() + "\n\n")
-                infoTypewriter.appendText(res + "\n")
-                if (res != "Success!") {
-                    findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
-                    playerWinRound = false
-                }
 
                 if (playerWinRound) {
-                    for (i in 0..<10) {
-                        delay(1000)
-                        infoTypewriter.clearText()
-                        sim.generateTask(sim.gameTask["id"] as Int)
-                        infoTypewriter.appendText("Hidden test case " + (i + 1).toString() + ": \n\n")
-                        infoTypewriter.appendText("Expected output: \n" + (sim.gameTask["goal"]).toString() + "\n\n")
-                        res = async {
-                            withContext(Dispatchers.Default) {
-                                sim.validateTask(instrList)
+                    infoTypewriter.appendText("Obtained output: \n" + (sim.gameTask["obtained"]).toString() + "\n\n")
+                    infoTypewriter.appendText(res + "\n")
+                    if (res != "Success!") {
+                        findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
+                        playerWinRound = false
+                    }
+
+                    if (playerWinRound) {
+                        for (i in 0..<10) {
+                            delay(1000)
+                            infoTypewriter.clearText()
+                            sim.generateTask(sim.gameTask["id"] as Int)
+                            infoTypewriter.appendText("Hidden test case " + (i + 1).toString() + ": \n\n")
+                            infoTypewriter.appendText("Expected output: \n" + (sim.gameTask["goal"]).toString() + "\n\n")
+                            res = async {
+                                withContext(Dispatchers.Default) {
+                                    sim.validateTask(instrList)
+                                }
+                            }.await()
+                            delay(1000)
+                            if (res != "Success!" && res != "Failed!") {
+                                playerWinRound = false
+                                findViewById<ImageButton>(R.id.gameInfoExit).visibility =
+                                    View.VISIBLE
+                                infoTypewriter.appendText(res + "\n")
+                                break
                             }
-                        }.await()
-                        delay(1000)
-                        if (res != "Success!" && res != "Failed!") {
-                            playerWinRound = false
-                            findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
+                            infoTypewriter.appendText("Obtained output: \n" + (sim.gameTask["obtained"]).toString() + "\n\n")
                             infoTypewriter.appendText(res + "\n")
-                            break
-                        }
-                        infoTypewriter.appendText("Obtained output: \n" + (sim.gameTask["obtained"]).toString() + "\n\n")
-                        infoTypewriter.appendText(res + "\n")
-                        if (res != "Success!") {
-                            playerWinRound = false
-                            findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
-                            break
+                            if (res != "Success!") {
+                                playerWinRound = false
+                                findViewById<ImageButton>(R.id.gameInfoExit).visibility =
+                                    View.VISIBLE
+                                break
+                            }
                         }
                     }
                 }
@@ -644,6 +651,15 @@ class GameActivity : AppCompatActivity() {
         // by default, only have the registerLayout visible
         switchKeyboardLayout(R.id.registersKeyboardLayout)
         // switchKeyboardLayout(R.id.operatorKeyboardLayout)
+
+
+        onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // https://stackoverflow.com/questions/3141996/android-how-to-override-the-back-button-so-it-doesnt-finish-my-activity
+                startActivity(Intent(this@GameActivity,MainActivity::class.java))
+                finishAffinity()
+            }
+        })
 
     }
 
