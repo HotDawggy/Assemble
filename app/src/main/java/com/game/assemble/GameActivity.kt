@@ -519,7 +519,9 @@ class GameActivity : AppCompatActivity() {
             this.findViewById<LinearLayout>(R.id.gameInfoLayout).visibility = View.VISIBLE
             this.findViewById<LinearLayout>(R.id.gameMainLayout).visibility = View.GONE
             if (instrList.any { it.hasNull() }) {
-                infoTypewriter.appendText("Error!\nSome fields are empty!"); return@setOnClickListener
+                infoTypewriter.appendText("Error!\nSome fields are empty!")
+                findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
+                return@setOnClickListener
             }
             var res = ""
             lifecycleScope.launch {
@@ -598,6 +600,15 @@ class GameActivity : AppCompatActivity() {
 
                     // update high score
                     sharedPrefs.edit().putInt("highScore", max(round, sharedPrefs.getInt("highScore", 0))).apply()
+
+                    // clear saved data
+                    val editor = sharedPrefs.edit()
+                    for(key in arrayOf("heartsRemaining", "instrList", "gameTaskId", "instrR", "instrIJ", "roundNumber")) {
+                        editor.remove(key)
+                    }
+
+                    // TODO: REMOVE INSTRUCTIONS
+
 
                     val intent = Intent(this@GameActivity, TransitionGameActivity::class.java)
                     intent.putExtra("roundNumber", round + 1)
