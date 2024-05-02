@@ -11,16 +11,18 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class TransitionGameActivity : AppCompatActivity() {
+    private var roundNumber: Int = 0
+    private var id: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_transition_game)
 
         val textView = findViewById<TextView>(R.id.transitionTextView)
-        val roundNumber = intent.getIntExtra("roundNumber", 1)
+        roundNumber = intent.getIntExtra("roundNumber", 1)
 
         val sim: MIPSSimulator = MIPSSimulator(this)
         val taskDescription = sim.generateTask()
-        val id : Int = sim.gameTask.info["id"].toString().toInt()
+        id = sim.gameTask.info["id"].toString().toInt()
 
         textView.text = "GET READY FOR ROUND $roundNumber\nYOUR GOAL IS $taskDescription"
 
@@ -41,5 +43,15 @@ class TransitionGameActivity : AppCompatActivity() {
             }
         })
 
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putInt("roundNumber", roundNumber)
+        editor.putInt("gameTaskId", id)
+        editor.apply()
     }
 }

@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<Typewriter>(R.id.homeAuthorTypewriter).also { it.setDelay(10) ; it.animateText("A game by Sam and Kenneth!") }
         val gameButton = findViewById<Typewriter>(R.id.homePageGameButton).also {
             it.setDelay(50)
-            if (sharedPrefs.contains("instrList")) {
+            if (sharedPrefs.contains("roundNumber")) {
                 it.animateText("Resume Game")
             }
             else {

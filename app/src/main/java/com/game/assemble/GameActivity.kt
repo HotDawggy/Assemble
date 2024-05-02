@@ -251,7 +251,7 @@ class GameActivity : AppCompatActivity() {
 
         // currentTask = sharedPrefs.getString("currentTask", sim.generateTask())!!
         if (sharedPrefs.contains("gameTaskId")) {
-            val id = sharedPrefs.getString("gameTaskId", "0")?.toInt()
+            val id = sharedPrefs.getInt("gameTaskId", 0)?.toInt()
             sim.generateTask(id)
         }
         else if (intent.getIntExtra("taskId", -1) != -1) {
