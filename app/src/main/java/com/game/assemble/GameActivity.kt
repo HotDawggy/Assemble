@@ -18,6 +18,7 @@ import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -241,6 +242,9 @@ class GameActivity : AppCompatActivity() {
 
         heartsRemaining = sharedPrefs.getString("heartsRemaining", "HH")!!
         instrList = stringToInstrList(sharedPrefs.getString("instrList","")!!)
+        if (instrList.isEmpty()) {
+            instrList += Instruction()
+        }
 
         if (intent.getIntExtra("roundNumber", -1) != -1) {
             round = intent.getIntExtra("roundNumber", -1)
@@ -259,18 +263,6 @@ class GameActivity : AppCompatActivity() {
         }
         else {
             sim.generateTask()
-        }
-
-        // TODO: REMOVE SOON
-        if (instrList.size == 0) {
-            Log.i("SOMEHOW ITS ZERO", "ZEROOOOO")
-            instrList = mutableListOf(Instruction((arrayOf("main:"))))
-            instrList += Instruction(arrayOf("and", "\$v0", "\$v0", "\$zero"))
-            instrList += Instruction(arrayOf("multiply:"))
-            instrList += Instruction(arrayOf("add", "\$v0", "\$v0", "\$a0"))
-            instrList += Instruction(arrayOf("addi", "\$a1", "\$a1", "-1"))
-            instrList += Instruction(arrayOf("bne", "\$a1", "\$zero", "multiply"))
-            instrList += Instruction(arrayOf("j", "exit"))
         }
 
         instructionLinearLayout = findViewById<LinearLayout>(R.id.gameInstructionLinearLayout)
@@ -682,6 +674,28 @@ class GameActivity : AppCompatActivity() {
             }
         })
 
+
+        // TODO: REMOVE SOON
+        val heartsButton: TextView = findViewById<TextView>(R.id.gameInfoHeartsRemaining)
+        heartsButton.setOnClickListener {
+            instrList = mutableListOf(Instruction((arrayOf("main:"))))
+            instrList += Instruction(arrayOf("and", "\$v0", "\$v0", "\$zero"))
+            instrList += Instruction(arrayOf("multiply:"))
+            instrList += Instruction(arrayOf("add", "\$v0", "\$v0", "\$a0"))
+            instrList += Instruction(arrayOf("addi", "\$a1", "\$a1", "-1"))
+            instrList += Instruction(arrayOf("bne", "\$a1", "\$zero", "multiply"))
+            instrList += Instruction(arrayOf("j", "exit"))
+
+            instructionLinearLayout.removeAllViews()
+
+            instrList.forEachIndexed { index, instruction ->
+                val view = LayoutInflater.from(myHelper.context)
+                    .inflate(R.layout.game_instruction_item, null)
+                modifyView(view, index, instruction)
+                instructionLinearLayout.addView(view, index)
+            }
+            update()
+        }
     }
 
     override fun onPause() {
