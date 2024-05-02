@@ -646,7 +646,7 @@ class GameActivity : AppCompatActivity() {
         }
 
         findViewById<TextView>(R.id.gameRoundTextView).text = "Round $round"
-        findViewById<TextView>(R.id.gameInfoHeartsRemaining).text = "<3".repeat(heartsRemaining.length + 1)
+        findViewById<TextView>(R.id.gameInfoHeartsRemaining).text = "♥".repeat(heartsRemaining.length + 1)
 
         // by default, only have the registerLayout visible
         switchKeyboardLayout(R.id.registersKeyboardLayout)
