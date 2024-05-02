@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         gameButton.setOnClickListener {
             val myIntent = Intent(
                 this,
-                GameActivity::class.java
+                TransitionGameActivity::class.java
             )
             startActivity(myIntent)
         }

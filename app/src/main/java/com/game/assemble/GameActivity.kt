@@ -1,6 +1,7 @@
 package com.game.assemble
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -238,10 +239,20 @@ class GameActivity : AppCompatActivity() {
         heartsRemaining = sharedPrefs.getString("heartsRemaining", "HH")!!
         instrList = stringToInstrList(sharedPrefs.getString("instrList","")!!)
 
+        if (intent.getIntExtra("roundNumber", -1) != -1) {
+            round = intent.getIntExtra("roundNumber", -1)
+        }
+        else {
+            round = sharedPrefs.getInt("roundNumber", 1)
+        }
+
         // currentTask = sharedPrefs.getString("currentTask", sim.generateTask())!!
         if (sharedPrefs.contains("gameTaskId")) {
             val id = sharedPrefs.getString("gameTaskId", "0")?.toInt()
             sim.generateTask(id)
+        }
+        else if (intent.getIntExtra("taskId", -1) != -1) {
+            sim.generateTask(intent.getIntExtra("taskId", -1))
         }
         else {
             sim.generateTask()
@@ -517,51 +528,95 @@ class GameActivity : AppCompatActivity() {
                     }
                 }.await()
                 delay(1000)
+
+                var playerWinRound = true
                 if (res != "Success!" && res != "Failed!") {
                     infoTypewriter.appendText(res + "\n")
-                    return@launch
+                    findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
+                    playerWinRound = false
                 }
                 infoTypewriter.appendText("Obtained output: \n" + (sim.gameTask["obtained"]).toString() + "\n\n")
                 infoTypewriter.appendText(res + "\n")
                 if (res != "Success!") {
                     findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
-                    return@launch
+                    playerWinRound = false
                 }
-                for (i in 0..<10) {
-                    delay(1000)
-                    infoTypewriter.clearText()
-                    sim.generateTask(sim.gameTask["id"] as Int)
-                    infoTypewriter.appendText("Hidden test case " + (i + 1).toString() + ": \n\n")
-                    infoTypewriter.appendText("Expected output: \n" + (sim.gameTask["goal"]).toString() + "\n\n")
-                    res = async {
-                        withContext(Dispatchers.Default) {
-                            sim.validateTask(instrList)
+
+                if (playerWinRound) {
+                    for (i in 0..<10) {
+                        delay(1000)
+                        infoTypewriter.clearText()
+                        sim.generateTask(sim.gameTask["id"] as Int)
+                        infoTypewriter.appendText("Hidden test case " + (i + 1).toString() + ": \n\n")
+                        infoTypewriter.appendText("Expected output: \n" + (sim.gameTask["goal"]).toString() + "\n\n")
+                        res = async {
+                            withContext(Dispatchers.Default) {
+                                sim.validateTask(instrList)
+                            }
+                        }.await()
+                        delay(1000)
+                        if (res != "Success!" && res != "Failed!") {
+                            playerWinRound = false
+                            findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
+                            infoTypewriter.appendText(res + "\n")
+                            break
                         }
-                    }.await()
-                    delay(1000)
-                    if (res != "Success!" && res != "Failed!") {
+                        infoTypewriter.appendText("Obtained output: \n" + (sim.gameTask["obtained"]).toString() + "\n\n")
                         infoTypewriter.appendText(res + "\n")
-                        return@launch
-                    }
-                    infoTypewriter.appendText("Obtained output: \n" + (sim.gameTask["obtained"]).toString() + "\n\n")
-                    infoTypewriter.appendText(res + "\n")
-                    if (res != "Success!") {
-                        findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
-                        return@launch
+                        if (res != "Success!") {
+                            playerWinRound = false
+                            findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
+                            break
+                        }
                     }
                 }
                 findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
+                if (playerWinRound) {
+                    Log.i("playerWinRound", playerWinRound.toString())
+                    val intent = Intent(this@GameActivity, TransitionGameActivity::class.java)
+                    intent.putExtra("roundNumber", round + 1)
+                    withContext(Dispatchers.Main) {
+                        startActivity(intent)
+                    }
+                }
+                else if (heartsRemaining.isNotEmpty()) {
+                    Log.i("playerWinRound", heartsRemaining.toString())
+                    heartsRemaining = heartsRemaining.dropLast(1)
+                    findViewById<TextView>(R.id.gameInfoHeartsRemaining).text = "<3".repeat(heartsRemaining.length + 1)
+
+                    // reset mips regs (otherwise this causes some error in sim.validateTask())
+                    val taskId = sim.gameTask.info["id"] as Int
+                    sim = MIPSSimulator(this@GameActivity)
+                    sim.generateTask(taskId)
+                }
+                else {
+                    Log.i("playerWinRound", "should be game over")
+                    // clear out saved data
+                    val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+                    val editor = sharedPreferences.edit()
+
+                    for(key in arrayOf("heartsRemaining", "instrList", "gameTaskId", "instrR", "instrIJ", "roundNumber")) {
+                        editor.remove(key)
+                    }
+
+                    // game over
+                    val intent = Intent(this@GameActivity, GameOverActivity::class.java)
+                    withContext(Dispatchers.Main) {
+                        startActivity(intent)
+                    }
+                }
             }
         }
         taskButton.setOnClickListener {
             taskButton.isClickable = false
-            this.findViewById<TextView>(R.id.gameInfoTitleTextView).text = "Task Description"
-            this.findViewById<LinearLayout>(R.id.gameInfoLayout).visibility = View.VISIBLE
-            this.findViewById<LinearLayout>(R.id.gameMainLayout).visibility = View.GONE
+            findViewById<TextView>(R.id.gameInfoTitleTextView).text = "Task Description"
+            findViewById<LinearLayout>(R.id.gameInfoLayout).visibility = View.VISIBLE
+            findViewById<LinearLayout>(R.id.gameMainLayout).visibility = View.GONE
             infoTypewriter.animateText(sim.gameTask["text"] as String)
         }
 
         findViewById<TextView>(R.id.gameRoundTextView).text = "Round $round"
+        findViewById<TextView>(R.id.gameInfoHeartsRemaining).text = "<3".repeat(heartsRemaining.length + 1)
 
         // by default, only have the registerLayout visible
         switchKeyboardLayout(R.id.registersKeyboardLayout)
@@ -575,7 +630,7 @@ class GameActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 
-        for(key in arrayOf("heartsRemaining", "instrList", "gameTaskId", "instrR", "instrIJ")) {
+        for(key in arrayOf("heartsRemaining", "instrList", "gameTaskId", "instrR", "instrIJ", "roundNumber")) {
             editor.remove(key)
         }
         if (heartsRemaining.isNotEmpty()) {
@@ -586,6 +641,8 @@ class GameActivity : AppCompatActivity() {
 
             editor.putString("instrR", stringArrayToRegList(keyboardData[0]))
             editor.putString("instrIJ", stringArrayToRegList(keyboardData[1]))
+
+            editor.putInt("roundNumber", round)
         }
         editor.apply()
     }

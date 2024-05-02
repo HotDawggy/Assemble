@@ -92,10 +92,13 @@ class MIPSSimulator(
         when (gameTask.info["id"]) {
             0 -> {  // LCM of a0, a1, return in v0
                 regs["\$a0"] = (4..999).random()
-                regs["\$a1"] = (4..999).random()
+                // regs["\$a1"] = (4..999).random()
+                // TODO: REVERT THIS
+                regs["\$a1"] = 1
                 gameTask["goal"] = gameTask.findLCM(regs["\$a0"], regs["\$a1"])
                 gameTask["input1"] = regs["\$a0"]
                 gameTask["input2"] = regs["\$a1"]
+                gameTask["text"] = "PLACEHOLDER: LCM of a0, a1, return in v0"
             }
             1 -> {  // Sort array in ascending order
                 regs["\$a0"] = stack.size + STACK_START
@@ -106,6 +109,7 @@ class MIPSSimulator(
                     addToStack(convertIntToByteArray((-999..999).random()), stack.size, 4)
                 }
                 gameTask["goal"] = stack.copyOfRange(gameTask["addr"] as Int, (gameTask["addr"] as Int) + (gameTask["size"] as Int) - 1).sort()
+                gameTask["text"] = "PLACEHOLDER: Sort array in ascending order"
             }
             2 -> {  // GCD of a0, a1, return in v0
                 regs["\$a0"] = (4..999).random()
@@ -113,6 +117,7 @@ class MIPSSimulator(
                 gameTask["goal"] = gameTask.findGCD(regs["\$a0"], regs["\$a1"])
                 gameTask["input1"] = regs["\$a0"]
                 gameTask["input2"] = regs["\$a1"]
+                gameTask["text"] = "PLACEHOLDER: GCD of a0, a1, return in v0"
             }
         }
         //Log.i("generateTask()", "Returning...")
