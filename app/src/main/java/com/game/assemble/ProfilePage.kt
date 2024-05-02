@@ -2,6 +2,9 @@ package com.game.assemble
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -25,10 +28,20 @@ class ProfilePage : AppCompatActivity() {
         else {
             usernameEditText.setText(savedUsername)
         }
+        usernameEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                sharedPrefs.edit().putString("username", usernameEditText.text.toString()).apply()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
 
         // init high score
         val highScoreTextView: TextView = findViewById(R.id.profilePageHighScore)
-        highScoreTextView.text = "High Score: " + sharedPrefs.getString("highScore", "0")
+        highScoreTextView.text = "High Score: " + sharedPrefs.getInt("highScore", 0)
 
         // init games played
         val gamesPlayedTextView: TextView = findViewById(R.id.profilePageGamesPlayedCount)
@@ -36,6 +49,20 @@ class ProfilePage : AppCompatActivity() {
 
         // init fav asm instruction
         val famAsmTextView: TextView = findViewById(R.id.profilePageFavAsm)
-        famAsmTextView.text = "You used ${sharedPrefs.getString("favAsm", "XOR")} ${sharedPrefs.getInt("favAsmCount", 0)} times!"
+        var regList = mutableListOf<String>()
+        regList += resources.getStringArray(R.array.instr_r)
+        regList += resources.getStringArray(R.array.instr_i)
+        regList += resources.getStringArray(R.array.instr_j)
+
+        var favOp = "Nothing"
+        var favCount = 0
+        for(op in regList) {
+            val usedCount = sharedPrefs.getInt(op, 0)
+            if (usedCount > favCount) {
+                favCount = usedCount
+                favOp = op
+            }
+        }
+        famAsmTextView.text = "You used $favOp $favCount times!"
     }
 }

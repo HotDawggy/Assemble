@@ -25,6 +25,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.math.max
 
 class GameActivity : AppCompatActivity() {
 
@@ -573,6 +574,24 @@ class GameActivity : AppCompatActivity() {
                 findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
                 if (playerWinRound) {
                     Log.i("playerWinRound", playerWinRound.toString())
+
+                    // update stats (fav instr)
+                    for(instruction in instrList) {
+                        val op = instruction[0]!!.removePrefix("\t").removeSuffix(":")
+                        var regList = mutableListOf<String>()
+                        regList += resources.getStringArray(R.array.instr_r)
+                        regList += resources.getStringArray(R.array.instr_i)
+                        regList += resources.getStringArray(R.array.instr_j)
+                        if (op in regList) {
+                            val editor = sharedPrefs.edit()
+                            editor.putInt(op, sharedPrefs.getInt(op, 0) + 1) // inefficient but probably fine
+                            editor.commit()
+                        }
+                    }
+
+                    // update high score
+                    sharedPrefs.edit().putInt("highScore", max(round, sharedPrefs.getInt("highScore", 0))).apply()
+
                     val intent = Intent(this@GameActivity, TransitionGameActivity::class.java)
                     intent.putExtra("roundNumber", round + 1)
                     withContext(Dispatchers.Main) {
@@ -598,6 +617,10 @@ class GameActivity : AppCompatActivity() {
                     for(key in arrayOf("heartsRemaining", "instrList", "gameTaskId", "instrR", "instrIJ", "roundNumber")) {
                         editor.remove(key)
                     }
+
+                    // update games played
+                    sharedPreferences.edit().putInt("gamesPlayed",
+                        sharedPreferences.getInt("gamesPlayed", 0) + 1).apply()
 
                     // game over
                     val intent = Intent(this@GameActivity, GameOverActivity::class.java)
