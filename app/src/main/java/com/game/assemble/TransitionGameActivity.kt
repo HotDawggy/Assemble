@@ -2,6 +2,7 @@ package com.game.assemble
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
@@ -43,6 +44,7 @@ class TransitionGameActivity : AppCompatActivity() {
             }
         })
 
+        Log.i("THIS IS A LOG CALL", getSharedPreferences("MyPrefs", MODE_PRIVATE).getString("instrList", "NOTHING SAVED")!!)
     }
 
     override fun onPause() {

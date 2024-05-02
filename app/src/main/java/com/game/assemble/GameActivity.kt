@@ -242,6 +242,7 @@ class GameActivity : AppCompatActivity() {
 
         heartsRemaining = sharedPrefs.getString("heartsRemaining", "HH")!!
         instrList = stringToInstrList(sharedPrefs.getString("instrList","")!!)
+        Log.i("somehowSaved", sharedPrefs.getString("instrList", "NOT ACTUALLY SAVED")!!)
         if (instrList.isEmpty()) {
             instrList += Instruction()
         }
@@ -598,6 +599,7 @@ class GameActivity : AppCompatActivity() {
                     for(key in arrayOf("heartsRemaining", "instrList", "gameTaskId", "instrR", "instrIJ", "roundNumber")) {
                         editor.remove(key)
                     }
+                    editor.commit()
 
                     // remove instructions
                     for(instruction in instrList) {
@@ -612,6 +614,9 @@ class GameActivity : AppCompatActivity() {
 
                     editor.apply()
 
+                    instrList.clear()
+                    instructionLinearLayout.removeAllViews()
+
                     val intent = Intent(this@GameActivity, TransitionGameActivity::class.java)
                     intent.putExtra("roundNumber", round + 1)
                     withContext(Dispatchers.Main) {
@@ -621,7 +626,7 @@ class GameActivity : AppCompatActivity() {
                 else if (heartsRemaining.isNotEmpty()) {
                     Log.i("playerWinRound", heartsRemaining.toString())
                     heartsRemaining = heartsRemaining.dropLast(1)
-                    findViewById<TextView>(R.id.gameInfoHeartsRemaining).text = "<3".repeat(heartsRemaining.length + 1)
+                    findViewById<TextView>(R.id.gameInfoHeartsRemaining).text = "♥".repeat(heartsRemaining.length + 1)
 
                     // reset mips regs (otherwise this causes some error in sim.validateTask())
                     val taskId = sim.gameTask.info["id"] as Int
