@@ -244,6 +244,7 @@ class GameActivity : AppCompatActivity() {
         instrList = stringToInstrList(sharedPrefs.getString("instrList","")!!)
         Log.i("somehowSaved", sharedPrefs.getString("instrList", "NOT ACTUALLY SAVED")!!)
         if (instrList.isEmpty()) {
+            instrList += Instruction(arrayOf("main:"))
             instrList += Instruction()
         }
 
