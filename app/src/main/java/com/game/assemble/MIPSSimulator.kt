@@ -216,10 +216,18 @@ class MIPSSimulator(
                     regs[instr[1]] = regs[instr[2]] and (regs[instr[3]])
                 }
                 "div" -> {
+                    if (regs[instr[2]] == 0) {
+                        regs = savedRegs
+                        return "Divide by zero exception!"
+                    }
                     regs["\$hi"] = regs[instr[1]] % regs[instr[2]]
                     regs["\$lo"] = regs[instr[1]].floorDiv(regs[instr[2]])
                 }
                 "divu" -> {
+                    if (regs[instr[2]] == 0) {
+                        regs = savedRegs
+                        return "Divide by zero exception!"
+                    }
                     regs["\$hi"] = (regs[instr[1]].toUInt() % regs[instr[2]].toUInt()).toInt()
                     regs["\$lo"] = ((regs[instr[1]]).toUInt().floorDiv(regs[instr[2]].toUInt())).toInt()
                 }
