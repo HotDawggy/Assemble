@@ -574,6 +574,8 @@ class GameActivity : AppCompatActivity() {
                         }
                     }
                 }
+
+                delay(1000)
                 findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
                 if (playerWinRound) {
                     Log.i("playerWinRound", playerWinRound.toString())
