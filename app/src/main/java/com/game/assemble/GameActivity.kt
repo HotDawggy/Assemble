@@ -257,14 +257,18 @@ class GameActivity : AppCompatActivity() {
 
         // currentTask = sharedPrefs.getString("currentTask", sim.generateTask())!!
         if (sharedPrefs.contains("gameTaskId")) {
-            val id = sharedPrefs.getInt("gameTaskId", 0)?.toInt()
+            val id = sharedPrefs.getInt("gameTaskId", 0)!!
+            sim.gameTask.setTask(id)
             sim.generateTask(id)
         }
         else if (intent.getIntExtra("taskId", -1) != -1) {
-            sim.generateTask(intent.getIntExtra("taskId", -1))
+            val id = intent.getIntExtra("taskId", -1)
+            sim.gameTask.setTask(id)
+            sim.generateTask(id)
         }
         else {
-            sim.generateTask()
+            val id = sim.gameTask.getRandomTask()
+            sim.generateTask(id)
         }
 
         instructionLinearLayout = findViewById<LinearLayout>(R.id.gameInstructionLinearLayout)
@@ -547,6 +551,7 @@ class GameActivity : AppCompatActivity() {
                         for (i in 0..<10) {
                             delay(1000)
                             infoTypewriter.clearText()
+                            sim.gameTask.setTask(sim.gameTask["id"] as Int)
                             sim.generateTask(sim.gameTask["id"] as Int)
                             infoTypewriter.appendText("Hidden test case " + (i + 1).toString() + ": \n\n")
                             infoTypewriter.appendText("Expected output: \n" + (sim.gameTask["goal"]).toString() + "\n\n")
@@ -627,6 +632,7 @@ class GameActivity : AppCompatActivity() {
                     // reset mips regs (otherwise this causes some error in sim.validateTask())
                     val taskId = sim.gameTask.info["id"] as Int
                     sim = MIPSSimulator(this@GameActivity)
+                    sim.gameTask.setTask(taskId)
                     sim.generateTask(taskId)
                 }
                 else {
