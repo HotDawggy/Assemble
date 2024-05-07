@@ -137,7 +137,7 @@ class MIPSSimulator(
                 gameTask["input1"] = regs["\$a0"]
                 regs["\$a1"] = stack.size + STACK_START
                 gameTask["addr"] = stack.size;
-                //gameTask["goal"] = gameTask.findPrimeList(regs["\$a0"])
+                gameTask["goal"] = gameTask.findPrimeList(regs["\$a0"])
             }
             5 -> {
                 regs["\$a0"] = (100..999).random()

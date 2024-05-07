@@ -36,6 +36,23 @@ class GameTask(context: Context) {
         }
         return num1
     }
+
+    fun findPrimeList(_n: Int): MutableList<Int> {
+        var res = mutableListOf<Int>()
+        var n = _n
+
+        var p: Int = 2
+        while(p * p <= n) {
+            while(n % p == 0) {
+                res.add(p)
+                n /= p
+            }
+            p += 1
+        }
+        if (n > 1) res.add(n)
+        return res
+    }
+
     operator fun get(key: String) : Any? {
         Log.d("GameTask", key)
         Log.d("GameTask", info.containsKey(key).toString())
