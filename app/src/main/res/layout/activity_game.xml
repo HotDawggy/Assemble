@@ -38,8 +38,7 @@
 
             <ImageButton
                 android:id="@+id/gameInfoExit"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@android:drawable/ic_delete"
                 app:tint="@color/white" />
@@ -101,14 +100,6 @@
                     android:text="Round"
                     android:textAllCaps="true" />
 
-                <ImageButton
-                    android:id="@+id/buttonToEncyclopedia"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="0.4"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/bok" />
-
                 <TextView
                     android:id="@+id/gameInfoHeartsRemaining"
                     android:layout_width="0dp"
@@ -119,6 +110,14 @@
                     android:textAlignment="center"
                     android:textColor="@color/teal_700"
                     android:textSize="20sp" />
+
+                <ImageButton
+                    android:id="@+id/buttonToEncyclopedia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/theme3"
+                    android:scaleType="centerInside"
+                    android:src="@android:drawable/ic_dialog_map" />
 
                 <ImageButton
                     android:id="@+id/gameTaskButton"

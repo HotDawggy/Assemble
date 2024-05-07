@@ -1,6 +1,7 @@
 package com.game.assemble
 import android.content.Context
 import android.util.Log
+import okhttp3.internal.toHexString
 import java.util.Calendar
 import kotlin.random.Random
 
@@ -26,7 +27,7 @@ class MIPSSimulator(
         return null
     }
     private fun parseStackAddress(addr: Int) : Int? {
-        val temp = STACK_START - addr - 1
+        val temp = STACK_START - addr
         return if (temp < 0) {
             null
         } else {
@@ -56,29 +57,38 @@ class MIPSSimulator(
         }
         return result
     }
-    private fun addToStack(bytes: ByteArray, index: Int, size: Int, updateSp: Boolean = false) {
-        var temp = index
-        Log.i("addToStack", stack.toString())
-        //printStack()
-        for (i in 0..< size) {
-            if (temp >= stack.size) stack + byteArrayOf((bytes[i]))
-            else stack[index] = bytes[i]
-            temp++
-            if (updateSp) regs["\$sp"] = regs["\$sp"] - 1
+    private fun modifyStackInPlace(bytes: ByteArray, size: Int, index: Int) {
+        for (i in 0..<size) {
+            stack[i + index] = bytes[i]
         }
+    }
+    private fun addToStack(bytes: ByteArray, size: Int, index: Int? = null, updateSp: Boolean = false) {
+        fun ByteArray.toHexString() = joinToString("") { "%02x".format(it) }
+        //Log.d("addToStack", bytes.toHexString())
+        //Log.d("addToStack", stack.size.toString())
+        //printStack()
+        if (index == null) stack += bytes
+        else modifyStackInPlace(bytes, size, index)
+        if (updateSp) regs["\$sp"] = regs["\$sp"] - size
+        //printStack()
+        //Log.d("addToStack", "sp: " + regs["\$sp"].toHexString())
     }
     private fun convertIntToByteArray(input : Int) : ByteArray {
-        var temp = input
-        var res = byteArrayOf()
-        for (i in 0..3) {
-            res = byteArrayOf((temp.toByte())) + byteArrayOf()
-            temp = temp ushr 8
-        }
+        Log.d("convertIntToByteArray", input.toString())
+        val res = ByteArray(4)
+        for (i in 0..3) res[i] = (input shr (i*8)).toByte()
+        fun ByteArray.toHexString() = joinToString("") { "%02x".format(it) }
+        //Log.d("convertIntToByteArray", res.toHexString())
         return res
     }
+    private fun convertByteArrayToInt(buffer: ByteArray, offset: Int): Int {
+        return (buffer[offset + 3].toInt() shl 24) or
+                (buffer[offset + 2].toInt() and 0xff shl 16) or
+                (buffer[offset + 1].toInt() and 0xff shl 8) or
+                (buffer[offset + 0].toInt() and 0xff)
+    }
 
-
-    fun printStack() {
+    private fun printStack() {
         Log.d("printStack", "Printing Stack")
         Log.d("printStack", "Size: " + stack.size.toString())
         for (byte in stack) {
@@ -88,28 +98,39 @@ class MIPSSimulator(
 
     fun generateTask(id: Int? = null) : String {
         //Log.i("generateTask()", "Generating task...")
-        gameTask.info["id"] = id?:gameTask.getRandomTask()
+        if (id == null) gameTask.getRandomTask()
+        else gameTask.setTask(id)
+        Log.d("generateTask()", (id ?: -1).toString())
         //gameTask.info["id"] = id?:0
         //Log.i("generateTask()", "Obtained task ID " + gameTask.info["id"].toString() + "...")
-        when (gameTask.info["id"]) {
+        when (gameTask.info["id"] as Int) {
             0 -> {  // LCM of a0, a1, return in v0
                 regs["\$a0"] = (4..999).random()
-                // regs["\$a1"] = (4..999).random()
+                regs["\$a1"] = (4..999).random()
                 // TODO: REVERT THIS
-                regs["\$a1"] = 1
+                //regs["\$a1"] = 1
                 gameTask["goal"] = gameTask.findLCM(regs["\$a0"], regs["\$a1"])
                 gameTask["input1"] = regs["\$a0"]
                 gameTask["input2"] = regs["\$a1"]
             }
             1 -> {  // Sort array in ascending order
+                Log.d("MIPSSimulator generateTask()", "generating task id 1")
                 regs["\$a0"] = stack.size + STACK_START
                 gameTask["addr"] = stack.size
                 regs["\$a1"] = (5..20).random()
                 gameTask["size"] = regs["\$a1"]
+                val tempList = mutableListOf<Int>()
                 for (i in (0..<regs["\$a1"])) {
-                    addToStack(convertIntToByteArray((-999..999).random()), stack.size, 4, true)
+                    Log.d("MIPSSimulator generateTask()", "adding to stack")
+                    val temp = (-999..999).random()
+                    tempList.add(temp)
+                    addToStack(convertIntToByteArray(temp), 4, updateSp = true)
                 }
-                gameTask["goal"] = stack.copyOfRange(gameTask["addr"] as Int, (gameTask["addr"] as Int) + (gameTask["size"] as Int) - 1).sort()
+                (tempList).sort()
+                for (num in tempList) {
+                    Log.d("printGoal", num.toString())
+                }
+                gameTask["goal"] = tempList
             }
             2 -> {  // GCD of a0, a1, return in v0
                 regs["\$a0"] = (4..999).random()
@@ -141,6 +162,8 @@ class MIPSSimulator(
                 regs["\$a0"] = (100..999).random()
                 gameTask["input1"] = regs["\$a0"]
                 //gameTask["goal"] = gameTask.findPrimeList(regs["\$a0"]).sort()
+                val primeList = gameTask.findPrimeList(regs["\$a0"]).also { it.sort() }
+                gameTask["goal"] = primeList[primeList.size - 1]
             }
             6 -> {
                 val charPool = "abcdefghijklmnopqrstuvwxyz0123456789"
@@ -149,16 +172,17 @@ class MIPSSimulator(
                 val arr1 = (1..(5..10).random()).map{
                     Random.nextInt(0, charPool.length).let { charPool[it] }
                 }.joinToString("").toByteArray()
-                addToStack(arr1, stack.size, arr1.size, true)
+                addToStack(arr1, stack.size, updateSp = true)
                 regs["\$a1"] = stack.size + STACK_START
                 val arr2 = listOf((1..(5..10).random()).map{
                     Random.nextInt(0, charPool.length).let { charPool[it] }
                 }.joinToString("").toByteArray(), arr1).random()
-                addToStack(arr2, stack.size, arr2.size, true)
+                addToStack(arr2, stack.size, updateSp = true)
                 gameTask["goal"] = if (arr1.contentEquals(arr2)) 1 else 0
             }
         }
         //Log.i("generateTask()", "Returning...")
+        Log.d("generateTask()", gameTask["goal"].toString())
         return gameTask["text"].toString()
     }
     fun validateTask(instrList: MutableList<Instruction>) : String {
@@ -181,8 +205,17 @@ class MIPSSimulator(
             }
 
             1 -> {  // Sort array in ascending order
-                for (j in (gameTask["addr"] as Int)..<(gameTask["addr"] as Int) + (gameTask["size"] as Int) - 1) {
-                    if (stack[j].toInt() > stack[j + 1].toInt()) return "Failed!"
+                val temp = mutableListOf<Int>()
+                for (j in 0..<(gameTask["size"] as Int)) {
+                    temp.add(convertByteArrayToInt(stack, (gameTask["addr"] as Int) + 4 * j))
+                }
+                gameTask["obtained"] = temp
+                for (j in 0..<(gameTask["size"] as Int)) {
+                    try {
+                        if (convertByteArrayToInt(stack, (gameTask["addr"] as Int) + 4 * j) != (gameTask["goal"] as MutableList<Int>)[j]) return "Failed"
+                    } catch (e: Exception) {
+                        return "Failed!"
+                    }
                 }
             }
 
@@ -195,14 +228,21 @@ class MIPSSimulator(
 
             3 -> {
                 for (j in 0..<(gameTask["size"] as Int)) {
-                    if (stack[j + gameTask["addr"] as Int].toInt() != (gameTask["goal"] as MutableList<Int>)[j]) return "Failed";
+                    if (stack[j + gameTask["addr"] as Int].toInt() != (gameTask["goal"] as MutableList<Int>)[j]) return "Failed!";
                 }
             }
             4 -> {
-
+                for (j in (gameTask["addr"] as Int)..<(gameTask["addr"] as Int) + (gameTask["size"] as Int) - 1) {
+                    if (stack[j].toInt() in gameTask["goal"] as MutableList<Int>) (gameTask["goal"] as MutableList<Int>).remove(stack[j].toInt())
+                    else return "Failed!"
+                }
+                if ((gameTask["goal"] as MutableList<Int>).size != 0) return "Failed!"
             }
             5 -> {
-
+                gameTask["obtained"] = regs["\$v0"].toString()
+                if (regs["\$v0"] != gameTask["goal"] as Int) {
+                    return "Failed!"
+                }
             }
             6 -> {
                 gameTask["obtained"] = regs["\$v0"].toString()
@@ -547,8 +587,8 @@ class MIPSSimulator(
                         regs = savedRegs
                         return "Invalid stack address"
                     }
-                    val tempArr = byteArrayOf((regs[instr[1]] shl 24 ushr 24).toByte())
-                    addToStack(tempArr, temp, 1)
+                    val tempArr = convertIntToByteArray(regs[instr[1]])
+                    addToStack(tempArr, 1, temp)
                 }
 
                 "sh" -> {   // sh
@@ -557,11 +597,8 @@ class MIPSSimulator(
                         regs = savedRegs
                         return "Invalid stack address"
                     }
-                    val tempArr = byteArrayOf(
-                        (regs[instr[1]] shl 16 ushr 24).toByte(),
-                        (regs[instr[1]] shl 24 ushr 24).toByte()
-                    )
-                    addToStack(tempArr, temp, 2)
+                    val tempArr = convertIntToByteArray(regs[instr[1]])
+                    addToStack(tempArr, 2, temp)
                 }
 
                 "sw" -> {   // sw
@@ -570,13 +607,8 @@ class MIPSSimulator(
                         regs = savedRegs
                         return "Invalid stack address"
                     }
-                    val tempArr = byteArrayOf(
-                        (regs[instr[1]] ushr 24).toByte(),
-                        (regs[instr[1]] shl 8 ushr 24).toByte(),
-                        (regs[instr[1]] shl 16 ushr 24).toByte(),
-                        (regs[instr[1]] shl 24 ushr 24).toByte()
-                    )
-                    addToStack(tempArr, temp, 4)
+                    val tempArr = convertIntToByteArray(regs[instr[1]])
+                    addToStack(tempArr, 4, temp)
                 }
                 "xor" -> {
                     regs[instr[1]] = regs[instr[2]] xor regs[instr[3]]

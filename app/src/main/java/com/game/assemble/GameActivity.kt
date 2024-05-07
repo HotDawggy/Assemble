@@ -523,6 +523,7 @@ class GameActivity : AppCompatActivity() {
             }
             var res = ""
             lifecycleScope.launch {
+                val taskID = sim.gameTask["id"] as Int
                 infoTypewriter.appendText("Known test case: \n\n")
                 infoTypewriter.appendText("Expected output: \n" + (sim.gameTask["goal"]).toString() + "\n\n")
                 res = async {
@@ -538,44 +539,40 @@ class GameActivity : AppCompatActivity() {
                     findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
                     playerWinRound = false
                 }
-
+                if (res != "Success!") {
+                    findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
+                    playerWinRound = false
+                }
+                infoTypewriter.appendText("Obtained output: \n" + (sim.gameTask["obtained"]).toString() + "\n\n")
+                infoTypewriter.appendText(res + "\n")
                 if (playerWinRound) {
-                    infoTypewriter.appendText("Obtained output: \n" + (sim.gameTask["obtained"]).toString() + "\n\n")
-                    infoTypewriter.appendText(res + "\n")
-                    if (res != "Success!") {
-                        findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
-                        playerWinRound = false
-                    }
+                    for (i in 0..<10) {
+                        delay(1000)
+                        infoTypewriter.clearText()
 
-                    if (playerWinRound) {
-                        for (i in 0..<10) {
-                            delay(1000)
-                            infoTypewriter.clearText()
-                            sim.gameTask.setTask(sim.gameTask["id"] as Int)
-                            sim.generateTask(sim.gameTask["id"] as Int)
-                            infoTypewriter.appendText("Hidden test case " + (i + 1).toString() + ": \n\n")
-                            infoTypewriter.appendText("Expected output: \n" + (sim.gameTask["goal"]).toString() + "\n\n")
-                            res = async {
-                                withContext(Dispatchers.Default) {
-                                    sim.validateTask(instrList)
-                                }
-                            }.await()
-                            delay(1000)
-                            if (res != "Success!" && res != "Failed!") {
-                                playerWinRound = false
-                                findViewById<ImageButton>(R.id.gameInfoExit).visibility =
-                                    View.VISIBLE
-                                infoTypewriter.appendText(res + "\n")
-                                break
+                        sim = MIPSSimulator(this@GameActivity)
+                        sim.generateTask(taskID)
+                        infoTypewriter.appendText("Hidden test case " + (i + 1).toString() + ": \n\n")
+                        infoTypewriter.appendText("Expected output: \n" + (sim.gameTask["goal"]).toString() + "\n\n")
+                        res = async {
+                            withContext(Dispatchers.Default) {
+                                sim.validateTask(instrList)
                             }
-                            infoTypewriter.appendText("Obtained output: \n" + (sim.gameTask["obtained"]).toString() + "\n\n")
-                            infoTypewriter.appendText(res + "\n")
-                            if (res != "Success!") {
-                                playerWinRound = false
-                                findViewById<ImageButton>(R.id.gameInfoExit).visibility =
-                                    View.VISIBLE
-                                break
-                            }
+                        }.await()
+                        delay(1000)
+                        infoTypewriter.appendText("Obtained output: \n" + (sim.gameTask["obtained"]).toString() + "\n\n")
+                        infoTypewriter.appendText(res + "\n")
+                        if (res != "Success!" && res != "Failed!") {
+                            playerWinRound = false
+                            findViewById<ImageButton>(R.id.gameInfoExit).visibility =
+                                View.VISIBLE
+                            break
+                        }
+                        if (res != "Success!") {
+                            playerWinRound = false
+                            findViewById<ImageButton>(R.id.gameInfoExit).visibility =
+                                View.VISIBLE
+                            break
                         }
                     }
                 }
@@ -632,7 +629,6 @@ class GameActivity : AppCompatActivity() {
                     // reset mips regs (otherwise this causes some error in sim.validateTask())
                     val taskId = sim.gameTask.info["id"] as Int
                     sim = MIPSSimulator(this@GameActivity)
-                    sim.gameTask.setTask(taskId)
                     sim.generateTask(taskId)
                 }
                 else {
@@ -691,6 +687,21 @@ class GameActivity : AppCompatActivity() {
         // TODO: REMOVE SOON
         val heartsButton: TextView = findViewById<TextView>(R.id.gameInfoHeartsRemaining)
         heartsButton.setOnClickListener {
+            /*
+            instrList = mutableListOf(Instruction((arrayOf("main:"))))
+            instrList += Instruction(arrayOf("addi", "\$t0", "\$zero", ""))
+            instrList += Instruction(arrayOf("addi", "\$t1", "\$zero", ""))
+            instrList += Instruction(arrayOf("addi", "\$t2", "\$zero", ""))
+            instrList += Instruction(arrayOf("addi", "\$t3", "\$zero", ""))
+            instrList += Instruction(arrayOf("addi", "\$s0", "\$zero", ""))
+            instrList += Instruction(arrayOf("sw", "\$t0", "20", "\$sp"))
+            instrList += Instruction(arrayOf("sw", "\$t1", "16", "\$sp"))
+            instrList += Instruction(arrayOf("sw", "\$t2", "12", "\$sp"))
+            instrList += Instruction(arrayOf("sw", "\$t3", "8", "\$sp"))
+            instrList += Instruction(arrayOf("sw", "\$s0", "4", "\$sp"))
+            instrList += Instruction(arrayOf("j", "exit"))
+            */
+
             instrList = mutableListOf(Instruction((arrayOf("main:"))))
             instrList += Instruction(arrayOf("and", "\$v0", "\$v0", "\$zero"))
             instrList += Instruction(arrayOf("multiply:"))
