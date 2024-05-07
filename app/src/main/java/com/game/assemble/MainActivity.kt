@@ -2,6 +2,8 @@ package com.game.assemble
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -17,12 +19,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<Typewriter>(R.id.homeAuthorTypewriter).also { it.setDelay(10) ; it.animateText("A game by Sam and Kenneth!") }
         val gameButton = findViewById<Typewriter>(R.id.homePageGameButton).also {
             it.setDelay(50)
-            if (sharedPrefs.contains("roundNumber")) {
-                it.animateText("Resume Game")
-            }
-            else {
-                it.animateText("New Game")
-            }
+            it.animateText("New Game")
         }
         val leaderboardButton = findViewById<Typewriter>(R.id.homePageLeaderboardButton).also {
             it.setDelay(50)
@@ -37,7 +34,31 @@ class MainActivity : AppCompatActivity() {
             it.animateText("Encyclopedia")
         }
 
+        val continueButton = findViewById<Typewriter>(R.id.homePageContinueButton).also {
+            it.setDelay(50)
+            it.animateText("Resume Game")
+            if (!sharedPrefs.contains("roundNumber")) {
+                Log.i("MYDEBUG", "GONE")
+                it.visibility = View.GONE
+            }
+        }
+
         gameButton.setOnClickListener {
+            val editor = sharedPrefs.edit()
+            for(key in arrayOf("heartsRemaining", "instrList", "gameTaskId", "instrR", "instrIJ", "roundNumber")) {
+                editor.remove(key)
+            }
+            editor.commit()
+
+            val myIntent = Intent(
+                this,
+                TransitionGameActivity::class.java
+            )
+            myIntent.putExtra("roundNumber", 1)
+            startActivity(myIntent)
+        }
+
+        continueButton.setOnClickListener {
             val myIntent = Intent(
                 this,
                 TransitionGameActivity::class.java
