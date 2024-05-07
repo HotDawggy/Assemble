@@ -28,6 +28,11 @@ class RemoveOpsActivity : AppCompatActivity() {
         roundNumber = intent.getIntExtra("roundNumber", -1)
         if (roundNumber == -1) roundNumber = sharedPrefs.getInt("roundNumber", 1)
 
+        val editor = sharedPrefs.edit()
+        editor.remove("gameTaskId")
+        editor.remove("heartsRemaining")
+        editor.commit()
+
         val opsR = regListToStringArray(sharedPrefs.getString("instrR", "")!!)
         val opsIJ = regListToStringArray(sharedPrefs.getString("instrIJ", "")!!)
 

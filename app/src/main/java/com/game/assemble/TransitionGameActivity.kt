@@ -37,6 +37,7 @@ class TransitionGameActivity : AppCompatActivity() {
         else {
             id = sim.gameTask.getRandomTask()
             taskDescription = sim.gameTask.info["text"] as String
+            Log.i("MYDEBUG", "id is $id")
             sim.generateTask(id)
         }
 

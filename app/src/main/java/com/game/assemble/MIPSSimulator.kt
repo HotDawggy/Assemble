@@ -88,8 +88,8 @@ class MIPSSimulator(
 
     fun generateTask(id: Int? = null) : String {
         //Log.i("generateTask()", "Generating task...")
-        //gameTask.info["id"] = id?:gameTask.getRandomTask() TODO UNCOMMENT THIS
-        gameTask.info["id"] = id?:0
+        gameTask.info["id"] = id?:gameTask.getRandomTask()
+        //gameTask.info["id"] = id?:0
         //Log.i("generateTask()", "Obtained task ID " + gameTask.info["id"].toString() + "...")
         when (gameTask.info["id"]) {
             0 -> {  // LCM of a0, a1, return in v0
@@ -100,7 +100,6 @@ class MIPSSimulator(
                 gameTask["goal"] = gameTask.findLCM(regs["\$a0"], regs["\$a1"])
                 gameTask["input1"] = regs["\$a0"]
                 gameTask["input2"] = regs["\$a1"]
-                gameTask["text"] = "PLACEHOLDER: LCM of a0, a1, return in v0"
             }
             1 -> {  // Sort array in ascending order
                 regs["\$a0"] = stack.size + STACK_START
@@ -111,7 +110,6 @@ class MIPSSimulator(
                     addToStack(convertIntToByteArray((-999..999).random()), stack.size, 4, true)
                 }
                 gameTask["goal"] = stack.copyOfRange(gameTask["addr"] as Int, (gameTask["addr"] as Int) + (gameTask["size"] as Int) - 1).sort()
-                gameTask["text"] = "PLACEHOLDER: Sort array in ascending order"
             }
             2 -> {  // GCD of a0, a1, return in v0
                 regs["\$a0"] = (4..999).random()
@@ -119,7 +117,6 @@ class MIPSSimulator(
                 gameTask["goal"] = gameTask.findGCD(regs["\$a0"], regs["\$a1"])
                 gameTask["input1"] = regs["\$a0"]
                 gameTask["input2"] = regs["\$a1"]
-                gameTask["text"] = "PLACEHOLDER: GCD of a0, a1, return in v0"
             }
             3 -> {
                 regs["\$a0"] = stack.size + STACK_START
@@ -132,7 +129,6 @@ class MIPSSimulator(
                     list.add(list[i - 1] + list[i - 2])
                 }
                 gameTask["goal"] = list
-                gameTask["text"] = "PLACEHOLDER: TODO"
             }
             4 -> {
                 regs["\$a0"] = (100..999).random()
@@ -140,13 +136,11 @@ class MIPSSimulator(
                 regs["\$a1"] = stack.size + STACK_START
                 gameTask["addr"] = stack.size;
                 gameTask["goal"] = gameTask.findPrimeList(regs["\$a0"])
-                gameTask["text"] = "PLACEHOLDER: TODO"
             }
             5 -> {
                 regs["\$a0"] = (100..999).random()
                 gameTask["input1"] = regs["\$a0"]
                 //gameTask["goal"] = gameTask.findPrimeList(regs["\$a0"]).sort()
-                gameTask["text"] = "PLACEHOLDER: TODO"
             }
             6 -> {
                 val charPool = "abcdefghijklmnopqrstuvwxyz0123456789"
@@ -162,7 +156,6 @@ class MIPSSimulator(
                 }.joinToString("").toByteArray(), arr1).random()
                 addToStack(arr2, stack.size, arr2.size, true)
                 gameTask["goal"] = if (arr1.contentEquals(arr2)) 1 else 0
-                gameTask["text"] = "PLACEHOLDER: TODO"
             }
         }
         //Log.i("generateTask()", "Returning...")

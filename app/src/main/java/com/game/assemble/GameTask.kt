@@ -61,7 +61,7 @@ class GameTask(context: Context) {
     operator fun get(key: String) : Any? {
         Log.d("GameTask", key)
         Log.d("GameTask", info.containsKey(key).toString())
-        if (!info.containsKey(key)) throw(IllegalArgumentException("Invalid key"))
+        //if (!info.containsKey(key)) throw(IllegalArgumentException("Invalid key"))
         return info[key]
     }
     operator fun set(key: String, value: Any?) {
