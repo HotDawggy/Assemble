@@ -8,6 +8,7 @@ import android.widget.AdapterView
 import android.widget.Button
 import android.widget.GridView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -17,11 +18,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class RemoveOpsActivity : AppCompatActivity() {
+    private var roundNumber: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_remove_ops)
 
         val sharedPrefs = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        roundNumber = intent.getIntExtra("roundNumber", -1)
+        if (roundNumber == -1) roundNumber = sharedPrefs.getInt("roundNumber", 1)
+
         val opsR = regListToStringArray(sharedPrefs.getString("instrR", "")!!)
         val opsIJ = regListToStringArray(sharedPrefs.getString("instrIJ", "")!!)
 
@@ -30,7 +36,7 @@ class RemoveOpsActivity : AppCompatActivity() {
         var toRemove = n / 4
 
         val textView = findViewById<TextView>(R.id.removeOpsTextView)
-        textView.text = "Pick another $toRemove operator(s) to remove."
+        textView.text = "Pick another $toRemove operator(s) to be removed in round $roundNumber."
 
         val gridView = findViewById<GridView>(R.id.removeOpsGridView)
         gridView.adapter = KeyboardRemoveOpsGridViewAdapter(this, allOps.toList())
@@ -39,6 +45,7 @@ class RemoveOpsActivity : AppCompatActivity() {
         var newOpsIJ = opsIJ.toMutableList()
 
         var selected = mutableListOf<String>()
+
 
         gridView.setOnItemClickListener { parent, view, position, id ->
             val button = view as Button
@@ -60,7 +67,7 @@ class RemoveOpsActivity : AppCompatActivity() {
 
                 button.setTextColor(Color.GREEN)
             }
-            textView.text = "Pick another $toRemove operator(s) to remove."
+            textView.text = "Pick another $toRemove operator(s) to be removed in round $roundNumber."
 
             if (toRemove == 0) {
                 val editor = sharedPrefs.edit()
@@ -68,8 +75,32 @@ class RemoveOpsActivity : AppCompatActivity() {
                 editor.putString("instrR", stringArrayToRegList(newOpsR.toTypedArray()))
                 editor.putString("instrIJ", stringArrayToRegList(newOpsIJ.toTypedArray()))
                 editor.commit()
-                startActivity(Intent(this, TransitionGameActivity::class.java))
+
+                val intent = Intent(this, TransitionGameActivity::class.java)
+                intent.putExtra("roundNumber", roundNumber)
+
+                startActivity(intent)
             }
         }
+
+        onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // https://stackoverflow.com/questions/3141996/android-how-to-override-the-back-button-so-it-doesnt-finish-my-activity
+                startActivity(Intent(this@RemoveOpsActivity,MainActivity::class.java))
+                finishAffinity()
+            }
+        })
+
     }
+
+    override fun onPause() {
+        super.onPause()
+
+        val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putInt("roundNumber", roundNumber)
+        editor.remove("gameTaskId")
+        editor.commit()
+    }
+
 }

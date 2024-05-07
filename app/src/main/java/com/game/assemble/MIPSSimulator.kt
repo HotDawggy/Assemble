@@ -88,7 +88,8 @@ class MIPSSimulator(
 
     fun generateTask(id: Int? = null) : String {
         //Log.i("generateTask()", "Generating task...")
-        gameTask.info["id"] = id?:gameTask.getRandomTask()
+        //gameTask.info["id"] = id?:gameTask.getRandomTask() TODO UNCOMMENT THIS
+        gameTask.info["id"] = id?:0
         //Log.i("generateTask()", "Obtained task ID " + gameTask.info["id"].toString() + "...")
         when (gameTask.info["id"]) {
             0 -> {  // LCM of a0, a1, return in v0

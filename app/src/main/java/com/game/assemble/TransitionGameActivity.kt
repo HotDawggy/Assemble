@@ -18,12 +18,23 @@ class TransitionGameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_transition_game)
 
+        val sharedPrefs = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        roundNumber = intent.getIntExtra("roundNumber", -1)
+        if (roundNumber == -1) roundNumber = sharedPrefs.getInt("roundNumber", 1)
+
         val textView = findViewById<TextView>(R.id.transitionTextView)
-        roundNumber = intent.getIntExtra("roundNumber", 1)
 
         val sim: MIPSSimulator = MIPSSimulator(this)
-        val taskDescription = sim.generateTask()
-        id = sim.gameTask.info["id"].toString().toInt()
+        var taskDescription = ""
+
+        if (sharedPrefs.contains("id")) {
+            id = sharedPrefs.getInt("id", 0)
+            taskDescription = sim.generateTask(id)
+        }
+        else {
+            taskDescription = sim.generateTask()
+            id = sim.gameTask.info["id"].toString().toInt()
+        }
 
         textView.text = "GET READY FOR ROUND $roundNumber\nYOUR GOAL IS $taskDescription"
 

@@ -604,14 +604,6 @@ class GameActivity : AppCompatActivity() {
                     }
                     editor.commit()
 
-                    // remove instructions
-                    for(instruction in instrList) {
-                        if (instruction[0] != null) {
-                            val op = instruction[0]!!.removePrefix("\t").removeSuffix(":")
-                            removeOpFromKeyboard(op)
-                        }
-                    }
-
                     editor.putString("instrR", stringArrayToRegList(keyboardData[0]))
                     editor.putString("instrIJ", stringArrayToRegList(keyboardData[1]))
 
@@ -620,8 +612,9 @@ class GameActivity : AppCompatActivity() {
                     instrList.clear()
                     instructionLinearLayout.removeAllViews()
 
-                    val intent = Intent(this@GameActivity, TransitionGameActivity::class.java)
+                    val intent = Intent(this@GameActivity, RemoveOpsActivity::class.java)
                     intent.putExtra("roundNumber", round + 1)
+                    Log.i("MYDEBUG", "putting new round number ${round + 1}")
                     withContext(Dispatchers.Main) {
                         startActivity(intent)
                     }
