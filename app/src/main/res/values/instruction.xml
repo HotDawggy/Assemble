@@ -249,19 +249,19 @@
         <item>jal</item>
     </string-array>
     <string-array name="label_names">
-        <item>Panda</item>
-        <item>Python</item>
-        <item>Bunny</item>
-        <item>Koala</item>
-        <item>Fluffy</item>
-        <item>Snuggles</item>
-        <item>Whiskers</item>
-        <item>Puddles</item>
-        <item>Cuddles</item>
-        <item>Muffin</item>
-        <item>Snuffles</item>
         <item>Luna</item>
         <item>Fifi</item>
-        <item>Bubbles</item>
+        <item>Pudd</item>
+        <item>Muff</item>
+        <item>Bubs</item>
+        <item>Cute</item>
+        <item>Dino</item>
+        <item>Echo</item>
+        <item>Face</item>
+        <item>Glow</item>
+        <item>Hype</item>
+        <item>IvyS</item>
+        <item>Jade</item>
+        <item>Kite</item>
     </string-array>
 </resources>

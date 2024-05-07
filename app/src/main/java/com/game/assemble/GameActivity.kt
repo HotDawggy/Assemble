@@ -294,7 +294,7 @@ class GameActivity : AppCompatActivity() {
             arrayOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9"),
             arrayOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-"),
             arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9"), // TODO: dynamically set this to the number of active instruction lines
-            resources.getStringArray(R.array.label_names) + arrayOf<String>("main", "exit"),
+            arrayOf<String>("main", "exit") + resources.getStringArray(R.array.label_names),
             resources.getStringArray(R.array.label_names)
         )
         // load operators from keyboard
