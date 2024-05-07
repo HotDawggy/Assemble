@@ -14,6 +14,11 @@ class GameTask(context: Context) {
         info["text"] = taskList[idx]
         return idx
     }
+
+    fun setTask(idx: Int) {
+        info["text"] = taskList[idx]
+    }
+
     fun findLCM(a: Int, b: Int): Int {
         val larger = if (a > b) a else b
         val maxLcm = a * b

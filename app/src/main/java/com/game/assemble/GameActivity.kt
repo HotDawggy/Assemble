@@ -656,7 +656,8 @@ class GameActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.gameInfoTitleTextView).text = "Task Description"
             findViewById<LinearLayout>(R.id.gameInfoLayout).visibility = View.VISIBLE
             findViewById<LinearLayout>(R.id.gameMainLayout).visibility = View.GONE
-            infoTypewriter.animateText(sim.gameTask["text"] as String)
+            Log.i("MYDEBUG", sim.gameTask.info["text"] as String)
+            infoTypewriter.animateText(sim.gameTask.info["text"] as String)
         }
 
         findViewById<TextView>(R.id.gameRoundTextView).text = "Round $round"

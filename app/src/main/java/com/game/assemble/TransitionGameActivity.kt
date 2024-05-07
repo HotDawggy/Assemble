@@ -29,11 +29,15 @@ class TransitionGameActivity : AppCompatActivity() {
 
         if (sharedPrefs.contains("id")) {
             id = sharedPrefs.getInt("id", 0)
-            taskDescription = sim.generateTask(id)
+            sim.gameTask.setTask(id)
+            sim.generateTask(id)
+
+            taskDescription = sim.gameTask.info["text"] as String
         }
         else {
-            taskDescription = sim.generateTask()
-            id = sim.gameTask.info["id"].toString().toInt()
+            id = sim.gameTask.getRandomTask()
+            taskDescription = sim.gameTask.info["text"] as String
+            sim.generateTask(id)
         }
 
         textView.text = "GET READY FOR ROUND $roundNumber\nYOUR GOAL IS $taskDescription"
