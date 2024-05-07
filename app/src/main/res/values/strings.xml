@@ -4,7 +4,9 @@
         <item>Calculate the least common multiple of the values stored in $a0, $a1, and return it to $v0</item>
         <item>Sort the INTEGER array in the stack in ascending order. The address of the first element is stored in $a0, and the size of the array is stored in $a1. Note each integer element occupies 4 bytes!</item>
         <item>Calculate the greatest common divisor of the values stored in $a0, $a1, and return it to $v0</item>
-        <item>Find the sum of all even primes, and return it to $v0</item>
-        <item>Multiply the values stored in $a0, $a1, and return it to $v0</item>
+        <item>Generate and the first n fibonacci sequence INTEGERS onto the stack. The starting address to store the sequence is stored in $a0, and the end index n is stored in $a1. Note each integer element occupies 4 bytes!</item>
+        <item>Find all prime factors of the given value stored in $a0, and store in the address in $a1 in an INTEGER array. e.g. if input is 315, output array should be [3, 3, 5, 7] in any order. Note each integer element occupies 4 bytes!</item>
+        <item>Find the largest prime factors of the given value stored in $a0, and store in $v0.</item>
+        <item>Compare the two null-terminated CHAR array stored in the addresses in $a0 and $a1 and return the result in $v0. If the array contents are the same, return 1, else return 0; Note each char element occupies 1 bytes!</item>
     </string-array>
 </resources>

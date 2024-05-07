@@ -2,6 +2,7 @@ package com.game.assemble
 import android.content.Context
 import android.util.Log
 import java.util.Calendar
+import kotlin.random.Random
 
 const val CODE_START = 0x00400000
 const val STACK_START = 0x7ffffffc
@@ -106,7 +107,7 @@ class MIPSSimulator(
                 regs["\$a1"] = (5..20).random()
                 gameTask["size"] = regs["\$a1"]
                 for (i in (0..<regs["\$a1"])) {
-                    addToStack(convertIntToByteArray((-999..999).random()), stack.size, 4)
+                    addToStack(convertIntToByteArray((-999..999).random()), stack.size, 4, true)
                 }
                 gameTask["goal"] = stack.copyOfRange(gameTask["addr"] as Int, (gameTask["addr"] as Int) + (gameTask["size"] as Int) - 1).sort()
                 gameTask["text"] = "PLACEHOLDER: Sort array in ascending order"
@@ -118,6 +119,45 @@ class MIPSSimulator(
                 gameTask["input1"] = regs["\$a0"]
                 gameTask["input2"] = regs["\$a1"]
                 gameTask["text"] = "PLACEHOLDER: GCD of a0, a1, return in v0"
+            }
+            3 -> {
+                regs["\$a0"] = stack.size + STACK_START
+                gameTask["addr"] = stack.size;
+                regs["\$a1"] = (5..20).random()
+                gameTask["size"] = regs["\$a1"]
+                val list: MutableList<Int> = mutableListOf<Int>(0, 1)
+                for (i in (2..<(regs["\$a1"]))) {
+                    Log.d("Fibonacci", (list[i - 1] + list[i - 2]).toString())
+                    list.add(list[i - 1] + list[i - 2])
+                }
+                gameTask["goal"] = list
+            }
+            4 -> {
+                regs["\$a0"] = (100..999).random()
+                gameTask["input1"] = regs["\$a0"]
+                regs["\$a1"] = stack.size + STACK_START
+                gameTask["addr"] = stack.size;
+                //gameTask["goal"] = gameTask.findPrimeList(regs["\$a0"])
+            }
+            5 -> {
+                regs["\$a0"] = (100..999).random()
+                gameTask["input1"] = regs["\$a0"]
+                //gameTask["goal"] = gameTask.findPrimeList(regs["\$a0"]).sort()
+            }
+            6 -> {
+                val charPool = "abcdefghijklmnopqrstuvwxyz0123456789"
+                regs["\$a0"] = stack.size + STACK_START
+                gameTask["addr1"] = stack.size;
+                val arr1 = (1..(5..10).random()).map{
+                    Random.nextInt(0, charPool.length).let { charPool[it] }
+                }.joinToString("").toByteArray()
+                addToStack(arr1, stack.size, arr1.size, true)
+                regs["\$a1"] = stack.size + STACK_START
+                val arr2 = listOf((1..(5..10).random()).map{
+                    Random.nextInt(0, charPool.length).let { charPool[it] }
+                }.joinToString("").toByteArray(), arr1).random()
+                addToStack(arr2, stack.size, arr2.size, true)
+                gameTask["goal"] = if (arr1.contentEquals(arr2)) 1 else 0
             }
         }
         //Log.i("generateTask()", "Returning...")
@@ -144,11 +184,29 @@ class MIPSSimulator(
 
             1 -> {  // Sort array in ascending order
                 for (j in (gameTask["addr"] as Int)..<(gameTask["addr"] as Int) + (gameTask["size"] as Int) - 1) {
-                    return "Failed!"
+                    if (stack[j].toInt() > stack[j + 1].toInt()) return "Failed!"
                 }
             }
 
             2 -> {  // GCD of a0, a1, return in v0
+                gameTask["obtained"] = regs["\$v0"].toString()
+                if (regs["\$v0"] != gameTask["goal"] as Int) {
+                    return "Failed!"
+                }
+            }
+
+            3 -> {
+                for (j in 0..<(gameTask["size"] as Int)) {
+                    if (stack[j + gameTask["addr"] as Int].toInt() != (gameTask["goal"] as MutableList<Int>)[j]) return "Failed";
+                }
+            }
+            4 -> {
+
+            }
+            5 -> {
+
+            }
+            6 -> {
                 gameTask["obtained"] = regs["\$v0"].toString()
                 if (regs["\$v0"] != gameTask["goal"] as Int) {
                     return "Failed!"

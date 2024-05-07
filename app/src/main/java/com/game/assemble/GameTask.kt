@@ -10,7 +10,7 @@ class GameTask(context: Context) {
     )
     private val taskList: Array<String> = context.resources.getStringArray(R.array.taskList)
     fun getRandomTask() : Int {
-        val idx = 0 //taskList.indices.random()
+        val idx = taskList.indices.random()
         info["text"] = taskList[idx]
         return idx
     }
