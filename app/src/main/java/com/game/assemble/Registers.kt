@@ -49,4 +49,10 @@ class Registers (
     fun getMap() : MutableMap<String, Int> {
         return regs
     }
+
+    fun getMap2(): MutableMap<String, Int> {
+        var res = regs.toMutableMap()
+        res.remove("\$zero")
+        return res
+    }
 }

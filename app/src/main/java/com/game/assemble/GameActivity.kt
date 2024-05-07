@@ -294,7 +294,7 @@ class GameActivity : AppCompatActivity() {
             arrayOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9"),
             arrayOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-"),
             arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9"), // TODO: dynamically set this to the number of active instruction lines
-            resources.getStringArray(R.array.label_names),
+            resources.getStringArray(R.array.label_names) + arrayOf<String>("main", "exit"),
             resources.getStringArray(R.array.label_names)
         )
         // load operators from keyboard
@@ -334,7 +334,7 @@ class GameActivity : AppCompatActivity() {
 
         val keyboardRecyclerView2: RecyclerView = findViewById(R.id.gameInstructionRegister2RecyclerView)
         keyboardRecyclerView2.layoutManager = LinearLayoutManager(this)
-        keyboardRecyclerView2.adapter = GameRegisterRecyclerViewAdapter(sim.regs.getMap())
+        keyboardRecyclerView2.adapter = GameRegisterRecyclerViewAdapter(sim.regs.getMap2())
 
         for(i in 0 until instructionLinearLayout.childCount) {
             val view = instructionLinearLayout.getChildAt(i).findViewById<TextView>(R.id.gameInstructionTextView1)
