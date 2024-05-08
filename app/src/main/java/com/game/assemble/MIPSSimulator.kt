@@ -118,7 +118,7 @@ class MIPSSimulator(
             }
             1 -> {  // Sort array in ascending order
                 Log.d("MIPSSimulator generateTask()", "generating task id 1")
-                regs["\$a0"] = stack.size + STACK_START
+                regs["\$a0"] = STACK_START - stack.size
                 gameTask["addr"] = stack.size
                 regs["\$a1"] = (5..20).random()
                 gameTask["size"] = regs["\$a1"]
@@ -145,7 +145,7 @@ class MIPSSimulator(
                 gameTask["input2"] = regs["\$a1"]
             }
             3 -> {
-                regs["\$a0"] = stack.size + STACK_START
+                regs["\$a0"] = STACK_START - stack.size
                 gameTask["addr"] = stack.size;
                 regs["\$a1"] = (5..20).random()
                 gameTask["size"] = regs["\$a1"]
@@ -159,7 +159,7 @@ class MIPSSimulator(
             4 -> {
                 regs["\$a0"] = (100..999).random()
                 gameTask["input1"] = regs["\$a0"]
-                regs["\$a1"] = stack.size + STACK_START
+                regs["\$a1"] = STACK_START - stack.size
                 gameTask["addr"] = stack.size;
                 gameTask["goal"] = gameTask.findPrimeList(regs["\$a0"])
             }
@@ -172,17 +172,21 @@ class MIPSSimulator(
             }
             6 -> {
                 val charPool = "abcdefghijklmnopqrstuvwxyz0123456789"
-                regs["\$a0"] = stack.size + STACK_START
+                regs["\$a0"] = STACK_START - stack.size
                 gameTask["addr1"] = stack.size;
                 val arr1 = (1..(5..10).random()).map{
                     Random.nextInt(0, charPool.length).let { charPool[it] }
                 }.joinToString("").toByteArray()
-                addToStack(arr1, stack.size, updateSp = true)
-                regs["\$a1"] = stack.size + STACK_START
+                addToStack(arr1, arr1.size, updateSp = true)
+                addToStack(byteArrayOf(0), 1, updateSp = true)
+                regs["\$a1"] = STACK_START - stack.size
                 val arr2 = listOf((1..(5..10).random()).map{
                     Random.nextInt(0, charPool.length).let { charPool[it] }
                 }.joinToString("").toByteArray(), arr1).random()
-                addToStack(arr2, stack.size, updateSp = true)
+                addToStack(arr2, arr2.size, updateSp = true)
+                addToStack(byteArrayOf(0), 1, updateSp = true)
+                Log.d("generateTask()", arr1.joinToString(" "))
+                Log.d("generateTask()", arr2.joinToString(" "))
                 gameTask["goal"] = if (arr1.contentEquals(arr2)) 1 else 0
             }
         }
@@ -232,8 +236,13 @@ class MIPSSimulator(
             }
 
             3 -> {
+                gameTask["obtained"] = mutableListOf<Int>()
                 for (j in 0..<(gameTask["size"] as Int)) {
-                    if (stack[j + gameTask["addr"] as Int].toInt() != (gameTask["goal"] as MutableList<Int>)[j]) return "Failed!";
+                    (gameTask["obtained"]as MutableList<Int>).add(convertByteArrayToInt(stack, gameTask["addr"] as Int + j * 4))
+                }
+                Log.d("validateTask()", gameTask["obtained"].toString())
+                for (j in 0..<(gameTask["size"] as Int)) {
+                    if ((gameTask["obtained"] as MutableList<Int>)[j] != (gameTask["goal"] as MutableList<Int>)[j]) return "Failed!";
                 }
             }
             4 -> {
@@ -279,6 +288,7 @@ class MIPSSimulator(
         val startTime = Calendar.getInstance().time.time
         var line = 0
         exit = false
+        regs.printRegister()
         while (true) {
             // printState("\$v0")
             if (line >= instrList.size) return "The program never jumped to exit!"

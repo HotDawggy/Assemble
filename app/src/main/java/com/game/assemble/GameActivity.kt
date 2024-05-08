@@ -534,12 +534,13 @@ class GameActivity : AppCompatActivity() {
                 delay(1000)
 
                 var playerWinRound = true
-                if (res != "Success!" && res != "Failed!") {
+                if (res != "Success!") {
                     findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
                     playerWinRound = false
                 }
                 infoTypewriter.appendText("Obtained output: \n" + (sim.gameTask["obtained"]).toString() + "\n\n")
                 infoTypewriter.appendText(res + "\n")
+                delay(3000);
                 if (playerWinRound) {
                     for (i in 0..<10) {
                         delay(1000)
@@ -557,18 +558,13 @@ class GameActivity : AppCompatActivity() {
                         delay(1000)
                         infoTypewriter.appendText("Obtained output: \n" + (sim.gameTask["obtained"]).toString() + "\n\n")
                         infoTypewriter.appendText(res + "\n")
-                        if (res != "Success!" && res != "Failed!") {
-                            playerWinRound = false
-                            findViewById<ImageButton>(R.id.gameInfoExit).visibility =
-                                View.VISIBLE
-                            break
-                        }
                         if (res != "Success!") {
                             playerWinRound = false
                             findViewById<ImageButton>(R.id.gameInfoExit).visibility =
                                 View.VISIBLE
                             break
                         }
+                        delay(2000)
                     }
                 }
 
@@ -683,16 +679,67 @@ class GameActivity : AppCompatActivity() {
         val heartsButton: TextView = findViewById<TextView>(R.id.gameInfoHeartsRemaining)
         heartsButton.setOnClickListener {
 
+            // Solution for 6
+            instrList = mutableListOf(Instruction((arrayOf("main:"))))
+            instrList += Instruction(arrayOf("jal", "Luna"))
+            instrList += Instruction(arrayOf("j", "exit"))
+            instrList += Instruction(arrayOf("Luna:"))
+            instrList += Instruction(arrayOf("sw", "\$ra", "0", "\$sp"))
+            instrList += Instruction(arrayOf("addi", "\$sp", "\$sp", "-4"))
+            instrList += Instruction(arrayOf("lb", "\$t0", "0", "\$a0"))
+            instrList += Instruction(arrayOf("lb", "\$t1", "0", "\$a1"))
+            instrList += Instruction(arrayOf("beq", "\$t0", "\$t1", "Fifi"))
+            instrList += Instruction(arrayOf("xor", "\$v0", "\$v0", "\$v0"))
+            instrList += Instruction(arrayOf("addi", "\$sp", "\$sp", "4"))
+            instrList += Instruction(arrayOf("lw", "\$ra", "0", "\$sp"))
+            instrList += Instruction(arrayOf("jr", "\$ra"))
+            instrList += Instruction(arrayOf("Fifi:"))
+            instrList += Instruction(arrayOf("beq", "\$t0", "\$zero", "Pudd"))
+            instrList += Instruction(arrayOf("addi", "\$a0", "\$a0", "-1"))
+            instrList += Instruction(arrayOf("addi", "\$a1", "\$a1", "-1"))
+            instrList += Instruction(arrayOf("jal", "Luna"))
+            instrList += Instruction(arrayOf("addi", "\$sp", "\$sp", "4"))
+            instrList += Instruction(arrayOf("lw", "\$ra", "0", "\$sp"))
+            instrList += Instruction(arrayOf("jr", "\$ra"))
+            instrList += Instruction(arrayOf("Pudd:"))
+            instrList += Instruction(arrayOf("addi", "\$v0", "\$zero", "1"))
+            instrList += Instruction(arrayOf("addi", "\$sp", "\$sp", "4"))
+            instrList += Instruction(arrayOf("lw", "\$ra", "0", "\$sp"))
+            instrList += Instruction(arrayOf("jr", "\$ra"))
+
+            // Solution for 3
+            /*
+            instrList = mutableListOf(Instruction((arrayOf("main:"))))
+            instrList += Instruction(arrayOf("add", "\$t0", "\$zero", "\$zero"))
+            instrList += Instruction(arrayOf("addi", "\$t1", "\$zero", "1"))
+            instrList += Instruction(arrayOf("sw", "\$t0", "0", "\$a0"))
+            instrList += Instruction(arrayOf("addi", "\$a0", "\$a0", "-4"))
+            instrList += Instruction(arrayOf("sw", "\$t1", "0", "\$a0"))
+            instrList += Instruction(arrayOf("addi", "\$a0", "\$a0", "-4"))
+            instrList += Instruction(arrayOf("addi", "\$a1", "\$a1", "-2"))
+            instrList += Instruction(arrayOf("Luna:"))
+            instrList += Instruction(arrayOf("beq", "\$a1", "\$zero", "Fifi"))
+            instrList += Instruction(arrayOf("add", "\$t2", "\$t0", "\$t1"))
+            instrList += Instruction(arrayOf("add", "\$t0", "\$t1", "\$zero"))
+            instrList += Instruction(arrayOf("add", "\$t1", "\$t2", "\$zero"))
+            instrList += Instruction(arrayOf("sw", "\$t2", "0", "\$a0"))
+            instrList += Instruction(arrayOf("addi", "\$a1", "\$a1", "-1"))
+            instrList += Instruction(arrayOf("addi", "\$a0", "\$a0", "-4"))
+            instrList += Instruction(arrayOf("j", "Luna"))
+            instrList += Instruction(arrayOf("Fifi:"))
+            instrList += Instruction(arrayOf("j", "exit"))
+            */
+
+            // Solution for 0 and 2
+            /*
             instrList = mutableListOf(Instruction((arrayOf("main:"))))
             instrList += Instruction(arrayOf("add", "\$s0", "\$a0", "\$zero"))
             instrList += Instruction(arrayOf("add", "\$s1", "\$a1", "\$zero"))
             instrList += Instruction(arrayOf("jal", "Luna"))
-            /*
             instrList += Instruction(arrayOf("div", "\$s0", "\$v0"))
             instrList += Instruction(arrayOf("mflo", "\$t0"))
             instrList += Instruction(arrayOf("mult", "\$t0", "\$s1"))
             instrList += Instruction(arrayOf("mflo", "\$v0"))
-            */
             instrList += Instruction(arrayOf("j", "exit"))
             instrList += Instruction(arrayOf("Luna:"))
             instrList += Instruction(arrayOf("sw", "\$ra", "0", "\$sp"))
@@ -709,6 +756,7 @@ class GameActivity : AppCompatActivity() {
             instrList += Instruction(arrayOf("lw", "\$ra", "0", "\$sp"))
             instrList += Instruction(arrayOf("add", "\$v0", "\$t0", "\$zero"))
             instrList += Instruction(arrayOf("jr", "\$ra"))
+             */
 
 
             instructionLinearLayout.removeAllViews()
