@@ -19,14 +19,15 @@ class MIPSSimulator(
         if (label == "exit") {Log.d("parseLabel", "Exit!"); exit = true; return null}
         for (instr in instrList) {
             if (instr.isLabel(label)) {
-                Log.d("parseLabel", "label = $label, instr = " + instr[0])
-                Log.d("parseLabel", "Label at " + instrList.indexOf(instr).toString())
+                //Log.d("parseLabel", "label = $label, instr = " + instr[0])
+                //Log.d("parseLabel", "Label at " + instrList.indexOf(instr).toString())
                 return instrList.indexOf(instr)
             }
         }
         return null
     }
     private fun parseStackAddress(addr: Int) : Int? {
+        Log.d("parseStackAddress()", addr.toHexString())
         val temp = STACK_START - addr
         return if (temp < 0) {
             null
@@ -36,9 +37,11 @@ class MIPSSimulator(
     }
 
     private fun parseCodeAddress(addr: Int, instrList: MutableList<Instruction>) : Int? {
-        if ((CODE_START - addr) % 4 != 0) return null
-        var temp: Int = (CODE_START - addr)/4
+        Log.d("parseCodeAddress()", addr.toHexString())
+        if ((addr - CODE_START) % 4 != 0) return null
+        var temp: Int = (addr - CODE_START)/4
         for (i in instrList.indices) {
+            //Log.d("parseCodeAddress()", temp.toString())
             if (temp == 0) return i
             if (instrList[i].isLabel()) continue
             else if (instrList[i - 1][0] == "jal") temp -= 2
@@ -67,14 +70,14 @@ class MIPSSimulator(
         //Log.d("addToStack", bytes.toHexString())
         //Log.d("addToStack", stack.size.toString())
         //printStack()
-        if (index == null) stack += bytes
+        if (index == null || index >= stack.size) stack += bytes
         else modifyStackInPlace(bytes, size, index)
         if (updateSp) regs["\$sp"] = regs["\$sp"] - size
         //printStack()
         //Log.d("addToStack", "sp: " + regs["\$sp"].toHexString())
     }
     private fun convertIntToByteArray(input : Int) : ByteArray {
-        Log.d("convertIntToByteArray", input.toString())
+        //Log.d("convertIntToByteArray", input.toString())
         val res = ByteArray(4)
         for (i in 0..3) res[i] = (input shr (i*8)).toByte()
         fun ByteArray.toHexString() = joinToString("") { "%02x".format(it) }
@@ -135,6 +138,8 @@ class MIPSSimulator(
             2 -> {  // GCD of a0, a1, return in v0
                 regs["\$a0"] = (4..999).random()
                 regs["\$a1"] = (4..999).random()
+                Log.d("generateTask(), id 2", regs["\$a0"].toString())
+                Log.d("generateTask(), id 2", regs["\$a1"].toString())
                 gameTask["goal"] = gameTask.findGCD(regs["\$a0"], regs["\$a1"])
                 gameTask["input1"] = regs["\$a0"]
                 gameTask["input2"] = regs["\$a1"]
@@ -269,6 +274,7 @@ class MIPSSimulator(
     }
 
     fun run(instrList: MutableList<Instruction>) : String {
+        //Log.d("Run()","Ran")
         val savedRegs = Registers(regs)
         val startTime = Calendar.getInstance().time.time
         var line = 0
@@ -279,7 +285,7 @@ class MIPSSimulator(
             val instr: Instruction = instrList[line]
             instr.logInstr()
             //Log.d("[*] MIPSSimulator.Run", "line " + line.toString())
-            if (Calendar.getInstance().time.time - startTime > 8000) { // TODO: REVERT BACK
+            if (Calendar.getInstance().time.time - startTime > 16000) { // TODO: REVERT BACK
                 regs = savedRegs
                 return "Timed out! Check if your code will result in infinite loop!"
             }
@@ -288,7 +294,7 @@ class MIPSSimulator(
                 return "Some fields are empty!"
             }
             line++
-            Log.d("Run", instr.isLabel().toString())
+            //Log.d("Run", instr.isLabel().toString())
             if (instr.isLabel()) {
                 continue
             }
@@ -475,6 +481,7 @@ class MIPSSimulator(
                 }
 
                 "jal" -> {
+                    regs.printRegister()
                     regs["\$ra"] = CODE_START
                     for (i in 0..<line) {
                         if (!instrList[i].isLabel()) {
@@ -500,7 +507,7 @@ class MIPSSimulator(
                         }
                     }
                     regs["\$ra"] + 8
-                    val temp = parseCodeAddress(regs["\$rs"], instrList)
+                    val temp = parseCodeAddress(regs[instr[1]], instrList)
                     if (temp == null) {
                         regs = savedRegs
                         return "Invalid code address"
@@ -509,7 +516,7 @@ class MIPSSimulator(
                 }
 
                 "jr" -> {
-                    val temp = parseCodeAddress(regs["\$rs"], instrList)
+                    val temp = parseCodeAddress(regs[instr[1]], instrList)
                     if (temp == null) {
                         regs = savedRegs
                         return "Invalid code address"
@@ -542,7 +549,7 @@ class MIPSSimulator(
                         return "Invalid stack address"
                     }
                     regs[instr[1]] =
-                        bigEndianConversion(stack.copyOfRange(temp - 1, temp + 1)) shl 16 ushr 16
+                        bigEndianConversion(stack.copyOfRange(temp, temp + 2)) shl 16 ushr 16
                 }
 
                 "lh" -> {   // lhu
@@ -552,7 +559,7 @@ class MIPSSimulator(
                         return "Invalid stack address"
                     }
                     regs[instr[1]] =
-                        bigEndianConversion(stack.copyOfRange(temp - 1, temp + 1)) shl 16 shr 16
+                        bigEndianConversion(stack.copyOfRange(temp, temp + 2)) shl 16 shr 16
                 }
 
                 "lui" -> {    // lui
@@ -565,7 +572,8 @@ class MIPSSimulator(
                         regs = savedRegs
                         return "Invalid stack address"
                     }
-                    regs[instr[1]] = bigEndianConversion(stack.copyOfRange(temp - 3, temp + 1))
+                    regs[instr[1]] = bigEndianConversion(stack.copyOfRange(temp, temp + 4))
+                    Log.d("lw", regs[instr[1]].toHexString())
                 }
 
                 "ori" -> {    // ori
@@ -609,6 +617,7 @@ class MIPSSimulator(
                     }
                     val tempArr = convertIntToByteArray(regs[instr[1]])
                     addToStack(tempArr, 4, temp)
+                    Log.d("sw", regs[instr[1]].toHexString())
                 }
                 "xor" -> {
                     regs[instr[1]] = regs[instr[2]] xor regs[instr[3]]

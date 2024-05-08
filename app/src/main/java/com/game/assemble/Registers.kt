@@ -1,5 +1,8 @@
 package com.game.assemble
 
+import android.util.Log
+import okhttp3.internal.toHexString
+
 class Registers (
     v0: Int = 0,
     a0: Int = 0,
@@ -35,11 +38,17 @@ class Registers (
         regs["\$lo"] = lo
     }
     operator fun get(idx: String?) : Int {
-        if (idx.isNullOrEmpty() || !regs.contains(idx)) throw(IllegalArgumentException("Invalid register"))
+        if (idx.isNullOrEmpty() || !regs.contains(idx)) {
+            Log.d("Invalid register", idx?: "null")
+            throw(IllegalArgumentException("Invalid register"))
+        }
         return regs[idx]!!
     }
     operator fun set(idx: String?, data: Int) {
-        if (idx.isNullOrEmpty() || !regs.contains(idx)) throw(IllegalArgumentException("Invalid register"))
+        if (idx.isNullOrEmpty() || !regs.contains(idx)) {
+            Log.d("Invalid register", idx?: "null")
+            throw(IllegalArgumentException("Invalid register"))
+        }
         regs[idx] = data
     }
     operator fun iterator(): MutableIterator<MutableMap.MutableEntry<String, Int>> {
@@ -47,12 +56,21 @@ class Registers (
     }
 
     fun getMap() : MutableMap<String, Int> {
-        return regs
+        var res = regs.toMutableMap()
+        res.remove("\$hi")
+        res.remove("\$lo")
+        return res
     }
 
     fun getMap2(): MutableMap<String, Int> {
         var res = regs.toMutableMap()
         res.remove("\$zero")
+        res.remove("\$hi")
+        res.remove("\$lo")
         return res
+    }
+
+    fun printRegister() {
+        regs.forEach { Log.d("printRegister()", it.key + " " + it.value.toHexString()) }
     }
 }

@@ -21,7 +21,7 @@ class Instruction(
         instr[idx] = data
     }
     fun isLabel(label: String? = null) : Boolean {
-        Log.d("isLabel","label = $label, instr[0] = " + instr[0])
+        //Log.d("isLabel","label = $label, instr[0] = " + instr[0])
         return when (instr[0]?.removeSuffix(":")?.removePrefix("\t")) {
             "add", "addu", "and", "nor", "or", "slt", "sltu", "sub", "subu", "addi", "addiu", "andi", "ori", "slti", "sltiu", "sll", "srl", "beq", "bne" -> false
             "sra", "sllv", "srlv", "srav", "xor", "xori", "lbu", "lhu", "lw", "sb", "sh", "sw", "lb", "lh", "j", "jr", "jal", "jalr", "mfhi", "mflo", "mthi", "mtlo" -> false

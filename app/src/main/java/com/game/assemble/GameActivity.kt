@@ -535,11 +535,6 @@ class GameActivity : AppCompatActivity() {
 
                 var playerWinRound = true
                 if (res != "Success!" && res != "Failed!") {
-                    infoTypewriter.appendText(res + "\n")
-                    findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
-                    playerWinRound = false
-                }
-                if (res != "Success!") {
                     findViewById<ImageButton>(R.id.gameInfoExit).visibility = View.VISIBLE
                     playerWinRound = false
                 }
@@ -687,28 +682,34 @@ class GameActivity : AppCompatActivity() {
         // TODO: REMOVE SOON
         val heartsButton: TextView = findViewById<TextView>(R.id.gameInfoHeartsRemaining)
         heartsButton.setOnClickListener {
-            /*
-            instrList = mutableListOf(Instruction((arrayOf("main:"))))
-            instrList += Instruction(arrayOf("addi", "\$t0", "\$zero", ""))
-            instrList += Instruction(arrayOf("addi", "\$t1", "\$zero", ""))
-            instrList += Instruction(arrayOf("addi", "\$t2", "\$zero", ""))
-            instrList += Instruction(arrayOf("addi", "\$t3", "\$zero", ""))
-            instrList += Instruction(arrayOf("addi", "\$s0", "\$zero", ""))
-            instrList += Instruction(arrayOf("sw", "\$t0", "20", "\$sp"))
-            instrList += Instruction(arrayOf("sw", "\$t1", "16", "\$sp"))
-            instrList += Instruction(arrayOf("sw", "\$t2", "12", "\$sp"))
-            instrList += Instruction(arrayOf("sw", "\$t3", "8", "\$sp"))
-            instrList += Instruction(arrayOf("sw", "\$s0", "4", "\$sp"))
-            instrList += Instruction(arrayOf("j", "exit"))
-            */
 
             instrList = mutableListOf(Instruction((arrayOf("main:"))))
-            instrList += Instruction(arrayOf("and", "\$v0", "\$v0", "\$zero"))
-            instrList += Instruction(arrayOf("multiply:"))
-            instrList += Instruction(arrayOf("add", "\$v0", "\$v0", "\$a0"))
-            instrList += Instruction(arrayOf("addi", "\$a1", "\$a1", "-1"))
-            instrList += Instruction(arrayOf("bne", "\$a1", "\$zero", "multiply"))
+            instrList += Instruction(arrayOf("add", "\$s0", "\$a0", "\$zero"))
+            instrList += Instruction(arrayOf("add", "\$s1", "\$a1", "\$zero"))
+            instrList += Instruction(arrayOf("jal", "Luna"))
+            /*
+            instrList += Instruction(arrayOf("div", "\$s0", "\$v0"))
+            instrList += Instruction(arrayOf("mflo", "\$t0"))
+            instrList += Instruction(arrayOf("mult", "\$t0", "\$s1"))
+            instrList += Instruction(arrayOf("mflo", "\$v0"))
+            */
             instrList += Instruction(arrayOf("j", "exit"))
+            instrList += Instruction(arrayOf("Luna:"))
+            instrList += Instruction(arrayOf("sw", "\$ra", "0", "\$sp"))
+            instrList += Instruction(arrayOf("addi", "\$sp", "\$sp", "-4"))
+            instrList += Instruction(arrayOf("add", "\$t0", "\$a0", "\$zero"))
+            instrList += Instruction(arrayOf("add", "\$t1", "\$a1", "\$zero"))
+            instrList += Instruction(arrayOf("beq", "\$t1", "\$zero", "Fifi"))
+            instrList += Instruction(arrayOf("add", "\$a0", "\$t1", "\$zero"))
+            instrList += Instruction(arrayOf("div", "\$t0", "\$t1"))
+            instrList += Instruction(arrayOf("mfhi", "\$a1"))
+            instrList += Instruction(arrayOf("jal", "Luna"))
+            instrList += Instruction(arrayOf("Fifi:"))
+            instrList += Instruction(arrayOf("addi", "\$sp", "\$sp", "4"))
+            instrList += Instruction(arrayOf("lw", "\$ra", "0", "\$sp"))
+            instrList += Instruction(arrayOf("add", "\$v0", "\$t0", "\$zero"))
+            instrList += Instruction(arrayOf("jr", "\$ra"))
+
 
             instructionLinearLayout.removeAllViews()
 
