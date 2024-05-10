@@ -149,6 +149,7 @@ class MIPSSimulator(
                 gameTask["addr"] = stack.size;
                 regs["\$a1"] = (5..20).random()
                 gameTask["size"] = regs["\$a1"]
+                addToStack(ByteArray(regs["\$a1"] * 4), regs["\$a1"] * 4, updateSp = false)
                 val list: MutableList<Int> = mutableListOf<Int>(0, 1)
                 for (i in (2..<(regs["\$a1"]))) {
                     Log.d("Fibonacci", (list[i - 1] + list[i - 2]).toString())
@@ -161,7 +162,9 @@ class MIPSSimulator(
                 gameTask["input1"] = regs["\$a0"]
                 regs["\$a1"] = STACK_START - stack.size
                 gameTask["addr"] = stack.size;
-                gameTask["goal"] = gameTask.findPrimeList(regs["\$a0"])
+                val res = gameTask.findPrimeList(regs["\$a0"]).also { it.sort() }
+                gameTask["goal"] = res
+                addToStack(ByteArray(res.size * 4), res.size * 4, updateSp = false)
             }
             5 -> {
                 regs["\$a0"] = (100..999).random()
@@ -246,11 +249,15 @@ class MIPSSimulator(
                 }
             }
             4 -> {
-                for (j in (gameTask["addr"] as Int)..<(gameTask["addr"] as Int) + (gameTask["size"] as Int) - 1) {
-                    if (stack[j].toInt() in gameTask["goal"] as MutableList<Int>) (gameTask["goal"] as MutableList<Int>).remove(stack[j].toInt())
-                    else return "Failed!"
+                gameTask["obtained"] = mutableListOf<Int>()
+                for (j in 0..<(gameTask["goal"] as MutableList<Int>).size) {
+                    (gameTask["obtained"]as MutableList<Int>).add(convertByteArrayToInt(stack, gameTask["addr"] as Int + j * 4))
                 }
-                if ((gameTask["goal"] as MutableList<Int>).size != 0) return "Failed!"
+                (gameTask["obtained"] as MutableList<Int>).sort()
+                Log.d("validateTask()", gameTask["obtained"].toString())
+                for (j in 0..<(gameTask["goal"] as MutableList<Int>).size) {
+                    if ((gameTask["obtained"] as MutableList<Int>)[j] != (gameTask["goal"] as MutableList<Int>)[j]) return "Failed!";
+                }
             }
             5 -> {
                 gameTask["obtained"] = regs["\$v0"].toString()
@@ -313,6 +320,7 @@ class MIPSSimulator(
                     val temp: Long = regs[instr[2]].toLong() + regs[instr[3]].toLong()
                     if (temp <= Int.MAX_VALUE && temp >= Int.MIN_VALUE) {
                         regs[instr[1] as String] = temp.toInt()
+                        Log.d("add", temp.toInt().toString())
                     } else {
                         regs = savedRegs
                         return "Overflow exception!"
@@ -328,6 +336,7 @@ class MIPSSimulator(
                     regs[instr[1]] = regs[instr[2]] and (regs[instr[3]])
                 }
                 "div" -> {
+                    Log.d("div", regs[instr[1]].toString() + " " + regs[instr[2]].toString())
                     if (regs[instr[2]] == 0) {
                         regs = savedRegs
                         return "Divide by zero exception!"
@@ -461,6 +470,7 @@ class MIPSSimulator(
                     }
                 }
                 "blez" -> {
+                    Log.d("blez", regs[instr[1]].toString())
                     if (regs[instr[1]] <= 0) {
                         val temp = parseLabel(instr[2]!!, instrList)
                         if (exit) return "" // Exit is jumped to
