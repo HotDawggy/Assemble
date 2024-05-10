@@ -160,4 +160,42 @@ class OperatorsInstrumentedTest {
             assertEquals(sim.regs["\$t0"], x and x)
         }
     }
+
+    @Test
+    fun test_div() {
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        // divide by non-zero values
+        repeat(100) {
+            val x = get_rand(Int.MIN_VALUE, Int.MAX_VALUE)
+            var y = get_rand(-100, 100)
+            while (y == 0) {
+                y = get_rand(-100, 100)
+            }
+
+            val sim = MIPSSimulator(appContext)
+            sim.regs["\$t0"] = x
+            sim.regs["\$t1"] = y
+
+            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            instrList += Instruction(arrayOf("div", "\$t0", "\$t1"))
+            sim.run(instrList)
+
+            assertEquals(x % y, sim.regs["\$hi"])
+            assertEquals(x.floorDiv(y), sim.regs["\$lo"])
+        }
+
+        // test division by 0
+        repeat(100) {
+            val x = get_rand(Int.MIN_VALUE, Int.MAX_VALUE)
+            val sim = MIPSSimulator(appContext)
+            sim.regs["\$t0"] = x
+            sim.regs["\$t1"] = 0
+
+            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            instrList += Instruction(arrayOf("div", "\$t0", "\$t1"))
+
+            assertEquals(sim.run(instrList), "Divide by zero exception!")
+        }
+    }
 }
