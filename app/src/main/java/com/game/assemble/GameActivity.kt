@@ -23,6 +23,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
@@ -635,6 +636,12 @@ class GameActivity : AppCompatActivity() {
                     // update games played
                     sharedPreferences.edit().putInt("gamesPlayed",
                         sharedPreferences.getInt("gamesPlayed", 0) + 1).apply()
+
+                    // send high score - https://stackoverflow.com/questions/68791763/how-can-i-create-an-asynchronous-post-request-in-kotlin
+                    val coroutineScope = CoroutineScope(Dispatchers.IO)
+                    val username = sharedPreferences.getString("username", "SOME GUY")!!
+                    val score = round
+                    Leaderboard().submitScore(username, score)
 
                     // game over
                     val intent = Intent(this@GameActivity, GameOverActivity::class.java)
