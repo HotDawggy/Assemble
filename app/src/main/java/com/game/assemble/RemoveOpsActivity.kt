@@ -38,7 +38,7 @@ class RemoveOpsActivity : AppCompatActivity() {
 
         val allOps = opsR + opsIJ
         val n = allOps.size
-        var toRemove = n / 4
+        var toRemove = n / 8
 
         val textView = findViewById<TextView>(R.id.removeOpsTextView)
         textView.text = "Pick another $toRemove operator(s) to be removed in round $roundNumber."
