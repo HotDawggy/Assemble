@@ -2,22 +2,19 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="ExampleInstrumentedTest">
+        <State />
+      </entry>
+      <entry key="ModelSolutionInstrumentedTest">
+        <State />
+      </entry>
       <entry key="app">
         <State />
       </entry>
-      <entry key="testModelSolution2()">
-        <State />
-      </entry>
-      <entry key="testModelSolution3()">
-        <State />
-      </entry>
-      <entry key="testModelSolution4()">
-        <State />
-      </entry>
-      <entry key="testModelSolution5()">
-        <State />
-      </entry>
       <entry key="testModelSolution6()">
+        <State />
+      </entry>
+      <entry key="test_add()">
         <State />
       </entry>
     </value>
