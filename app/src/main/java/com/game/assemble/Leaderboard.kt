@@ -43,7 +43,7 @@ class Leaderboard : AppCompatActivity() {
                 var arr = parseResponse(response!!)
 
                 if (arr.isEmpty()) {
-                    arr = listOf<LeaderboardItem>(LeaderboardItem("", "Empty Leaderboard :(", 0))
+                    arr = listOf<LeaderboardItem>(LeaderboardItem("", "Empty Leaderboard :(", null))
                 }
 
                 runOnUiThread {
@@ -56,7 +56,7 @@ class Leaderboard : AppCompatActivity() {
                 var arr = parseResponse(response!!)
 
                 if (arr.isEmpty()) {
-                    arr = listOf<LeaderboardItem>(LeaderboardItem("", "Empty Leaderboard :(", 0))
+                    arr = listOf<LeaderboardItem>(LeaderboardItem("", "Empty Leaderboard :(", null))
                 }
 
                 runOnUiThread {
@@ -69,7 +69,7 @@ class Leaderboard : AppCompatActivity() {
                 var arr = parseResponse(response!!)
 
                 if (arr.isEmpty()) {
-                    arr = listOf<LeaderboardItem>(LeaderboardItem("", "Empty Leaderboard :(", 0))
+                    arr = listOf<LeaderboardItem>(LeaderboardItem("", "Empty Leaderboard :(", null))
                 }
 
                 runOnUiThread {
@@ -112,7 +112,7 @@ class Leaderboard : AppCompatActivity() {
     // from https://stackoverflow.com/questions/66059143/how-to-make-a-http-post-request-in-kotlin-android-to-simple-server
     fun submitScore(username: String, score: Int) {
         // TODO: Replace in Prod
-        val url = "https://f6ba-219-79-67-13.ngrok-free.app/leaderboard.php"
+        val url = "https://51d7-86-48-11-122.ngrok-free.app/leaderboard.php"
 
         // add parameter
         val formBody = FormBody.Builder()
@@ -139,7 +139,7 @@ class Leaderboard : AppCompatActivity() {
 
     fun requestScore(timespan: String, onResponse: (String?) -> Unit) {
         // TODO: Replace in Prod
-        val baseUrl = "https://f6ba-219-79-67-13.ngrok-free.app/leaderboard.php"
+        val baseUrl = "https://51d7-86-48-11-122.ngrok-free.app/leaderboard.php"
 
         // from https://stackoverflow.com/questions/65884020/http-get-request-with-parameters-in-okhttp-android-kotlin
         val url = baseUrl.toHttpUrl().newBuilder()

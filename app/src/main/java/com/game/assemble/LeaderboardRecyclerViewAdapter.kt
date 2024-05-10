@@ -42,7 +42,8 @@ class LeaderboardRecyclerViewAdapter(private var dataSet: Array<LeaderboardItem>
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         viewHolder.rankingView.text = dataSet[position].ranking
-        viewHolder.scoreView.text = dataSet[position].score.toString()
+        viewHolder.scoreView.text = if (dataSet[position].score != null) dataSet[position].score.toString()
+                                    else ""
         viewHolder.usernameView.text = dataSet[position].username
 
         viewHolder.rankingView.setTextColor(Color.WHITE)
