@@ -10,7 +10,7 @@ const val STACK_START = 0x7ffffffc
 class MIPSSimulator(
     context: Context,
     ) {
-    var regs: Registers = Registers()
+    var regs: Registers = Registers(sp = STACK_START, ra= CODE_START)
     private var exit = false
     val gameTask: GameTask = GameTask(context)
     private var stack: ByteArray = byteArrayOf()
@@ -41,13 +41,32 @@ class MIPSSimulator(
         if ((addr - CODE_START) % 4 != 0) return null
         var temp: Int = (addr - CODE_START)/4
         for (i in instrList.indices) {
-            //Log.d("parseCodeAddress()", temp.toString())
-            if (temp == 0) return i
+            instrList[i].logInstr()
             if (instrList[i].isLabel()) continue
-            else if (instrList[i - 1][0] == "jal") temp -= 2
+            else if (instrList[i - 1][0] == "jal" || instrList[i - 1][0] == "jalr") {
+                temp -= 2
+            }
             else temp--
+            Log.d("parseCodeAddress()", temp.toString())
+            if (temp <= 0) {
+                return i
+            }
         }
         return null
+    }
+    private fun getCodeAddress(line: Int, instrList: MutableList<Instruction>) : Int {
+        Log.d("parseCodeAddress()", line.toString())
+        var temp = CODE_START
+        for (i in 0..<line) {
+            instrList[i].logInstr()
+            if (instrList[i].isLabel()) continue
+            else if (instrList[i - 1][0] == "jal" || instrList[i - 1][0] == "jalr") {
+                temp += 8
+            }
+            else temp += 4
+            Log.d("parseCodeAddress()", temp.toString())
+        }
+        return temp
     }
     private fun zeroExtendImmediate(source: Int) : Int {
         return ((source shl 16) ushr 16)
@@ -113,6 +132,8 @@ class MIPSSimulator(
 
     fun generateTask(id: Int? = null) : String {
         //Log.i("generateTask()", "Generating task...")
+        stack = byteArrayOf()
+        regs["\$sp"] = STACK_START
         if (id == null) gameTask.getRandomTask()
         else gameTask.setTask(id)
         Log.d("generateTask()", (id ?: -1).toString())
@@ -307,14 +328,15 @@ class MIPSSimulator(
         val startTime = Calendar.getInstance().time.time
         var line = 0
         exit = false
-        regs.printRegister()
+        //regs.printRegister()
         while (true) {
+
             // printState("\$v0")
             if (line >= instrList.size) return "The program never jumped to exit!"
             val instr: Instruction = instrList[line]
             instr.logInstr()
             //Log.d("[*] MIPSSimulator.Run", "line " + line.toString())
-            if (Calendar.getInstance().time.time - startTime > 16000) { // TODO: REVERT BACK
+            if (Calendar.getInstance().time.time - startTime > 2000) { // TODO: REVERT BACK
                 regs = savedRegs
                 return "Timed out! Check if your code will result in infinite loop!"
             }
@@ -513,14 +535,7 @@ class MIPSSimulator(
                 }
 
                 "jal" -> {
-                    regs.printRegister()
-                    regs["\$ra"] = CODE_START
-                    for (i in 0..<line) {
-                        if (!instrList[i].isLabel()) {
-                            regs["\$ra"] += 4
-                        }
-                    }
-                    regs["\$ra"] + 8
+                    regs["\$ra"] = getCodeAddress(line - 1, instrList) + 8
 
                     val temp = parseLabel(instr[1]!!, instrList)
                     if (exit == true) return "" // Exit is jumped to
@@ -528,17 +543,11 @@ class MIPSSimulator(
                         return "Invalid label!"
                     }
                     else line = temp
-
+                    regs.printRegister()
                 }
 
                 "jalr" -> {
-                    regs["\$ra"] = CODE_START
-                    for (i in 0..<line) {
-                        if (!instrList[i].isLabel()) {
-                            regs["\$ra"] += 4
-                        }
-                    }
-                    regs["\$ra"] + 8
+                    regs["\$ra"] = getCodeAddress(line - 1, instrList) + 8
                     val temp = parseCodeAddress(regs[instr[1]], instrList)
                     if (temp == null) {
                         regs = savedRegs

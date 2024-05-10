@@ -31,7 +31,6 @@ class ExampleInstrumentedTest {
         val sim = MIPSSimulator(appContext)
         val taskID = 0
         sim.generateTask(taskID)
-        sim.gameTask.setTask(taskID)
 
         val instrList = mutableListOf(Instruction((arrayOf("main:"))))
         instrList += Instruction(arrayOf("add", "\$s0", "\$a0", "\$zero"))
@@ -67,7 +66,6 @@ class ExampleInstrumentedTest {
         val sim = MIPSSimulator(appContext)
         val taskID = 1
         sim.generateTask(taskID)
-        sim.gameTask.setTask(taskID)
 
         val instrList = mutableListOf(Instruction((arrayOf("main:"))))
         instrList += Instruction(arrayOf("add", "\$s0", "\$zero", "\$a0"))
@@ -104,8 +102,7 @@ class ExampleInstrumentedTest {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         val sim = MIPSSimulator(appContext)
         val taskID = 2
-        //sim.generateTask(taskID)
-        //sim.gameTask.setTask(taskID)
+        sim.generateTask(taskID)
 
         val instrList = mutableListOf(Instruction((arrayOf("main:"))))
         instrList += Instruction(arrayOf("add", "\$s0", "\$a0", "\$zero"))
@@ -138,7 +135,6 @@ class ExampleInstrumentedTest {
         val sim = MIPSSimulator(appContext)
         val taskID = 3
         sim.generateTask(taskID)
-        sim.gameTask.setTask(taskID)
 
         val instrList = mutableListOf(Instruction((arrayOf("main:"))))
         instrList += Instruction(arrayOf("add", "\$t0", "\$zero", "\$zero"))
@@ -169,7 +165,6 @@ class ExampleInstrumentedTest {
         val sim = MIPSSimulator(appContext)
         val taskID = 4
         sim.generateTask(taskID)
-        sim.gameTask.setTask(taskID)
 
         val instrList = mutableListOf(Instruction((arrayOf("main:"))))
         instrList += Instruction(arrayOf("add", "\$s0", "\$zero", "\$a0"))
@@ -208,7 +203,6 @@ class ExampleInstrumentedTest {
         val sim = MIPSSimulator(appContext)
         val taskID = 5
         sim.generateTask(taskID)
-        sim.gameTask.setTask(taskID)
 
         val instrList = mutableListOf(Instruction((arrayOf("main:"))))
         instrList += Instruction(arrayOf("add", "\$s0", "\$zero", "\$a0"))
@@ -255,7 +249,6 @@ class ExampleInstrumentedTest {
         val sim = MIPSSimulator(appContext)
         val taskID = 6
         sim.generateTask(taskID)
-        sim.gameTask.setTask(taskID)
 
         val instrList = mutableListOf(Instruction((arrayOf("main:"))))
         instrList += Instruction(arrayOf("jal", "Luna"))
