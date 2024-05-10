@@ -75,4 +75,89 @@ class OperatorsInstrumentedTest {
             assertEquals(sim.run(instrList), "Overflow exception!")
         }
     }
+
+    @Test
+    fun test_addu() {
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        // adding small numbers
+        repeat(100) {
+            val x = get_rand(-100, 100)
+            val y = get_rand(-100, 100)
+
+            val sim = MIPSSimulator(appContext)
+            sim.regs["\$t0"] = x
+            sim.regs["\$t1"] = y
+
+            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            instrList += Instruction(arrayOf("addu", "\$t2", "\$t0", "\$t1"))
+            sim.run(instrList)
+
+            assertEquals(x + y, sim.regs["\$t2"])
+        }
+
+        // adding to same register
+        repeat(100) {
+            val x = get_rand(-100, 100)
+
+            val sim = MIPSSimulator(appContext)
+            sim.regs["\$t0"] = x
+
+            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            instrList += Instruction(arrayOf("addu", "\$t0", "\$t0", "\$t0"))
+            sim.run(instrList)
+
+            assertEquals(2 * x, sim.regs["\$t0"])
+        }
+
+        // "wrap-around"
+        repeat(100) {
+            val x = get_rand(Int.MIN_VALUE, Int.MAX_VALUE)
+            val y = get_rand(Int.MIN_VALUE, Int.MAX_VALUE)
+
+            val sim = MIPSSimulator(appContext)
+            sim.regs["\$t0"] = x
+            sim.regs["\$t1"] = y
+
+            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            instrList += Instruction(arrayOf("addu", "\$t2", "\$t0", "\$t1"))
+            sim.run(instrList)
+
+            assertEquals((x + y).toUInt(), sim.regs["\$t2"].toUInt())
+        }
+    }
+
+    @Test
+    fun test_and() {
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        // test random values
+        repeat(100) {
+            val sim = MIPSSimulator(appContext)
+            val x = get_rand(Int.MIN_VALUE, Int.MAX_VALUE)
+            val y = get_rand(Int.MIN_VALUE, Int.MAX_VALUE)
+
+            sim.regs["\$t0"] = x
+            sim.regs["\$t1"] = y
+
+            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            instrList += Instruction(arrayOf("and", "\$t2", "\$t1", "\$t0"))
+            sim.run(instrList)
+
+            assertEquals(sim.regs["\$t2"], x and y)
+        }
+
+        // test and-ing the same register
+        repeat(100) {
+            val sim = MIPSSimulator(appContext)
+            val x = get_rand(Int.MIN_VALUE, Int.MAX_VALUE)
+            sim.regs["\$t0"] = x
+
+            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            instrList += Instruction(arrayOf("and", "\$t0", "\$t0", "\$t0"))
+            sim.run(instrList)
+
+            assertEquals(sim.regs["\$t0"], x and x)
+        }
+    }
 }
