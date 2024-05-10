@@ -786,7 +786,7 @@ class GameActivity : AppCompatActivity() {
              */
 
             // Solution for 6
-            /*
+
             instrList = mutableListOf(Instruction((arrayOf("main:"))))
             instrList += Instruction(arrayOf("jal", "Luna"))
             instrList += Instruction(arrayOf("j", "exit"))
@@ -813,7 +813,7 @@ class GameActivity : AppCompatActivity() {
             instrList += Instruction(arrayOf("addi", "\$sp", "\$sp", "4"))
             instrList += Instruction(arrayOf("lw", "\$ra", "0", "\$sp"))
             instrList += Instruction(arrayOf("jr", "\$ra"))
-             */
+
 
             // Solution for 3
             /*
@@ -839,7 +839,7 @@ class GameActivity : AppCompatActivity() {
             */
 
             // Solution for 2
-
+/*
             instrList = mutableListOf(Instruction((arrayOf("main:"))))
             instrList += Instruction(arrayOf("add", "\$s0", "\$a0", "\$zero"))
             instrList += Instruction(arrayOf("add", "\$s1", "\$a1", "\$zero"))
@@ -860,9 +860,9 @@ class GameActivity : AppCompatActivity() {
             instrList += Instruction(arrayOf("lw", "\$ra", "0", "\$sp"))
             instrList += Instruction(arrayOf("add", "\$v0", "\$t0", "\$zero"))
             instrList += Instruction(arrayOf("jr", "\$ra"))
-
+*/
             // Solution for 0
-            /*
+/*
             instrList = mutableListOf(Instruction((arrayOf("main:"))))
             instrList += Instruction(arrayOf("add", "\$s0", "\$a0", "\$zero"))
             instrList += Instruction(arrayOf("add", "\$s1", "\$a1", "\$zero"))
@@ -887,8 +887,8 @@ class GameActivity : AppCompatActivity() {
             instrList += Instruction(arrayOf("lw", "\$ra", "0", "\$sp"))
             instrList += Instruction(arrayOf("add", "\$v0", "\$t0", "\$zero"))
             instrList += Instruction(arrayOf("jr", "\$ra"))
+*/
 
-             */
 
 
 
