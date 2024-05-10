@@ -40,7 +40,11 @@ class Leaderboard : AppCompatActivity() {
 
         dayButton.setOnClickListener {
             requestScore("day") {response ->
-                val arr = parseResponse(response!!)
+                var arr = parseResponse(response!!)
+
+                if (arr.isEmpty()) {
+                    arr = listOf<LeaderboardItem>(LeaderboardItem("", "Empty Leaderboard :(", null))
+                }
 
                 runOnUiThread {
                     customAdapter.updateData(arr.toTypedArray())
@@ -49,7 +53,11 @@ class Leaderboard : AppCompatActivity() {
         }
         weekButton.setOnClickListener {
             requestScore("week") {response ->
-                val arr = parseResponse(response!!)
+                var arr = parseResponse(response!!)
+
+                if (arr.isEmpty()) {
+                    arr = listOf<LeaderboardItem>(LeaderboardItem("", "Empty Leaderboard :(", null))
+                }
 
                 runOnUiThread {
                     customAdapter.updateData(arr.toTypedArray())
@@ -58,7 +66,11 @@ class Leaderboard : AppCompatActivity() {
         }
         allButton.setOnClickListener {
             requestScore("all") {response ->
-                val arr = parseResponse(response!!)
+                var arr = parseResponse(response!!)
+
+                if (arr.isEmpty()) {
+                    arr = listOf<LeaderboardItem>(LeaderboardItem("", "Empty Leaderboard :(", null))
+                }
 
                 runOnUiThread {
                     customAdapter.updateData(arr.toTypedArray())
@@ -79,12 +91,18 @@ class Leaderboard : AppCompatActivity() {
     }
 
     fun parseResponse(response: String): List<LeaderboardItem> {
+        Log.i("MYDEBUG", "response is $response")
+
+        if (response.contains("ERR_NGROK")) {
+            return listOf<LeaderboardItem>()
+        }
+
         val jsonArray = JSONArray(response)
         val leaderboardArray = mutableListOf<LeaderboardItem>()
 
         for(i in 0 until jsonArray.length()) {
             val jsonObject: JSONObject = jsonArray.getJSONObject(i)
-            val item = LeaderboardItem((i + 1).toString() + "-th", jsonObject.getString("username"), jsonObject.getString("score").toInt())
+            val item = LeaderboardItem((i + 1).toString(), jsonObject.getString("username"), jsonObject.getString("score").toInt())
             leaderboardArray.add(item)
         }
 
@@ -94,7 +112,7 @@ class Leaderboard : AppCompatActivity() {
     // from https://stackoverflow.com/questions/66059143/how-to-make-a-http-post-request-in-kotlin-android-to-simple-server
     fun submitScore(username: String, score: Int) {
         // TODO: Replace in Prod
-        val url = "https://0553-175-159-124-117.ngrok-free.app/leaderboard.php"
+        val url = "https://51d7-86-48-11-122.ngrok-free.app/leaderboard.php"
 
         // add parameter
         val formBody = FormBody.Builder()
@@ -121,7 +139,7 @@ class Leaderboard : AppCompatActivity() {
 
     fun requestScore(timespan: String, onResponse: (String?) -> Unit) {
         // TODO: Replace in Prod
-        val baseUrl = "https://0553-175-159-124-117.ngrok-free.app/leaderboard.php"
+        val baseUrl = "https://51d7-86-48-11-122.ngrok-free.app/leaderboard.php"
 
         // from https://stackoverflow.com/questions/65884020/http-get-request-with-parameters-in-okhttp-android-kotlin
         val url = baseUrl.toHttpUrl().newBuilder()
