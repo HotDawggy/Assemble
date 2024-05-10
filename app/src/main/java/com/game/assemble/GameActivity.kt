@@ -681,7 +681,7 @@ class GameActivity : AppCompatActivity() {
             startActivity(Intent(this, Encyclopedia::class.java))
         }
 
-        /*
+
         // TODO: REMOVE SOON
         val heartsButton: TextView = findViewById<TextView>(R.id.gameInfoHeartsRemaining)
         heartsButton.setOnClickListener {
@@ -807,7 +807,7 @@ class GameActivity : AppCompatActivity() {
             */
 
             // Solution for 0 and 2
-            /*
+
             instrList = mutableListOf(Instruction((arrayOf("main:"))))
             instrList += Instruction(arrayOf("add", "\$s0", "\$a0", "\$zero"))
             instrList += Instruction(arrayOf("add", "\$s1", "\$a1", "\$zero"))
@@ -832,7 +832,7 @@ class GameActivity : AppCompatActivity() {
             instrList += Instruction(arrayOf("lw", "\$ra", "0", "\$sp"))
             instrList += Instruction(arrayOf("add", "\$v0", "\$t0", "\$zero"))
             instrList += Instruction(arrayOf("jr", "\$ra"))
-             */
+
 
 
             instructionLinearLayout.removeAllViews()
@@ -845,7 +845,7 @@ class GameActivity : AppCompatActivity() {
             }
             update()
         }
-         */
+
     }
 
     override fun onPause() {

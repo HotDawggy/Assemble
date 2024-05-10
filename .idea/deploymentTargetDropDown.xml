@@ -2,22 +2,22 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="Encyclopedia">
+      <entry key="ExampleInstrumentedTest">
         <State />
       </entry>
       <entry key="GameActivity">
         <State />
       </entry>
-      <entry key="Leaderboard">
-        <State />
-      </entry>
-      <entry key="MainActivity">
-        <State />
-      </entry>
-      <entry key="RemoveOpsActivity">
-        <State />
-      </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="testModelSolution0()">
+        <State />
+      </entry>
+      <entry key="testModelSolution2()">
+        <State />
+      </entry>
+      <entry key="testModelSolution3()">
         <State />
       </entry>
     </value>
