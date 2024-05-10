@@ -40,7 +40,11 @@ class Leaderboard : AppCompatActivity() {
 
         dayButton.setOnClickListener {
             requestScore("day") {response ->
-                val arr = parseResponse(response!!)
+                var arr = parseResponse(response!!)
+
+                if (arr.isEmpty()) {
+                    arr = listOf<LeaderboardItem>(LeaderboardItem("", "Empty Leaderboard :(", 0))
+                }
 
                 runOnUiThread {
                     customAdapter.updateData(arr.toTypedArray())
@@ -49,7 +53,11 @@ class Leaderboard : AppCompatActivity() {
         }
         weekButton.setOnClickListener {
             requestScore("week") {response ->
-                val arr = parseResponse(response!!)
+                var arr = parseResponse(response!!)
+
+                if (arr.isEmpty()) {
+                    arr = listOf<LeaderboardItem>(LeaderboardItem("", "Empty Leaderboard :(", 0))
+                }
 
                 runOnUiThread {
                     customAdapter.updateData(arr.toTypedArray())
@@ -58,7 +66,11 @@ class Leaderboard : AppCompatActivity() {
         }
         allButton.setOnClickListener {
             requestScore("all") {response ->
-                val arr = parseResponse(response!!)
+                var arr = parseResponse(response!!)
+
+                if (arr.isEmpty()) {
+                    arr = listOf<LeaderboardItem>(LeaderboardItem("", "Empty Leaderboard :(", 0))
+                }
 
                 runOnUiThread {
                     customAdapter.updateData(arr.toTypedArray())
