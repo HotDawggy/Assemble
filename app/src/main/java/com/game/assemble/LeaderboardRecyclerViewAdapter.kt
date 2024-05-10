@@ -1,6 +1,7 @@
 package com.game.assemble
 
 // from https://developer.android.com/develop/ui/views/layout/recyclerview
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,6 +44,10 @@ class LeaderboardRecyclerViewAdapter(private var dataSet: Array<LeaderboardItem>
         viewHolder.rankingView.text = dataSet[position].ranking
         viewHolder.scoreView.text = dataSet[position].score.toString()
         viewHolder.usernameView.text = dataSet[position].username
+
+        viewHolder.rankingView.setTextColor(Color.WHITE)
+        viewHolder.scoreView.setTextColor(Color.WHITE)
+        viewHolder.usernameView.setTextColor(Color.WHITE)
     }
 
     // Return the size of your dataset (invoked by the layout manager)

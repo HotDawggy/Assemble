@@ -74,7 +74,8 @@
             android:layout_weight="1"
             android:text="Past Day"
             tools:layout_editor_absoluteX="148dp"
-            tools:layout_editor_absoluteY="16dp" />
+            tools:layout_editor_absoluteY="16dp"
+            android:textColor="@color/white"/>
 
         <Button
             android:id="@+id/btnLeaderboardWeek"
@@ -82,7 +83,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Past Week"
-            tools:layout_editor_absoluteY="16dp" />
+            tools:layout_editor_absoluteY="16dp"
+            android:textColor="@color/white"/>
 
         <Button
             android:id="@+id/btnLeaderboardAll"
@@ -90,6 +92,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="All Time"
-            tools:layout_editor_absoluteY="16dp" />
+            tools:layout_editor_absoluteY="16dp"
+            android:textColor="@color/white"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
