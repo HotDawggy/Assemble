@@ -606,8 +606,8 @@ class GameActivity : AppCompatActivity() {
                     instructionLinearLayout.removeAllViews()
 
                     val intent = Intent(this@GameActivity, RemoveOpsActivity::class.java)
-                    intent.putExtra("roundNumber", round + 1)
-                    Log.i("MYDEBUG", "putting new round number ${round + 1}")
+                    intent.putExtra("roundNumber", round)
+                    Log.i("MYDEBUG", "putting new round number ${round}")
                     withContext(Dispatchers.Main) {
                         startActivity(intent)
                     }

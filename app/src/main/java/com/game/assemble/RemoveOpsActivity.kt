@@ -41,7 +41,7 @@ class RemoveOpsActivity : AppCompatActivity() {
         var toRemove = n / 8
 
         val textView = findViewById<TextView>(R.id.removeOpsTextView)
-        textView.text = "Pick another $toRemove operator(s) to be removed in round $roundNumber."
+        textView.text = "Pick another $toRemove operator(s) to be removed starting the next round."
 
         val gridView = findViewById<GridView>(R.id.removeOpsGridView)
         gridView.adapter = KeyboardRemoveOpsGridViewAdapter(this, allOps.toList())
@@ -82,7 +82,7 @@ class RemoveOpsActivity : AppCompatActivity() {
                 editor.commit()
 
                 val intent = Intent(this, TransitionGameActivity::class.java)
-                intent.putExtra("roundNumber", roundNumber)
+                intent.putExtra("roundNumber", roundNumber + 1)
 
                 startActivity(intent)
             }
