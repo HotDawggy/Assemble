@@ -49,8 +49,8 @@ class MIPSSimulator(
         }
         return null
     }
-    private fun zeroExtendImmediate(source: Int, amount: Int = 16) : Int {
-        return ((source shl amount) ushr amount)
+    private fun zeroExtendImmediate(source: Int) : Int {
+        return ((source shl 16) ushr 16)
     }
 
     private fun bigEndianConversion(bytes: ByteArray): Int {
@@ -73,7 +73,7 @@ class MIPSSimulator(
         if (index == null || index >= stack.size) stack += bytes
         else modifyStackInPlace(bytes, size, index)
         if (updateSp) regs["\$sp"] = regs["\$sp"] - size
-        //printStack()
+        printStack()
         //Log.d("addToStack", "sp: " + regs["\$sp"].toHexString())
     }
     private fun convertIntToByteArray(input : Int) : ByteArray {
@@ -90,12 +90,24 @@ class MIPSSimulator(
                 (buffer[offset + 1].toInt() and 0xff shl 8) or
                 (buffer[offset + 0].toInt() and 0xff)
     }
+    private fun convertHalfWordToByteArray(input : Int) : ByteArray {
+        //Log.d("convertIntToByteArray", input.toString())
+        val res = ByteArray(2)
+        for (i in 0..1) res[i] = (input shr (i*8)).toByte()
+        fun ByteArray.toHexString() = joinToString("") { "%02x".format(it) }
+        //Log.d("convertIntToByteArray", res.toHexString())
+        return res
+    }
+    private fun convertByteArrayToHalfWord(buffer: ByteArray, offset: Int): Int {
+        return (buffer[offset + 1].toInt() shl 8) or
+                (buffer[offset + 0].toInt() and 0xff)
+    }
 
     private fun printStack() {
         Log.d("printStack", "Printing Stack")
         Log.d("printStack", "Size: " + stack.size.toString())
-        for (byte in stack) {
-            Log.d("printStack", byte.toString())
+        for (i in 0..<stack.size / 4) {
+            Log.d("printStack", convertByteArrayToInt(stack, i * 4).toString())
         }
     }
 
@@ -320,7 +332,7 @@ class MIPSSimulator(
                     val temp: Long = regs[instr[2]].toLong() + regs[instr[3]].toLong()
                     if (temp <= Int.MAX_VALUE && temp >= Int.MIN_VALUE) {
                         regs[instr[1] as String] = temp.toInt()
-                        Log.d("add", temp.toInt().toString())
+                        //Log.d("add", temp.toInt().toString())
                     } else {
                         regs = savedRegs
                         return "Overflow exception!"
@@ -336,7 +348,7 @@ class MIPSSimulator(
                     regs[instr[1]] = regs[instr[2]] and (regs[instr[3]])
                 }
                 "div" -> {
-                    Log.d("div", regs[instr[1]].toString() + " " + regs[instr[2]].toString())
+                    //Log.d("div", regs[instr[1]].toString() + " " + regs[instr[2]].toString())
                     if (regs[instr[2]] == 0) {
                         regs = savedRegs
                         return "Divide by zero exception!"
@@ -470,7 +482,7 @@ class MIPSSimulator(
                     }
                 }
                 "blez" -> {
-                    Log.d("blez", regs[instr[1]].toString())
+                    //Log.d("blez", regs[instr[1]].toString())
                     if (regs[instr[1]] <= 0) {
                         val temp = parseLabel(instr[2]!!, instrList)
                         if (exit) return "" // Exit is jumped to
@@ -569,7 +581,7 @@ class MIPSSimulator(
                         return "Invalid stack address"
                     }
                     regs[instr[1]] =
-                        bigEndianConversion(stack.copyOfRange(temp, temp + 2)) shl 16 ushr 16
+                        convertByteArrayToHalfWord(stack, temp)
                 }
 
                 "lh" -> {   // lhu
@@ -592,7 +604,7 @@ class MIPSSimulator(
                         regs = savedRegs
                         return "Invalid stack address"
                     }
-                    regs[instr[1]] = bigEndianConversion(stack.copyOfRange(temp, temp + 4))
+                    regs[instr[1]] = convertByteArrayToInt(stack, temp)
                     Log.d("lw", regs[instr[1]].toHexString())
                 }
 
@@ -615,7 +627,7 @@ class MIPSSimulator(
                         regs = savedRegs
                         return "Invalid stack address"
                     }
-                    val tempArr = convertIntToByteArray(regs[instr[1]])
+                    val tempArr = convertHalfWordToByteArray(regs[instr[1]])
                     addToStack(tempArr, 1, temp)
                 }
 
@@ -625,7 +637,7 @@ class MIPSSimulator(
                         regs = savedRegs
                         return "Invalid stack address"
                     }
-                    val tempArr = convertIntToByteArray(regs[instr[1]])
+                    val tempArr = byteArrayOf(convertIntToByteArray(regs[instr[1]])[3])
                     addToStack(tempArr, 2, temp)
                 }
 
