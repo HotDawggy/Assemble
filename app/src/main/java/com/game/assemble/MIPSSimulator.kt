@@ -36,7 +36,7 @@ class MIPSSimulator(
         }
     }
 
-    private fun parseCodeAddress(addr: Int, instrList: MutableList<Instruction>) : Int? {
+    fun parseCodeAddress(addr: Int, instrList: MutableList<Instruction>) : Int? {
         Log.d("parseCodeAddress()", addr.toHexString())
         if ((addr - CODE_START) % 4 != 0) return null
         var temp: Int = (addr - CODE_START)/4
@@ -54,7 +54,7 @@ class MIPSSimulator(
         }
         return null
     }
-    private fun getCodeAddress(line: Int, instrList: MutableList<Instruction>) : Int {
+    fun getCodeAddress(line: Int, instrList: MutableList<Instruction>) : Int {
         Log.d("parseCodeAddress()", line.toString())
         var temp = CODE_START
         for (i in 0..<line) {
