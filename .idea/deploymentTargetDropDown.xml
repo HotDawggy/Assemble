@@ -8,16 +8,16 @@
       <entry key="app">
         <State />
       </entry>
-      <entry key="test_jr()">
+      <entry key="test_lh()">
         <State />
       </entry>
-      <entry key="test_lb()">
+      <entry key="test_sltiu()">
         <State />
       </entry>
-      <entry key="test_lbu()">
+      <entry key="test_xor()">
         <State />
       </entry>
-      <entry key="test_lhu()">
+      <entry key="test_xori()">
         <State />
       </entry>
     </value>

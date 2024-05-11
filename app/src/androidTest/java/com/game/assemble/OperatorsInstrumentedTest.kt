@@ -1205,9 +1205,41 @@ class OperatorsInstrumentedTest {
             sim.run(instrList)
 
             // cast signed byte to unsigned for checking
-            //assertEquals(sim.regs["\$t2"].toUInt(), (x * 256 + x).toUInt())
-            //assertEquals(sim.regs["\$t2"].toUInt(), (x.toUInt() shl 8) + x.toUInt())        }
+            assertEquals(sim.regs["\$t2"].toUInt() and 0xFFFFu, (x).toUInt() and 0xFFFFu)
         }
+        // jump to invalid address
+        run {
+            val sim = MIPSSimulator(appContext)
+            sim.regs["\$t1"] = 0x7ffffffc + 1
+
+            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            instrList += Instruction(arrayOf("lhu", "\$t2", "0", "\$t1"))
+            instrList += Instruction(arrayOf("j", "exit"))
+
+            assertEquals(sim.run(instrList), "Invalid stack address")
+        }
+    }
+
+    @Test
+    fun test_lh() {
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        // insert half-word into memory and load it
+        repeat(100) {
+            val sim = MIPSSimulator(appContext)
+            val x = get_rand(0, 1000)
+            sim.regs["\$t1"] = 0x7ffffffc
+            sim.regs["\$t0"] = x
+
+            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            instrList += Instruction(arrayOf("sh", "\$t0", "0", "\$t1"))
+            instrList += Instruction(arrayOf("lh", "\$t2", "0", "\$t1"))
+            instrList += Instruction(arrayOf("j", "exit"))
+            sim.run(instrList)
+
+            assertEquals(sim.regs["\$t2"], x)
+        }
+
         // jump to invalid address
         run {
             val sim = MIPSSimulator(appContext)
@@ -1218,6 +1250,169 @@ class OperatorsInstrumentedTest {
             instrList += Instruction(arrayOf("j", "exit"))
 
             assertEquals(sim.run(instrList), "Invalid stack address")
+        }
+    }
+
+    @Test
+    fun test_lui() { // $t = i << 16
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        repeat(100) {
+            val sim = MIPSSimulator(appContext)
+            val x = get_rand(0, 1000)
+            sim.regs["\$t0"] = x
+
+            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            instrList += Instruction(arrayOf("lui", "\$t0", x.toString()))
+            instrList += Instruction(arrayOf("j", "exit"))
+
+            sim.run(instrList)
+            assertEquals(sim.regs["\$t0"], x shl 16)
+        }
+    }
+
+    @Test
+    fun test_lw() {
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        // insert word into memory and load it
+        repeat(100) {
+            val sim = MIPSSimulator(appContext)
+            val x = get_rand(0, Int.MAX_VALUE)
+            sim.regs["\$t1"] = 0x7ffffffc
+            sim.regs["\$t0"] = x
+
+            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            instrList += Instruction(arrayOf("sw", "\$t0", "0", "\$t1"))
+            instrList += Instruction(arrayOf("lw", "\$t2", "0", "\$t1"))
+            instrList += Instruction(arrayOf("j", "exit"))
+            sim.run(instrList)
+
+            // cast signed byte to unsigned for checking
+            assertEquals(sim.regs["\$t2"].toUInt(), (x).toUInt())
+        }
+
+        // jump to invalid address
+        run {
+            val sim = MIPSSimulator(appContext)
+            sim.regs["\$t1"] = 0x7ffffffc + 1
+
+            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            instrList += Instruction(arrayOf("lw", "\$t2", "0", "\$t1"))
+            instrList += Instruction(arrayOf("j", "exit"))
+
+            assertEquals(sim.run(instrList), "Invalid stack address")
+        }
+    }
+
+    @Test
+    fun test_ori() { // ori $t, $s, i $t = $s | ZE(i)
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        repeat(100) {
+            val sim = MIPSSimulator(appContext)
+            val x = get_rand(Int.MIN_VALUE, Int.MAX_VALUE)
+            val y = get_rand(Int.MIN_VALUE, Int.MAX_VALUE)
+            sim.regs["\$t0"] = y
+
+            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            instrList += Instruction(arrayOf("ori", "\$t1", "\$t0", x.toString()))
+            instrList += Instruction(arrayOf("j", "exit"))
+            sim.run(instrList)
+
+            assertEquals(sim.regs["\$t1"], (y or ((x shl 16) ushr 16)))
+        }
+    }
+
+    @Test
+    fun test_slti() { // slti $t, $s, i $t = ($s < SE(i))
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        repeat(100) {
+            val sim = MIPSSimulator(appContext)
+            val x = get_rand(Int.MIN_VALUE, Int.MAX_VALUE)
+            val y = get_rand(Int.MIN_VALUE, Int.MAX_VALUE)
+            sim.regs["\$t1"] = y
+
+            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            instrList += Instruction(arrayOf("slti", "\$t0", "\$t1", x.toString()))
+            instrList += Instruction(arrayOf("j", "exit"))
+            sim.run(instrList)
+
+            assertEquals(sim.regs["\$t0"], if (y < x) 1 else 0)
+        }
+    }
+
+    @Test
+    fun test_sltiu() { // sltiu $t, $s, i $t = ($s < SE(i))
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        repeat(100) {
+            val sim = MIPSSimulator(appContext)
+            val x = (UInt.MIN_VALUE..UInt.MAX_VALUE).random()
+            val y = (UInt.MIN_VALUE..UInt.MAX_VALUE).random()
+            sim.regs["\$t1"] = y.toInt()
+
+            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            instrList += Instruction(arrayOf("sltiu", "\$t0", "\$t1", x.toInt().toString()))
+            instrList += Instruction(arrayOf("j", "exit"))
+            sim.run(instrList)
+
+            assertEquals(sim.regs["\$t0"], if (y < x) 1 else 0)
+        }
+    }
+
+    @Test
+    fun test_sb() {
+        this.test_lb()
+    }
+
+    @Test
+    fun test_sh() {
+        this.test_lh()
+    }
+
+    @Test
+    fun test_sw() {
+        this.test_lw()
+    }
+
+    @Test
+    fun test_xor() {
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        repeat(100) {
+            val sim = MIPSSimulator(appContext)
+            val x = get_rand(Int.MIN_VALUE, Int.MAX_VALUE)
+            val y = get_rand(Int.MIN_VALUE, Int.MAX_VALUE)
+            sim.regs["\$t1"] = y
+            sim.regs["\$t0"] = x
+
+            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            instrList += Instruction(arrayOf("xor", "\$t2", "\$t0", "\$t1"))
+            instrList += Instruction(arrayOf("j", "exit"))
+            sim.run(instrList)
+
+            assertEquals(sim.regs["\$t2"], x xor y)
+        }
+    }
+
+    @Test
+    fun test_xori() {
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        repeat(100) {
+            val sim = MIPSSimulator(appContext)
+            val x = get_rand(Int.MIN_VALUE, Int.MAX_VALUE)
+            val y = get_rand(Int.MIN_VALUE, Int.MAX_VALUE)
+            sim.regs["\$t0"] = x
+
+            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            instrList += Instruction(arrayOf("xori", "\$t2", "\$t0", y.toString()))
+            instrList += Instruction(arrayOf("j", "exit"))
+            sim.run(instrList)
+
+            assertEquals(sim.regs["\$t2"], x xor ((y shl 16) ushr 16))
         }
     }
 }
