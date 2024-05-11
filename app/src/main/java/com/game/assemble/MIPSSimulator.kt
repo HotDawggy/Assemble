@@ -126,9 +126,14 @@ class MIPSSimulator(
         Log.d("convertHalfWordToByteArray()", res.size.toString())
         return res
     }
-    private fun convertByteArrayToHalfWord(buffer: ByteArray, offset: Int): Int {
-        return (buffer[offset + 1].toInt() shl 8) or
-                (buffer[offset + 0].toInt() and 0xff)
+    private fun convertByteArrayToHalfWord(buffer: ByteArray, offset: Int, unsigned: Boolean = false): Int {
+        if (unsigned) {
+            return (buffer[offset + 1].toInt() shl 8) or
+                    (buffer[offset + 0].toInt() and 0xff)
+        } else {
+            return (buffer[offset + 1].toInt() shl 24 shr 16) or
+                    (buffer[offset + 0].toInt() and 0xff)
+        }
     }
 
     private fun printStack() {
@@ -598,7 +603,7 @@ class MIPSSimulator(
                         return "Invalid stack address"
                     }
                     regs[instr[1]] =
-                        convertByteArrayToHalfWord(stack, temp)
+                        convertByteArrayToHalfWord(stack, temp, true)
                 }
 
                 "lh" -> {   // lhu
@@ -608,7 +613,7 @@ class MIPSSimulator(
                         return "Invalid stack address"
                     }
                     regs[instr[1]] =
-                        bigEndianConversion(stack.copyOfRange(temp, temp + 2)) shl 16 shr 16
+                        convertByteArrayToHalfWord(stack, temp)
                 }
 
                 "lui" -> {    // lui
