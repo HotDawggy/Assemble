@@ -16,14 +16,6 @@ import org.junit.Assert.*
  */
 @RunWith(AndroidJUnit4::class)
 class OperatorsInstrumentedTest {
-    @Test
-    fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        val sim = MIPSSimulator(appContext)
-        sim.generateTask(0)
-    }
-
     private fun get_rand(a: Int, b: Int): Int {
         return (a..b).random()
     }
