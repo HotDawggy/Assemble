@@ -80,14 +80,17 @@ class MIPSSimulator(
         return result
     }
     private fun modifyStackInPlace(bytes: ByteArray, size: Int, index: Int) {
+        Log.d("modifyStackInPlace()",bytes.size.toString())
         for (i in 0..<size) {
+            Log.d("modifyStackInPlace()",bytes[i].toString())
             stack[i + index] = bytes[i]
         }
     }
     private fun addToStack(bytes: ByteArray, size: Int, index: Int? = null, updateSp: Boolean = false) {
         fun ByteArray.toHexString() = joinToString("") { "%02x".format(it) }
-        //Log.d("addToStack", bytes.toHexString())
-        //Log.d("addToStack", stack.size.toString())
+        Log.d("addToStack", bytes.toHexString())
+        Log.d("addToStack", size.toString())
+        Log.d("addToStack", (index?:-1).toString())
         //printStack()
         if (index == null || index >= stack.size) {
             if (index != null) {
@@ -120,6 +123,7 @@ class MIPSSimulator(
         for (i in 0..1) res[i] = (input shr (i*8)).toByte()
         fun ByteArray.toHexString() = joinToString("") { "%02x".format(it) }
         //Log.d("convertIntToByteArray", res.toHexString())
+        Log.d("convertHalfWordToByteArray()", res.size.toString())
         return res
     }
     private fun convertByteArrayToHalfWord(buffer: ByteArray, offset: Int): Int {
@@ -640,7 +644,7 @@ class MIPSSimulator(
                         regs = savedRegs
                         return "Invalid stack address"
                     }
-                    val tempArr = convertHalfWordToByteArray(regs[instr[1]])
+                    val tempArr = byteArrayOf(regs[instr[1]].toByte())
                     addToStack(tempArr, 1, temp)
                 }
 
@@ -650,7 +654,7 @@ class MIPSSimulator(
                         regs = savedRegs
                         return "Invalid stack address"
                     }
-                    val tempArr = byteArrayOf(convertIntToByteArray(regs[instr[1]])[3])
+                    val tempArr = convertHalfWordToByteArray(regs[instr[1]])
                     addToStack(tempArr, 2, temp)
                 }
 
