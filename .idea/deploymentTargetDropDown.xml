@@ -2,22 +2,22 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="ModelSolutionInstrumentedTest">
-        <State />
-      </entry>
       <entry key="app">
         <State />
       </entry>
-      <entry key="testModelSolution2()">
+      <entry key="test_addi()">
         <State />
       </entry>
-      <entry key="test_addu()">
+      <entry key="test_addiu()">
         <State />
       </entry>
-      <entry key="test_and()">
+      <entry key="test_andi()">
         <State />
       </entry>
-      <entry key="test_div()">
+      <entry key="test_beq()">
+        <State />
+      </entry>
+      <entry key="test_subu()">
         <State />
       </entry>
     </value>
