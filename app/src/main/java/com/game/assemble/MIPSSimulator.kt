@@ -157,8 +157,7 @@ class MIPSSimulator(
             0 -> {  // LCM of a0, a1, return in v0
                 regs["\$a0"] = (4..999).random()
                 regs["\$a1"] = (4..999).random()
-                // TODO: REVERT THIS
-                //regs["\$a1"] = 1
+
                 gameTask["goal"] = gameTask.findLCM(regs["\$a0"], regs["\$a1"])
                 gameTask["input1"] = regs["\$a0"]
                 gameTask["input2"] = regs["\$a1"]
@@ -349,7 +348,7 @@ class MIPSSimulator(
             val instr: Instruction = instrList[line]
             instr.logInstr()
             //Log.d("[*] MIPSSimulator.Run", "line " + line.toString())
-            if (Calendar.getInstance().time.time - startTime > 2000) { // TODO: REVERT BACK
+            if (Calendar.getInstance().time.time - startTime > 2000) {
                 regs = savedRegs
                 return "Timed out! Check if your code will result in infinite loop!"
             }

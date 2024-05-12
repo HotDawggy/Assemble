@@ -2,6 +2,9 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="GameActivity">
+        <State />
+      </entry>
       <entry key="OperatorsInstrumentedTest">
         <State />
       </entry>
@@ -9,9 +12,6 @@
         <State />
       </entry>
       <entry key="test_lh()">
-        <State />
-      </entry>
-      <entry key="test_sltiu()">
         <State />
       </entry>
       <entry key="test_xor()">

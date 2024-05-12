@@ -148,8 +148,6 @@ fun changeInstructionOppType(button: TextView, opType: String) {
     val template = Instruction(arrayOf(opType)).getTemplateFromOperator()
     val keyboards = getKeyboardFromOperator(opType)
 
-    // TODO: replace on click listeners
-    // TODO: templates
     for(i in 0 until 8) {
         if (i >= template.size) {
             buttons[i].visibility = View.INVISIBLE
@@ -157,7 +155,6 @@ fun changeInstructionOppType(button: TextView, opType: String) {
         }
         else if (template[i] == "_") {
             buttons[i].setOnClickListener {
-                // TODO: bring up correct keyboard type
                 GameActivity.switchKeyboardLayout(keyboards[i / 2])
 
                 if (GameActivity.lastAccessedGameButton != null) {
