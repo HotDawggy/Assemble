@@ -2,6 +2,9 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="Encyclopedia">
+        <State />
+      </entry>
       <entry key="GameActivity">
         <State />
       </entry>
@@ -12,12 +15,6 @@
         <State />
       </entry>
       <entry key="app">
-        <State />
-      </entry>
-      <entry key="test_lh()">
-        <State />
-      </entry>
-      <entry key="test_xori()">
         <State />
       </entry>
     </value>
