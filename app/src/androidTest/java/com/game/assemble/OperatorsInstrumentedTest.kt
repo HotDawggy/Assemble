@@ -19,10 +19,7 @@ class OperatorsInstrumentedTest {
     private fun get_rand(a: Int, b: Int): Int {
         return (a..b).random()
     }
-
-    private fun get_rand_long(a: Long, b: Long): Long {
-        return (a..b).random()
-    }
+    
     @Test
     fun test_add() {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
@@ -30,7 +27,7 @@ class OperatorsInstrumentedTest {
         // add small numbers
         repeat(100) {
             val sim = MIPSSimulator(appContext)
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             val x = get_rand(-100, 100)
             val y = get_rand(-100, 100)
             sim.regs["\$t0"] = x
@@ -45,7 +42,7 @@ class OperatorsInstrumentedTest {
         // edge case - add register with itself
         repeat(100) {
             val sim = MIPSSimulator(appContext)
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             val x = get_rand(-100, 100)
             sim.regs["\$t0"] = x
 
@@ -58,9 +55,9 @@ class OperatorsInstrumentedTest {
         // edge case - overflow handling (exceed 0x7FFFFFFF)
         repeat(100) {
             val sim = MIPSSimulator(appContext)
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
 
-            val x = 0x80000000 - get_rand_long(0, 0x80000000) + get_rand(0, 100)
+            val x = 0x80000000 - (0..0x80000000).random() + get_rand(0, 100)
             val y = 0x80000000 - x // such that x + y == 0x80000000 + epsilon
             sim.regs["\$t0"] = x.toInt()
             sim.regs["\$t1"] = y.toInt()
@@ -84,7 +81,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t0"] = x
             sim.regs["\$t1"] = y
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("addu", "\$t2", "\$t0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -99,7 +96,7 @@ class OperatorsInstrumentedTest {
             val sim = MIPSSimulator(appContext)
             sim.regs["\$t0"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("addu", "\$t0", "\$t0", "\$t0"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -116,7 +113,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t0"] = x
             sim.regs["\$t1"] = y
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("addu", "\$t2", "\$t0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -138,7 +135,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t0"] = x
             sim.regs["\$t1"] = y
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("and", "\$t2", "\$t1", "\$t0"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -152,7 +149,7 @@ class OperatorsInstrumentedTest {
             val x = get_rand(Int.MIN_VALUE, Int.MAX_VALUE)
             sim.regs["\$t0"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("and", "\$t0", "\$t0", "\$t0"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -177,7 +174,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t0"] = x
             sim.regs["\$t1"] = y
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("div", "\$t0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -193,7 +190,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t0"] = x
             sim.regs["\$t1"] = 0
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("div", "\$t0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
 
@@ -208,13 +205,13 @@ class OperatorsInstrumentedTest {
         // divide by non-zero values
         repeat(100) {
             val x = get_rand(0, Int.MAX_VALUE)
-            var y = get_rand(1, 100)
+            val y = get_rand(1, 100)
 
             val sim = MIPSSimulator(appContext)
             sim.regs["\$t0"] = x
             sim.regs["\$t1"] = y
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("div", "\$t0", "\$t1"))
 
             instrList += Instruction(arrayOf("j", "exit"))
@@ -231,7 +228,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t0"] = x
             sim.regs["\$t1"] = 0
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("div", "\$t0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
             assertEquals(sim.run(instrList), "Divide by zero exception!")
@@ -250,7 +247,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t0"] = x
             sim.regs["\$t1"] = y
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("mult", "\$t0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -265,7 +262,7 @@ class OperatorsInstrumentedTest {
             val sim = MIPSSimulator(appContext)
             sim.regs["\$t0"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("mult", "\$t0", "\$t0"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -287,7 +284,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t0"] = x
             sim.regs["\$t1"] = y
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("mult", "\$t0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -302,7 +299,7 @@ class OperatorsInstrumentedTest {
             val sim = MIPSSimulator(appContext)
             sim.regs["\$t0"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("mult", "\$t0", "\$t0"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -322,7 +319,7 @@ class OperatorsInstrumentedTest {
             val sim = MIPSSimulator(appContext)
             sim.regs["\$hi"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("mfhi", "\$t0"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -340,7 +337,7 @@ class OperatorsInstrumentedTest {
             val sim = MIPSSimulator(appContext)
             sim.regs["\$lo"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("mflo", "\$t0"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -359,7 +356,7 @@ class OperatorsInstrumentedTest {
             val sim = MIPSSimulator(appContext)
             sim.regs["\$t0"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("mthi", "\$t0"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -378,7 +375,7 @@ class OperatorsInstrumentedTest {
             val sim = MIPSSimulator(appContext)
             sim.regs["\$t0"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("mtlo", "\$t0"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -398,7 +395,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t0"] = x
             sim.regs["\$t1"] = y
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("nor", "\$t2", "\$t0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -418,7 +415,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t0"] = x
             sim.regs["\$t1"] = y
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("or", "\$t2", "\$t0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -438,7 +435,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t0"] = x
             sim.regs["\$t1"] = y
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("slt", "\$t2", "\$t0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -458,7 +455,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t0"] = x.toInt()
             sim.regs["\$t1"] = y.toInt()
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("sltu", "\$t2", "\$t0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -477,7 +474,7 @@ class OperatorsInstrumentedTest {
             val sim = MIPSSimulator(appContext)
             sim.regs["\$t0"] = base
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("sll", "\$t2", "\$t0", exp.toString()))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -497,7 +494,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t0"] = base
             sim.regs["\$t1"] = exp
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("sllv", "\$t2", "\$t0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -516,7 +513,7 @@ class OperatorsInstrumentedTest {
             val sim = MIPSSimulator(appContext)
             sim.regs["\$t0"] = base
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("srl", "\$t2", "\$t0", exp.toString()))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -536,7 +533,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t0"] = base
             sim.regs["\$t1"] = exp
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("srlv", "\$t2", "\$t0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -555,7 +552,7 @@ class OperatorsInstrumentedTest {
             val sim = MIPSSimulator(appContext)
             sim.regs["\$t0"] = base
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("sra", "\$t2", "\$t0", exp.toString()))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -575,7 +572,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t0"] = base
             sim.regs["\$t1"] = exp
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("srav", "\$t2", "\$t0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -595,7 +592,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t0"] = x
             sim.regs["\$t1"] = y
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("sub", "\$t2", "\$t0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
             val res = sim.run(instrList)
@@ -621,7 +618,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t0"] = x.toInt()
             sim.regs["\$t1"] = y.toInt()
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("subu", "\$t2", "\$t0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -640,7 +637,7 @@ class OperatorsInstrumentedTest {
             val sim = MIPSSimulator(appContext)
             sim.regs["\$t0"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("addi", "\$t2", "\$t0", y.toString()))
             instrList += Instruction(arrayOf("j", "exit"))
             val res = sim.run(instrList)
@@ -665,10 +662,10 @@ class OperatorsInstrumentedTest {
             val sim = MIPSSimulator(appContext)
             sim.regs["\$t0"] = x.toInt()
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("addiu", "\$t2", "\$t0", y.toInt().toString()))
             instrList += Instruction(arrayOf("j", "exit"))
-            val res = sim.run(instrList)
+            sim.run(instrList)
 
             val sum = x.toLong() + y.toLong()
             assertEquals(sim.regs["\$t2"], sum.toInt())
@@ -685,7 +682,7 @@ class OperatorsInstrumentedTest {
             val sim = MIPSSimulator(appContext)
             sim.regs["\$t0"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("andi", "\$t2", "\$t0", y.toString()))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -707,7 +704,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t1"] = x
             sim.regs["\$t2"] = y
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("beq", "\$t1", "\$t2", "exit"))
             instrList += Instruction(arrayOf("add", "\$t1", "\$t1", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
@@ -729,7 +726,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t1"] = x
             sim.regs["\$t2"] = y
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("beq", "\$t1", "\$t2", "luna"))
             instrList += Instruction(arrayOf("add", "\$t1", "\$t1", "\$t1"))
             instrList += Instruction(arrayOf("luna:"))
@@ -752,7 +749,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t1"] = x
             sim.regs["\$t2"] = y
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("beq", "\$t1", "\$t2", "rawr"))
             instrList += Instruction(arrayOf("add", "\$t1", "\$t1", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
@@ -779,7 +776,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t1"] = x
             sim.regs["\$t2"] = y
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("bne", "\$t1", "\$t2", "exit"))
             instrList += Instruction(arrayOf("add", "\$t1", "\$t1", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
@@ -801,7 +798,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t1"] = x
             sim.regs["\$t2"] = y
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("bne", "\$t1", "\$t2", "luna"))
             instrList += Instruction(arrayOf("add", "\$t1", "\$t1", "\$t1"))
             instrList += Instruction(arrayOf("luna:"))
@@ -824,7 +821,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t1"] = x
             sim.regs["\$t2"] = y
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("bne", "\$t1", "\$t2", "rawr"))
             instrList += Instruction(arrayOf("add", "\$t1", "\$t1", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
@@ -849,7 +846,7 @@ class OperatorsInstrumentedTest {
             val x = get_rand(-3, 3)
             sim.regs["\$t1"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("blez", "\$t1", "exit"))
             instrList += Instruction(arrayOf("add", "\$t1", "\$t1", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
@@ -869,7 +866,7 @@ class OperatorsInstrumentedTest {
             val x = get_rand(-3, 3)
             sim.regs["\$t1"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("blez", "\$t1", "luna"))
             instrList += Instruction(arrayOf("add", "\$t1", "\$t1", "\$t1"))
             instrList += Instruction(arrayOf("luna:"))
@@ -890,7 +887,7 @@ class OperatorsInstrumentedTest {
             val x = get_rand(-3, 3)
             sim.regs["\$t1"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("blez", "\$t1", "rawr"))
             instrList += Instruction(arrayOf("add", "\$t1", "\$t1", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
@@ -915,7 +912,7 @@ class OperatorsInstrumentedTest {
             val x = get_rand(-3, 3)
             sim.regs["\$t1"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("bgtz", "\$t1", "exit"))
             instrList += Instruction(arrayOf("add", "\$t1", "\$t1", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
@@ -935,7 +932,7 @@ class OperatorsInstrumentedTest {
             val x = get_rand(-3, 3)
             sim.regs["\$t1"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("bgtz", "\$t1", "luna"))
             instrList += Instruction(arrayOf("add", "\$t1", "\$t1", "\$t1"))
             instrList += Instruction(arrayOf("luna:"))
@@ -956,7 +953,7 @@ class OperatorsInstrumentedTest {
             val x = get_rand(-3, 3)
             sim.regs["\$t1"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("bgtz", "\$t1", "rawr"))
             instrList += Instruction(arrayOf("add", "\$t1", "\$t1", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
@@ -978,7 +975,7 @@ class OperatorsInstrumentedTest {
         // test jump to exit
         run { // use run-block for scoping (convenience)
             val sim = MIPSSimulator(appContext)
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("j", "exit"))
             instrList += Instruction(arrayOf("addi", "\$t0", "\$zero", "1"))
             sim.run(instrList)
@@ -989,7 +986,7 @@ class OperatorsInstrumentedTest {
         // test jump to arbitrary label
         run {
             val sim = MIPSSimulator(appContext)
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("j", "luna"))
             instrList += Instruction(arrayOf("addi", "\$t0", "\$zero", "1"))
             instrList += Instruction(arrayOf("luna:"))
@@ -1002,7 +999,7 @@ class OperatorsInstrumentedTest {
         // test jump to invalid label
         run {
             val sim = MIPSSimulator(appContext)
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("j", "rawrrr"))
             instrList += Instruction(arrayOf("addi", "\$t0", "\$zero", "1"))
             instrList += Instruction(arrayOf("j", "exit"))
@@ -1018,7 +1015,7 @@ class OperatorsInstrumentedTest {
         // test jump to exit
         run { // use run-block for scoping (convenience)
             val sim = MIPSSimulator(appContext)
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("jal", "exit"))
             instrList += Instruction(arrayOf("addi", "\$t0", "\$zero", "1"))
             sim.run(instrList)
@@ -1029,7 +1026,7 @@ class OperatorsInstrumentedTest {
         // test jump to arbitrary label
         run {
             val sim = MIPSSimulator(appContext)
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("jal", "luna"))
             instrList += Instruction(arrayOf("addi", "\$t0", "\$zero", "1"))
             instrList += Instruction(arrayOf("luna:"))
@@ -1043,7 +1040,7 @@ class OperatorsInstrumentedTest {
         // test jump to invalid label
         run {
             val sim = MIPSSimulator(appContext)
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("jal", "rawrrr"))
             instrList += Instruction(arrayOf("addi", "\$t0", "\$zero", "1"))
             instrList += Instruction(arrayOf("j", "exit"))
@@ -1061,7 +1058,7 @@ class OperatorsInstrumentedTest {
         sim.regs["\$t0"] = 0x00400000 + 8 + 4 + 4 // jump to the 2nd addi
 
         // jalr to $t0
-        val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+        val instrList = mutableListOf(Instruction(arrayOf("main:")))
         instrList += Instruction(arrayOf("jalr", "\$t0"))
 
         // instruction that should be jumped over
@@ -1088,7 +1085,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t0"] = 0x00400000 + 4 + 4 + 4 // jump to the 2nd addi
 
             // jr to $t0
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("jr", "\$t0"))
 
             // instruction that should be jumped over
@@ -1106,7 +1103,7 @@ class OperatorsInstrumentedTest {
         run {
             val sim = MIPSSimulator(appContext)
             sim.regs["\$t0"] = 1234321
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("jr", "\$t0"))
             instrList += Instruction(arrayOf("j", "exit"))
 
@@ -1124,7 +1121,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t1"] = 0x7ffffffc
             sim.regs["\$t0"] = get_rand(0, 255)
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("sb", "\$t0", "0", "\$t1"))
             instrList += Instruction(arrayOf("lbu", "\$t2", "0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
@@ -1138,7 +1135,7 @@ class OperatorsInstrumentedTest {
             val sim = MIPSSimulator(appContext)
             sim.regs["\$t1"] = 0x7ffffffc + 1
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("lbu", "\$t2", "0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
 
@@ -1156,7 +1153,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t1"] = 0x7ffffffc
             sim.regs["\$t0"] = get_rand(0, 255)
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("sb", "\$t0", "0", "\$t1"))
             instrList += Instruction(arrayOf("lb", "\$t2", "0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
@@ -1171,7 +1168,7 @@ class OperatorsInstrumentedTest {
             val sim = MIPSSimulator(appContext)
             sim.regs["\$t1"] = 0x7ffffffc + 1
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("lb", "\$t2", "0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
 
@@ -1190,7 +1187,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t1"] = 0x7ffffffc
             sim.regs["\$t0"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("sh", "\$t0", "0", "\$t1"))
             instrList += Instruction(arrayOf("lhu", "\$t2", "0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
@@ -1204,7 +1201,7 @@ class OperatorsInstrumentedTest {
             val sim = MIPSSimulator(appContext)
             sim.regs["\$t1"] = 0x7ffffffc + 1
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("lhu", "\$t2", "0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
 
@@ -1223,7 +1220,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t1"] = 0x7ffffffc
             sim.regs["\$t0"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("sh", "\$t0", "0", "\$t1"))
             instrList += Instruction(arrayOf("lh", "\$t2", "0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
@@ -1237,7 +1234,7 @@ class OperatorsInstrumentedTest {
             val sim = MIPSSimulator(appContext)
             sim.regs["\$t1"] = 0x7ffffffc + 1
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("lh", "\$t2", "0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
 
@@ -1254,7 +1251,7 @@ class OperatorsInstrumentedTest {
             val x = get_rand(0, 1000)
             sim.regs["\$t0"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("lui", "\$t0", x.toString()))
             instrList += Instruction(arrayOf("j", "exit"))
 
@@ -1274,7 +1271,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t1"] = 0x7ffffffc
             sim.regs["\$t0"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("sw", "\$t0", "0", "\$t1"))
             instrList += Instruction(arrayOf("lw", "\$t2", "0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
@@ -1289,7 +1286,7 @@ class OperatorsInstrumentedTest {
             val sim = MIPSSimulator(appContext)
             sim.regs["\$t1"] = 0x7ffffffc + 1
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("lw", "\$t2", "0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
 
@@ -1307,7 +1304,7 @@ class OperatorsInstrumentedTest {
             val y = get_rand(Int.MIN_VALUE, Int.MAX_VALUE)
             sim.regs["\$t0"] = y
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("ori", "\$t1", "\$t0", x.toString()))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -1326,7 +1323,7 @@ class OperatorsInstrumentedTest {
             val y = get_rand(Int.MIN_VALUE, Int.MAX_VALUE)
             sim.regs["\$t1"] = y
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("slti", "\$t0", "\$t1", x.toString()))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -1345,7 +1342,7 @@ class OperatorsInstrumentedTest {
             val y = (UInt.MIN_VALUE..UInt.MAX_VALUE).random()
             sim.regs["\$t1"] = y.toInt()
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("sltiu", "\$t0", "\$t1", x.toInt().toString()))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -1380,7 +1377,7 @@ class OperatorsInstrumentedTest {
             sim.regs["\$t1"] = y
             sim.regs["\$t0"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("xor", "\$t2", "\$t0", "\$t1"))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)
@@ -1399,7 +1396,7 @@ class OperatorsInstrumentedTest {
             val y = get_rand(Int.MIN_VALUE, Int.MAX_VALUE)
             sim.regs["\$t0"] = x
 
-            val instrList = mutableListOf<Instruction>(Instruction(arrayOf("main:")))
+            val instrList = mutableListOf(Instruction(arrayOf("main:")))
             instrList += Instruction(arrayOf("xori", "\$t2", "\$t0", y.toString()))
             instrList += Instruction(arrayOf("j", "exit"))
             sim.run(instrList)

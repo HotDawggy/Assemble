@@ -4,8 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -91,24 +89,5 @@ class MainActivity : AppCompatActivity() {
             )
             startActivity(myIntent)
         }
-
-
-        // Testing MIPSSimulator, remove on production
-        /*
-        sim.stack = byteArrayOf(0x10, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x20)
-        sim.Run(listOf(
-            Instruction(opcode = 0x28, rt = 4, rs = 29, immediate = 4)
-            //Instruction(),
-            //Instruction(opcode = 0, rd = 2, rs = 4, rt = 5, funct = 0x20)
-        ))
-        if (sim.err.isNotBlank()) {
-            Log.i("sim.err", sim.err)
-            sim.printState()
-        }
-        else {
-            Log.i("sim.v0", sim.regs[2].toString())
-            sim.printStack()
-        }
-         */
     }
 }
